@@ -1,27 +1,27 @@
 Welcome to the DecentSampler Developer Guide
 ============================================
 
-**DecentSampler** (/lu'make/) is a Python library for cooks and food lovers
-that creates recipes mixing random ingredients.
-It pulls data from the `Open Food Facts database <https://world.openfoodfacts.org/>`_
-and offers a *simple* and *intuitive* API.
+**DecentSampler** is a free sampling plug-in that allows music composers to use multi-samples in the DecentSampler format. This document is a guide to creating samples in that format.
 
-Check out the :doc:`usage` section for further information, including
-how to :ref:`Introduction` the project.
-
-Check out the :doc:`format_documentation` for further information, including
-how to :ref:`installation` the project.
+If you have no familiarity with the DecentSamples format, `this video <https://www.youtube.com/watch?v=UxPRmD_RNCY>`_ is a great place to start. After that, you'll want to start at the :doc:`introduction` to learn a bit more about how to create sample libraries.
 
 .. note::
 
    This project is under active development.
-
-Lumache has its documentation hosted on Read the Docs.
 
 Contents
 --------
 
 .. toctree::
 
-   format_documentation
-   usage
+   introduction
+   the-ui-element
+   the-groups-element
+   the-effects-element
+   the-midi-element
+   the-modulators-element
+   the-tags-element
+   appendix-a-the-color-format
+   appendix-b-the-binding-element
+   appendix-c-boilerplate-dspreset-file
+   useful-topics
