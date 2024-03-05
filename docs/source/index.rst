@@ -23,5 +23,5 @@ Contents
 
 .. toctree::
 
+   format_documentation
    usage
-   api
