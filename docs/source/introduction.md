@@ -25,14 +25,4 @@ Example:
 </DecentSampler>
 ```
 
-Underneath the top-level `<DecentSampler>` element you can put any number of other elements, which are described below:
-
-```{toctree}
-:maxdepth: 1
-the-ui-element
-the-groups-element
-the-effects-element
-the-midi-element
-the-modulators-element
-the-tags-element
-```
+Underneath the top-level `<DecentSampler>` element you can put any number of other elements, which are described in the sections that follow.
