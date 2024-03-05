@@ -3,7 +3,7 @@ The &lt;midi&gt; element
 
 MIDI mappings can be added to your instrument by adding a `<midi>` element right below your top-level `<DecentSampler>` element. 
 
-#### The &lt;cc&gt; element
+## The &lt;cc&gt; element
 Within the `<midi>` element, you can have any number of `<cc>` elements. These allow you to map changes in incoming continuous controller messages to specific parameters of your instrument. To use this functionality, you'll want to add a separate `<cc>` element for each CC number you would like to respond to. The `<cc>` element has a single required attribute `number=""` which specifies the number (from 0 to 127) of the continuous controller you would like to listen on. Beneath the `<cc>` element, you can have any number of bindings. 
 
 ```xml
@@ -19,7 +19,7 @@ Within the `<midi>` element, you can have any number of `<cc>` elements. These a
 </midi>
 ```
 
-#### The &lt;note&gt; element
+## The &lt;note&gt; element
 Within the `<midi>` element, you can have any number of `<note>` elements. These allow you to map specific notes to specific parameters of your instrument. To use this functionality, you'll want to add a separate `<note>` element for each MIDI note you would like to respond to. The `<note>` element has a single required attribute `note=""` which specifies the number (from 0 to 127) of the MIDI note you would like to listen on. Beneath the `<note>` element, you can have any number of bindings. Here is an example of how keyswitches could be set up:
 
 ```xml
@@ -37,7 +37,7 @@ Within the `<midi>` element, you can have any number of `<note>` elements. These
 
 In the above keyswitch example, MIDI note 11 turns on group 0 and turns off group 1, whereas MIDI note 12 does the opposite. Note the use of the `fixed_value` translation type.
 
-##### Bindings within the `<midi>` section
+### Bindings within the `<midi>` section
 
 The bindings that the `<cc>` and `<note>` element listens on are the same as those used by the UI controls. See [Appendix B](#appendix-b-the-binding-element) for a complete description of these.
 

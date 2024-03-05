@@ -11,7 +11,7 @@ Version 1.6.0 of Decent Sampler officially introduces the new `<modulators>` sec
 </DecentSampler>
 ```
 
-#### The &lt;lfo&gt; element
+## The &lt;lfo&gt; element
 
 Underneath the `<modulators>` section, you can have any number of different LFOs, which are defined using an `<lfo>` element, for example: 
 
@@ -28,7 +28,7 @@ This element has the following attributes:
 - **`modAmount`**: This value between 0 and 1 controls how much the  modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
 - **`scope`**: Whether or not this LFO exists for all notes or whether each keypress gets its own LFO. Possible values are `global` (default for LFOs) and `voice`. If `voice` is chosen, a new LFO is started each time a new note is pressed.
 
-#### The &lt;envelope&gt; element
+## The &lt;envelope&gt; element
 
 In addition to LFOs, you can also have additional ADSR envelopes. These can be useful for controlling group-level effects, such as low-pass filters. If this is what you wish to achieve, make sure you check out the section on group-level effects below.
 
@@ -42,7 +42,7 @@ This element has the following attributes:
 - **`modAmount`**: This value between 0 and 1 controls how much the  modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
 - **`scope`**: Whether or not this LFO exists for all notes or whether each keypress gets its own LFO. Possible values are `global` and `voice` (default for envelopes). If `voice` is chosen, a new LFO is started each time a new note is pressed.
 
-#### How to use &lt;binding&gt;s in conjunction with modulators
+## How to use &lt;binding&gt;s in conjunction with modulators
 
 In order to actually have your LFOs and envelopes do anything, you need to have bindings under them. If you are not familiar with the concept of bindings, you may want to read [this section](https://www.decentsamples.com/wp-content/uploads/2020/06/format-documentation.html#appendix-b-the-binding-element) then return here. Bindings tell the engine which parameters the LFO should be affecting and how. Here is an example:
 
@@ -72,7 +72,7 @@ Modulators, on the other hand, do not work this way. If a modulator (such as an 
 - Group Tuning
 - Global Tuning
 
-#### Modulator scope: global or voice-level
+## Modulator scope: global or voice-level
 
 By default, all modulators will be created at the global level. This means that there will be exactly one modulator that is shared by all voices. In many situations, such as an LFO modulating a single low-pass filter which is shared by all of voices, this is often what we want. 
 
