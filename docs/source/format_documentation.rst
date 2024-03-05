@@ -1,8 +1,7 @@
 File Format Reference Guide
 ==========================================
 
---------------
-.. _installation:
+.. _introduction:
 
 Introduction
 ------------
