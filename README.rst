@@ -1,9 +1,4 @@
-Template for the Read the Docs tutorial
+DecentSampler Developer's Guide
 =======================================
 
-This GitHub template includes fictional Python library
-with some basic Sphinx docs.
-
-Read the tutorial here:
-
-https://docs.readthedocs.io/en/stable/tutorial/
+This repository contains the source code for the Decent Sampler's Developer's Guide.
