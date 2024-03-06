@@ -1,4 +1,4 @@
-# How to Create Sample Libraries with Note Sequences in DecentSampler
+# How to Use Note Sequences within your Sample Libraries
 
 As of version 1.11.1, **DecentSampler** now supports embedding note sequences with your sample libraries. This means that you can create patters or musical motifs that can be triggered either using MIDI or via the UI. This guide will show you how to create a sample library with note sequences and how to trigger them using MIDI.
 
