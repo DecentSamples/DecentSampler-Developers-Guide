@@ -25,4 +25,4 @@ Example:
 </DecentSampler>
 ```
 
-Underneath the top-level `<DecentSampler>` element you can put any number of other elements, which are described in the sections that follow.
+Underneath the top-level `<DecentSampler>` element you can put any number of other elements, all of which are described in the sections that follow.

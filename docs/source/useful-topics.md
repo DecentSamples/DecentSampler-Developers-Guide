@@ -2,6 +2,7 @@ Useful Tutorials and Resources
 ==============================
 ```{toctree}
 
+topic-how-to-use-note-sequences
 topic-how-to-control-parameters-using-tags
 topic-how-to-do-voice-muting-for-drums
 topic-how-to-implement-true-legato

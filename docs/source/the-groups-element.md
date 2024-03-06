@@ -82,7 +82,7 @@ Each sample has its own ADSR amplitude envelope.
 The curve shapes of the attack, decay, and release zones can be changed as well. All three of the of the following parameters use the same system: a value from -100 to 100 that determines the shape of the curve. **-100 is a logarithmic curve, 0 is a linear curve, and 100 is an exponential curve.**
 
 <p align="center">
-<img alt="-100 is a logarithmic curve, 0 is a linear curve, and 100 is an exponential curve" src="images/adsr-curves.png" title="ADSR Curves" style="max-width: 535px;" />
+<img alt="-100 is a logarithmic curve, 0 is a linear curve, and 100 is an exponential curve" src="_static/images/adsr-curves.png" title="ADSR Curves" style="max-width: 535px;" />
 </p>
 
 | Attribute         |            | Description       | Default Value |

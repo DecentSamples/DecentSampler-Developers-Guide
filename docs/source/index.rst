@@ -19,6 +19,7 @@ Contents
    the-groups-element
    the-effects-element
    the-midi-element
+   the-noteSequences-element
    the-modulators-element
    the-tags-element
    appendix-a-the-color-format

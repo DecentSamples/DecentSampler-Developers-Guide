@@ -20,17 +20,28 @@ Within the `<midi>` element, you can have any number of `<cc>` elements. These a
 ```
 
 ## The &lt;note&gt; element
-Within the `<midi>` element, you can have any number of `<note>` elements. These allow you to map specific notes to specific parameters of your instrument. To use this functionality, you'll want to add a separate `<note>` element for each MIDI note you would like to respond to. The `<note>` element has a single required attribute `note=""` which specifies the number (from 0 to 127) of the MIDI note you would like to listen on. Beneath the `<note>` element, you can have any number of bindings. Here is an example of how keyswitches could be set up:
+Within the `<midi>` element, you can have any number of `<note>` elements. These allow you to map specific notes to specific parameters of your instrument. To use this functionality, you'll want to add a separate `<note>` element for each MIDI note or range of notes you would like to respond to.
+
+
+Here are the attributes of the `<note />` element:
+
+- **note** (required): This attribute specifies the MIDI note number (from 0 to 127) you would like to listen on. You can also specify ranges of notes by using a dash. For example `note="24-35"` would be used to specify bindings for the range of notes 24 thorugh 35. 
+- **enabled** (optional): A true/false value that specifies whether this note listener is turned on.
+- **swallowNotes** (optional): The bindings that live below this note listener are called before any notes are played. By default, swallowNotes is false, which means that the keypress will then be received by the sampler. If `swallowNotes` is true, the sampler will not receive the note. This is useful if you wish to prevent certain keys from triggers notes.
+
+It is possible to enable and disable a note listener by targeting the `enabled` attribute.
+
+Beneath the `<note>` element, you can have any number of bindings. Here is an example of how keyswitches might be set up:
 
 ```xml
 <midi>
-  <note note="11">
-    <binding type="general" level="group" position="0" parameter="ENABLED" translation="fixed_value" translationValue="true" />
-    <binding type="general" level="group" position="1" parameter="ENABLED" translation="fixed_value" translationValue="false" />
+  <note note="11" enabled="true">
+    <binding enabled="true" type="general" level="group" groupIndex="0" parameter="ENABLED" translation="fixed_value" translationValue="true" />
+    <binding enabled="true" type="general" level="group" groupIndex="1" parameter="ENABLED" translation="fixed_value" translationValue="false" />
   </note>
-  <note note="12">
-    <binding type="general" level="group" position="0" parameter="ENABLED" translation="fixed_value" translationValue="false" />
-    <binding type="general" level="group" position="1" parameter="ENABLED" translation="fixed_value" translationValue="true" />
+  <note note="12" enabled="true">
+    <binding enabled="true" type="general" level="group" groupIndex="0" parameter="ENABLED" translation="fixed_value" translationValue="false" />
+    <binding enabled="true" type="general" level="group" groupIndex="1" parameter="ENABLED" translation="fixed_value" translationValue="true" />
   </note>
 </midi>
 ```
