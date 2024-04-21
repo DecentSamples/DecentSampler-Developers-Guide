@@ -208,14 +208,14 @@ Example:
 
 Attributes:
 
-| Attribute         |          | Type                        | Valid Range   | Default  |
-| ----------------- | -------- | --------------------------- | ------------- | -------- |
-| `type`            | Required | Must be `phaser`            | `phaser`      |          |
-| `mix`             | Optional | The wet/dry mix which controls how much of the chorus signal we hear | 0 - 1.0, where 1.0 is just chorus, 0 is just dry signal.     | 0.5      |
-| `modDepth`        | Optional | The modulation depth of the effect    | 0 - 1.0, where 0 is no modulation, 1.0 is max modulation. | 0.2      |
-| `modRate`         | Optional | The modulation speed in Hz. | 0 - 10.0       | 0.2        |
-| `centerFrequency` | Optional | The center frequency (in Hz) of the phaser all-pass filters modulation | 0 - 1.0       | 400        |
-| `feedback`        | Optional | Sets the feedback volume of the phaser. | -1 - 1.0       | 0.7        |
+| Attribute         |          | Type                                                                   | Valid Range                                               | Default |
+| ----------------- | -------- | ---------------------------------------------------------------------- | --------------------------------------------------------- | ------- |
+| `type`            | Required | Must be `phaser`                                                       | `phaser`                                                  |         |
+| `mix`             | Optional | The wet/dry mix which controls how much of the phaser signal we hear   | 0 - 1.0, where 1.0 is just phaser, 0 is just dry signal.  | 0.5     |
+| `modDepth`        | Optional | The modulation depth of the effect                                     | 0 - 1.0, where 0 is no modulation, 1.0 is max modulation. | 0.2     |
+| `modRate`         | Optional | The modulation speed in Hz.                                            | 0 - 10.0                                                  | 0.2     |
+| `centerFrequency` | Optional | The center frequency (in Hz) of the phaser all-pass filters modulation | 0 - 22000                                                 | 400     |
+| `feedback`        | Optional | Sets the feedback volume of the phaser.                                | -1 - 1.0                                                  | 0.7     |
 
 ### Convolution effect
 
