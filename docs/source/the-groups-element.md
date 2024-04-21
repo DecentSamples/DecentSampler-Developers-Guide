@@ -85,11 +85,11 @@ The curve shapes of the attack, decay, and release zones can be changed as well.
 <img alt="-100 is a logarithmic curve, 0 is a linear curve, and 100 is an exponential curve" src="_static/images/adsr-curves.png" title="ADSR Curves" style="max-width: 535px;" />
 </p>
 
-| Attribute         |            | Description       | Default Value |
-|-------------------|------------| ------------------|---------------|
-| **`attackCurve`**      | (optional) | A value from -100 to 100 that determines the shape of the attack curve. This can also be set at the `<group>` or `<groups>` levels.  | -100 (logarithmic) |
-| **`decayCurve`**       | (optional) | A value from -100 to 100 that determines the shape of the decay curve. The decay time in seconds of the amplitude envelope of this zone.  This can also be set at the `<group>` or `<groups>` levels.  | 100 (exponential) |
-| **`releaseCurve`**     | (optional) | A value from -100 to 100 that determines the shape of the release curves. The release time in seconds of the amplitude envelope of this zone. This can also be set at the `<group>` or `<groups>` levels. | 100 (exponential) |
+| Attribute          |            | Description                                                                                                                           | Default Value      |
+|--------------------|------------| --------------------------------------------------------------------------------------------------------------------------------------|--------------------|
+| **`attackCurve`**  | (optional) | A value from -100 to 100 that determines the shape of the attack curve. This can also be set at the `<group>` or `<groups>` levels.   | -100 (logarithmic) |
+| **`decayCurve`**   | (optional) | A value from -100 to 100 that determines the shape of the decay curve. This can also be set at the `<group>` or `<groups>` levels.    |  100 (exponential) |
+| **`releaseCurve`** | (optional) | A value from -100 to 100 that determines the shape of the release curves. This can also be set at the `<group>` or `<groups>` levels. |  100 (exponential) |
 
 **Round Robins**
 
