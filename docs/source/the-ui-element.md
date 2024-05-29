@@ -190,7 +190,7 @@ Attributes:
 | **width**   | (required) | The width of the menu                                                                                                                                                   |        |
 | **height**  | (required) | The height of the menu                                                                                                                                                  |        |
 | **value**   | (optional) | The is the 1-based index of the menu option that is currently selected. **NOTE: Index numbers for menu items start at 1.** A value of 0 means that no item is selected. |        |
-| **visible** | (optional) | This controls whether or not this button is visible. There are two valid values: `true`, `false`.                                                                       | `true` |
+| **visible** | (optional) | This controls whether or not this menu is visible. There are two valid values: `true`, `false`.                                                                         | `true` |
 
 Example:
 ```xml

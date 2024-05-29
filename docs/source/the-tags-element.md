@@ -8,6 +8,6 @@ Underneath the `<tags>` element, you can have any number of `<tag>` elements. Th
 
 | Attribute       |            | Description                                                                       |
 |:----------------|:-----------|:----------------------------------------------------------------------------------|
-| **`enabled`**   | (optional) | A number for 0.0 to 1.0 that specifies the initial volume for a tag. Default: 1.0 |
+| **`enabled`**   | (optional) | Whether or not this tag is enabled. Possible values: true, false. Default: true   |
 | **`volume`**    | (optional) | A number for 0.0 to 1.0 that specifies the initial volume for a tag. Default: 1.0 |
 | **`polyphony`** | (optional) | A whole number that specifies the number of voices allowed for this tag.          |
