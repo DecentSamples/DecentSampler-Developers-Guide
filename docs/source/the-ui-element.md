@@ -233,6 +233,39 @@ That's right. The `<option>` element has only one attribute. In order to have yo
 
 As you can see, this example uses a menu to switch between two groups. It also sets the text of a text label. You'll note the liberal use of the new `fixed_value` translation mode above. This means that when any of these options are selected, a fixed predetermined value is used for the value of that binding. 
 
+## The &lt;xyPad&gt; element
+The `<xyPad>` element allows you to create a two-dimensional pad control within your UI. This control functions almost like two sliders, one for the x-axis and one for the y-axis.
+
+Attributes:
+- **`x`** (required): The `x` position of your control where (0,0) is the top-left corner
+- **`y`** (required): The `y` position of your control where (0,0) is the top-left corner
+- **`width`** (required): The width in pixels of the control.
+- **`height`** (required): The height in pixels of the control.
+- **`markerDiameter`** (optional): The diameter of the marker that moves around the control. Default: 10
+- **`markerOutlineColor`** (optional): An 8 digit hex value indicating the color of the marker's outline. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
+- **`markerFillColor`** (optional): An 8 digit hex value indicating the color of the marker's fill. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
+- **`outlineColor`** (optional): An 8 digit hex value indicating the color of the control's outline. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
+- **`bgColor`** (optional): An 8 digit hex value indicating the color of the control's background. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
+
+### The &lt;x&gt; and &lt;y&gt; elements
+
+Below the `<xyPad>` element, you can specify `<x>` and `<y>` elements. These elements are used to specify the bindings for the x and y axes of the control.
+
+Example:
+```xml
+<xyPad x="10" y="10" width="300" height="100" parameterName="Pad" xValue="0.5" yValue="0.5" bgColor="77FFCC00" markerFillColor="FFFFFFFF" outlineColor="77FFFFFFF">
+  <x>
+    <binding type="amp" level="group" groupIndex="0" parameter="AMP_VOLUME" translation="linear" translationOutputMin="0" translationOutputMax="1" />
+    <binding type="amp" level="group" groupIndex="1" parameter="AMP_VOLUME" translation="linear" translationOutputMin="1" translationOutputMax="0" />
+  </x>
+  <y>
+    <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY"
+        translation="table" 
+        translationTable="0,33;0.3,150;0.4,450;0.5,1100;0.7,4100;0.9,11000;1.0001,22000"/>
+    </y>
+  </xyPad>
+```
+
 ## The &lt;keyboard&gt; element
 
 The `<keyboard>` element lives underneath the `<ui>` element. This is where you specify settings relating to the on-screen keyboard. There should be only one `<keyboard>` element in your preset file. At this point, the only settings are color ranges which are specified using `<color>` sub-elements.
