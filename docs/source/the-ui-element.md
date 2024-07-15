@@ -53,6 +53,7 @@ Attributes:
 | **`hoverImage`** | (optional)                     | For `image` buttons only. The path of the main image to display when the user hovers their mouse over this button. This can also be set at the state level so that it only applies to a specific state. | None    |
 | **`clickImage`** | (optional)                     | For `image` buttons only. The path of the main image to display when the user clicks down on this button. This can also be set at the state level so that it only applies to a specific state.          | None    |
 | **`visible`**    | (optional)                     | This controls whether or not this button is visible. There are two valid values: `true`, `false`.                                                                                                       | `true`  |
+| **`tooltip`**    | (optional)                     | A tool tip to display when the user hovers over this control.  |   |
 
 Example:
 ```xml
@@ -94,7 +95,7 @@ In order to have your `<button>` elements actually do something useful, you need
 
 As you can see, this example uses a button to switch between two groups. You'll note the liberal use of the `fixed_value` translation mode above. This means that when any of these options are selected, a fixed predetermined value is used for the value of that binding. 
 
-### The &lt;image&gt; element
+## The &lt;image&gt; element
 The `<image>` element allows you to place a static image into your user interface. It lives underneath the `<tab>` element. Attributes:
 
 - **`x`** (required): The `x` position of your image where (0,0) is the top-left corner
@@ -104,6 +105,8 @@ The `<image>` element allows you to place a static image into your user interfac
 - **`path`** (required): The relative path of the image file to show in this component
 - **`aspectRatioMode`** (required): Whether or not the engine should preserve the aspect ratio of the image. Note: regardless of these settings, you still need to specify a width and height for your image element. Valid values: `preserve`, `stretch`. Default value is `preserve`. 
 - **`visible`** (optional): This controls whether or not this image is visible. There are two valid values: `true` (default), `false`.
+- **`tooltip`** (optional): A tool tip to display when the user hovers over this image.
+
 
 ### The &lt;label&gt; element
 The `<label>` element allows you to place a static block of text into yoru user interface. It lives underneath the `<tab>` element. Attributes:
@@ -118,6 +121,7 @@ The `<label>` element allows you to place a static block of text into yoru user 
 - **`vAlign`** (optional): The vertical alignment of the text within the box described by the width and height attributes. Valid values: `top`,`bottom`, `center`. Default is `center`.
 - **`hAlign`** (optional): The horizontal alignment of the text within the box described by the width and height attributes. Valid values: `left`,`right`, `center`. Default is `center`.
 - **`visible`** (optional): This controls whether or not this text label is visible. There are two valid values: `true` (default), `false`.
+- **`tooltip`** (optional): A tool tip to display when the user hovers over this label.
 
 A label's text can also be set dynamically using bindings using the `TEXT` binding parameter name.
 
@@ -148,6 +152,7 @@ Attributes:
 - **`trackForegroundColor`** (optional): An 8 digit hex value indicating the foreground color to use for the knob track. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
 - **`trackBackgroundColor`** (optional): An 8 digit hex value indicating the background color to use for the knob track. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
 - **`visible`** (optional): This controls whether or not this control is visible. There are two valid values: `true` (default), `false`.
+- **`tooltip`** (optional): A tool tip to display when the user hovers over this control.
 
 It is also possible to use custom control graphics using the following attributes:
 
@@ -183,14 +188,15 @@ The `<menu>` element allows you to create a drop-down menu within your UI.
 
 Attributes:
 
-| Attribute   | Required   | Description                                                                                                                                                             |        |
-|:------------|:-----------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------|
-| **x**       | (required) | The x position of the menu                                                                                                                                              |        |
-| **y**       | (required) | The y position of the menu                                                                                                                                              |        |
-| **width**   | (required) | The width of the menu                                                                                                                                                   |        |
-| **height**  | (required) | The height of the menu                                                                                                                                                  |        |
-| **value**   | (optional) | The is the 1-based index of the menu option that is currently selected. **NOTE: Index numbers for menu items start at 1.** A value of 0 means that no item is selected. |        |
-| **visible** | (optional) | This controls whether or not this button is visible. There are two valid values: `true`, `false`.                                                                       | `true` |
+| Attribute      | Required   | Description                                                                                                                                                             |        |
+|:---------------|:-----------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------|
+| **x**          | (required) | The x position of the menu                                                                                                                                              |        |
+| **y**          | (required) | The y position of the menu                                                                                                                                              |        |
+| **width**      | (required) | The width of the menu                                                                                                                                                   |        |
+| **height**     | (required) | The height of the menu                                                                                                                                                  |        |
+| **value**      | (optional) | The is the 1-based index of the menu option that is currently selected. **NOTE: Index numbers for menu items start at 1.** A value of 0 means that no item is selected. |        |
+| **visible**    | (optional) | This controls whether or not this button is visible. There are two valid values: `true`, `false`.                                                                       | `true` |
+| **tooltip**    | (optional) | A tool tip to display when the user hovers over this control.                                                                                                           |        |
 
 Example:
 ```xml
@@ -246,6 +252,7 @@ Attributes:
 - **`markerFillColor`** (optional): An 8 digit hex value indicating the color of the marker's fill. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
 - **`outlineColor`** (optional): An 8 digit hex value indicating the color of the control's outline. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
 - **`bgColor`** (optional): An 8 digit hex value indicating the color of the control's background. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
+- **`tooltip`** (optional): A tool tip to display when the user hovers over this control.
 
 ### The &lt;x&gt; and &lt;y&gt; elements
 
