@@ -74,6 +74,7 @@ Each sample has its own ADSR amplitude envelope.
 
 | Attribute         |            | Description       |
 |-------------------|------------| ------------------|
+| **`ampEnvEnabled`**      | (optional) | This turns the amplitude envelope on and off. Valid values are: `false` and `true` (default).  |
 | **`attack`**      | (optional) | The attack time in seconds of the amplitude envelope of this zone. This can also be set at the `<group>` or `<groups>` levels.  |
 | **`decay`**       | (optional) | The decay time in seconds of the amplitude envelope of this zone.  This can also be set at the `<group>` or `<groups>` levels.  |
 | **`sustain`**     | (optional) | The sustain level (0.0 - 1.0) of the amplitude envelope of this zone.  This can also be set at the `<group>` or `<groups>` levels. |
@@ -90,12 +91,6 @@ The curve shapes of the attack, decay, and release zones can be changed as well.
 | **`attackCurve`**      | (optional) | A value from -100 to 100 that determines the shape of the attack curve. This can also be set at the `<group>` or `<groups>` levels.  | -100 (logarithmic) |
 | **`decayCurve`**       | (optional) | A value from -100 to 100 that determines the shape of the decay curve. The decay time in seconds of the amplitude envelope of this zone.  This can also be set at the `<group>` or `<groups>` levels.  | 100 (exponential) |
 | **`releaseCurve`**     | (optional) | A value from -100 to 100 that determines the shape of the release curves. The release time in seconds of the amplitude envelope of this zone. This can also be set at the `<group>` or `<groups>` levels. | 100 (exponential) |
-
-Additionally, it's possible to bypass the amplitude envelope entirely by setting the `ampEnvEnabled` attribute to `false`:
-
-| Attribute         |            | Description       | Default Value |
-|-------------------|------------| ------------------|---------------|
-| **`ampEnvEnabled`** | (optional) | A boolean value indicating whether or not the amplitude envelope should be used. Valid values: true, false | true | 
 
 **Round Robins**
 
