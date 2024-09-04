@@ -91,6 +91,12 @@ The curve shapes of the attack, decay, and release zones can be changed as well.
 | **`decayCurve`**       | (optional) | A value from -100 to 100 that determines the shape of the decay curve. The decay time in seconds of the amplitude envelope of this zone.  This can also be set at the `<group>` or `<groups>` levels.  | 100 (exponential) |
 | **`releaseCurve`**     | (optional) | A value from -100 to 100 that determines the shape of the release curves. The release time in seconds of the amplitude envelope of this zone. This can also be set at the `<group>` or `<groups>` levels. | 100 (exponential) |
 
+Additionally, it's possible to bypass the amplitude envelope entirely by setting the `ampEnvEnabled` attribute to `false`:
+
+| Attribute         |            | Description       | Default Value |
+|-------------------|------------| ------------------|---------------|
+| **`ampEnvEnabled`** | (optional) | A boolean value indicating whether or not the amplitude envelope should be used. Valid values: true, false | true | 
+
 **Round Robins**
 
 Round robins allow different samples to be played each time a zone is triggered. This is especially useful with sounds that have short attacks (such as drums), and is a great way to keep your sample libraries from sounding fake. In order for round robins to work, you must specify both a `seqMode` and a `seqPosition` for all samples. If you have several different sets of round robins with different lengths, you'll want to set the `seqLength` value as well. There are several round-robin modes:
