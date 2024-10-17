@@ -22,6 +22,7 @@ Contents
    the-noteSequences-element
    the-modulators-element
    the-tags-element
+   the-buses-element
    appendix-a-the-color-format
    appendix-b-the-binding-element
    appendix-c-boilerplate-dspreset-file
