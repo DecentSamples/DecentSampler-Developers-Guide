@@ -12,6 +12,7 @@ Example: How to control two groups with knobs<https://www.decentsamples.com/dece
 ## Sample Mapping and Effects
 ```{toctree}
 :maxdepth: 1
+topic-how-to-use-buses-and-auxiliary-outputs
 topic-how-to-use-note-sequences
 topic-how-to-control-parameters-using-tags
 topic-how-to-do-voice-muting-for-drums
