@@ -153,6 +153,9 @@ Attributes:
 - **`trackBackgroundColor`** (optional): An 8 digit hex value indicating the background color to use for the knob track. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
 - **`visible`** (optional): This controls whether or not this control is visible. There are two valid values: `true` (default), `false`.
 - **`tooltip`** (optional): A tool tip to display when the user hovers over this control.
+- **`snapMode`** (optional): This attribute controls how the control should snap to values. Valid values: `none`, `whole_numbers`, `tenths`, `hundredths`, `thousandths`, and `stop_points`. Default: none.
+- **`snapStopPoints`** (optional): A comma-separated list of values that the control should snap to when `snapMode` is set to `stop_points`. Default: none.
+- **`defeatSnapWithShift`** (optional): A true/false value indicating whether or not the user can defeat the snap-to-value behavior by holding down the shift key. Default: false.
 
 It is also possible to use custom control graphics using the following attributes:
 
