@@ -107,6 +107,27 @@ The `<image>` element allows you to place a static image into your user interfac
 - **`visible`** (optional): This controls whether or not this image is visible. There are two valid values: `true` (default), `false`.
 - **`tooltip`** (optional): A tool tip to display when the user hovers over this image.
 
+## The %lt;multiFrameImage&gt; element
+
+The `<multiFrameImage>` element allows you to play a sequence of images as an animation. The expectation is that all the frames of the animation will be loaded in a single image, arranged in a strip – either horizontal or vertical. This is the same format as is used by the custom knobs above. It lives underneath the `<tab>` element. Attributes:
+
+- **`x`** (required): The `x` position of your image where (0,0) is the top-left corner
+- **`y`** (required): The `y` position of your image where (0,0) is the top-left corner
+- **`width`** (required): The width in pixels of the image component
+- **`height`** (required): The height in pixels of the image component
+- **`path`** (required): The relative path of the image file to show in this component
+- **`numFrames`** (required): The number of frames in the animation
+- **`frameRate`** (required): The frame rate of the animation in frames per second. The maximum supported frame rate is 24 frames per second.
+- **`sourceFormat`** (required): The orientation of the frames within the image strip. Valid values: `horizontal_image_strip`, `vertical_image_strip`.
+- **`playbackMode`** (optional): The direction in which the animation should play. Valid values: `forward_loop`, `forward_once`, `reverse_loop`, `reverse_once`, `ping_pong_loop` (forth and back), and `stopped`. Default value is `forward_loop`.
+- **`visible`** (optional): This controls whether or not this image is visible. There are two valid values: `true` (default), `false`.
+- **`tooltip`** (optional): A tool tip to display when the user hovers over this image.
+
+Example:
+
+```xml
+<multiFrameImage x="10" y="10" width="64" height="64" path="Images/Animation.png" numFrames="31" imageStripOrientaton="vertical" frameRate="24" playbackMode="forward"/>
+```
 
 ### The &lt;label&gt; element
 The `<label>` element allows you to place a static block of text into yoru user interface. It lives underneath the `<tab>` element. Attributes:
@@ -159,7 +180,7 @@ Attributes:
 
 It is also possible to use custom control graphics using the following attributes:
 
-- **`customSkinImage`** (optional): This is path to an image to use for the control. This is expected to be a JPEG or PNG in KnobMan format. A huge gallery of compatible knobs can be found here (https://www.g200kg.com/en/webknobman/gallery.php).
+- **`customSkinImage`** (optional): This is path to an image to use for the control. This is expected to be a JPEG or PNG in KnobMan format. A huge gallery of compatible knobs can be found [here](https://www.g200kg.com/en/webknobman/gallery.php).
 - **`customSkinNumFrames`** (optional): The number of animation frames contained in the KnobMan image pointed to by `customSkinImage`.
 - **`customSkinImageOrientation`** (optional): The orientation of the frames within the KnobMan image pointed to by `customSkinImage`. Valid values: `horizontal`, `vertical`. Default: vertical.
 - **`mouseDragSensitivity`** (optional): An integer number describing how sensitive the control should be to mouse drags. The higher the number, the less sensitive the control will be to mouse movements.
