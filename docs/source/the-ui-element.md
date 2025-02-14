@@ -107,7 +107,7 @@ The `<image>` element allows you to place a static image into your user interfac
 - **`visible`** (optional): This controls whether or not this image is visible. There are two valid values: `true` (default), `false`.
 - **`tooltip`** (optional): A tool tip to display when the user hovers over this image.
 
-## The %lt;multiFrameImage&gt; element
+## The &lt;multiFrameImage&gt; element
 
 The `<multiFrameImage>` element allows you to play a sequence of images as an animation. The expectation is that all the frames of the animation will be loaded in a single image, arranged in a strip – either horizontal or vertical. This is the same format as is used by the custom knobs above. It lives underneath the `<tab>` element. Attributes:
 
