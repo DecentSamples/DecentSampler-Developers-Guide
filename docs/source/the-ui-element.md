@@ -104,6 +104,7 @@ The `<image>` element allows you to place a static image into your user interfac
 - **`height`** (required): The height in pixels of the image component
 - **`path`** (required): The relative path of the image file to show in this component
 - **`aspectRatioMode`** (required): Whether or not the engine should preserve the aspect ratio of the image. Note: regardless of these settings, you still need to specify a width and height for your image element. Valid values: `preserve`, `stretch`. Default value is `preserve`. 
+- **`opacity`** (optional): The opacity of the image. This is a floating point value between 0 and 1. Default: 1
 - **`visible`** (optional): This controls whether or not this image is visible. There are two valid values: `true` (default), `false`.
 - **`tooltip`** (optional): A tool tip to display when the user hovers over this image.
 
@@ -118,6 +119,7 @@ The `<multiFrameImage>` element allows you to play a sequence of images as an an
 - **`path`** (required): The relative path of the image file to show in this component
 - **`numFrames`** (required): The number of frames in the animation
 - **`frameRate`** (required): The frame rate of the animation in frames per second. The maximum supported frame rate is 24 frames per second.
+- **`opacity`** (optional): The opacity of the animation. This is a floating point value between 0 and 1. Default: 1
 - **`sourceFormat`** (required): The orientation of the frames within the image strip. Valid values: `horizontal_image_strip`, `vertical_image_strip`.
 - **`playbackMode`** (optional): The direction in which the animation should play. Valid values: `forward_loop`, `forward_once`, `reverse_loop`, `reverse_once`, `ping_pong_loop` (forth and back), and `stopped`. Default value is `forward_loop`.
 - **`visible`** (optional): This controls whether or not this image is visible. There are two valid values: `true` (default), `false`.
@@ -141,6 +143,7 @@ The `<label>` element allows you to place a static block of text into yoru user 
 - **`height`** (required): The height in pixels of the label.
 - **`vAlign`** (optional): The vertical alignment of the text within the box described by the width and height attributes. Valid values: `top`,`bottom`, `center`. Default is `center`.
 - **`hAlign`** (optional): The horizontal alignment of the text within the box described by the width and height attributes. Valid values: `left`,`right`, `center`. Default is `center`.
+- **`orientation`** (optional): The orientation of the text within the box described by the width and height attributes. Valid values: `horizontal`, `vertical_up`, `vertical_down`. Default is `horizontal`.
 - **`visible`** (optional): This controls whether or not this text label is visible. There are two valid values: `true` (default), `false`.
 - **`tooltip`** (optional): A tool tip to display when the user hovers over this label.
 
