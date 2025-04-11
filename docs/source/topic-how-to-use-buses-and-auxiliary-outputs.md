@@ -39,7 +39,7 @@ In this example, we will apply an effect to audio using a bus. To do this, we wi
 <buses>
     <bus busVolume="0.5" output1Target="MAIN_OUTPUT" output2Target="AUX_STEREO_OUTPUT_1" output1Volume="0.8" output2Volume="0.5">
         <effects>
-            <effect type="Reverb" wetDryMix="0.5" roomSize="0.5" damping="0.5" />
+            <effect type="reverb" wetLevel="1"/>
         </effects>
     </bus>
 </buses>
