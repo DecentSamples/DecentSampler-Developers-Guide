@@ -62,7 +62,7 @@ In order to actually have your LFOs and envelopes do anything, you need to have 
 
 There are a few differences between bindings as they are used by knobs and the ones used by modulators. Specifically, when you move a UI control that has a binding attached, the engine actually goes out and changes the value of the parameter that is targeted by that binding. For example, if you have a knob that controls a lowpass filter's cutoff frequency, moving that knob will cause that actual frequency of that filter to change. In other words, the changes that the knob is making on the underlying sample library are _permanent_. The same is also true for bindings associated with MIDI continuous controllers. 
 
-Modulators, on the other hand, do not work this way. If a modulator (such as an LFO) changes its value, the engine looks at the bindings associated with that LFO and then makes a list of _temporary_ changes to the underlying data. When it comes time to render out the effect, it consults both the _permanent_ value and the _temporary_ modulation values. As a result of this difference in the way bindings are handled, only some parameters are "modulatable." At time of press, the following parameters are modulatable:
+Modulators, on the other hand, are temporary. If a modulator (such as an LFO) changes its value, the engine looks at the bindings associated with that LFO and then makes a list of _temporary_ changes to the underlying data. When it comes time to render out the effect, it consults both the _permanent_ value and the _temporary_ modulation values. As a result of this difference in the way bindings are handled, only some parameters are "modulatable." At time of press, the following parameters are modulatable:
 
 - All gain effect parameters
 - All delay effect parameters
@@ -81,14 +81,12 @@ Modulators, on the other hand, do not work this way. If a modulator (such as an 
 
 By default, all modulators will be created at the global level. This means that there will be exactly one modulator that is shared by all voices. In many situations, such as an LFO modulating a single low-pass filter which is shared by all of voices, this is often what we want. 
 
-But there are other situations where we don't want our modulator to be global. In such cases we 
+But there are other situations where we don’t want our modulator to be global. For example, what if we want to have a unique envelope for each key-press? Well, for that we use the `scope` attribute of the `<lfo>` or `<envelope>` element. This attribute can be set to `voice`, which means that each time a new note is pressed, a new modulator will be created for that note. This is particularly useful for envelopes, which are often used to control parameters that are unique to each note, such as the volume or filter cutoff of a note:
 
 ```xml
-<modulators>
-    <envelope attack="2" decay="0" sustain="1" release="0.5" modAmount="1.0">
-        <binding type="effect" level="group" groupIndex="0" effectIndex="0" parameter="FX_FILTER_FREQUENCY" translation="linear" translationOutputMin="0" translationOutputMax="4000.0" modBehavior="add" />
-    </envelope>
-</modulators>
+<envelope attack="2" decay="0" sustain="1" release="0.5" modAmount="1.0" scope="voice">
 ```
 
-Note that this voice-level modulator is now targeting a group level effect.
+For certain parameters, such as **Group Tuning** or **Group Pan**, it may always make sense to have `scope="voice"` set. For others, such as **Global Volume** or **Global Pan**, it may make more sense to have `scope="global"` set.
+
+For a full discussion of how to use modulators, check out [this article on the Decent Samples blog](https://www.decentsamples.com/2022/08/19/how-to-add-lfos-and-extra-envelopes-to-your-decent-sampler-instruments).
