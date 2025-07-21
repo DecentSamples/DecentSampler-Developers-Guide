@@ -16,7 +16,7 @@ Version 1.6.0 of Decent Sampler officially introduces the new `<modulators>` sec
 Underneath the `<modulators>` section, you can have any number of different LFOs, which are defined using an `<lfo>` element, for example: 
 
 ```xml
-<modulators>1
+<modulators>
   <lfo shape="sine" frequency="2" modAmount="1.0"></lfo>
 </modulators>
 ```
@@ -58,7 +58,7 @@ Here's a practical example of how to use the `<mpeTimbre>` element:
 
 ```xml
 <modulators>
-    <mpeTimbre modAmount="0.5" scope="voice">
+    <mpeTimbre scope="voice" fallingSmoothingTime="20" risingSmoothingTime="20">
         <!-- This binding modifies the frequency of a low-pass filter -->
         <binding type="effect" level="group" groupIndex="0" effectIndex="0" parameter="FX_FILTER_FREQUENCY"
             modBehavior="add"
@@ -82,7 +82,7 @@ Here's a practical example of how to use the `<mpePressure>` element:
 
 ```xml
 <modulators>
-    <mpePressure scope="voice">
+    <mpePressure scope="voice" fallingSmoothingTime="20" risingSmoothingTime="20">
         <binding type="amp" level="group" groupIndex="0" effectIndex="0" parameter="AMP_VOLUME" 
             modBehavior="set"
             translation="linear"
