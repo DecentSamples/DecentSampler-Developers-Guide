@@ -37,13 +37,11 @@ There is also a single pole version of the lowpass filter that can be accessed u
 
 Attributes:
 
-|  Attribute  |          |           Type           |                                 Valid Range                                 | Default |
-| ----------- | -------- | ------------------------ | --------------------------------------------------------------------------- | ------- |
+|  Attribute  |          |           Type           |                                 Valid Range                                                | Default |
+| ----------- | -------- | ------------------------ | ------------------------------------------------------------------------------------------ | ------- |
 | `type`      | Required | The type of filter       | Must be either `lowpass` (legacy: `lowpass_4pl`), `lowpass_1pl`, `bandpass`, or `highpass` |         |
-| `resonance` | Optional | The filter resonance (Q) | 0.001 - 5.0, where 5 is big, 0 is small.                                      |     0.7 |
-| `frequency` | Optional | The filter frequency     | 0 - 1.0, where 0 is not damped, 1.0 is fully damped.                        |     0.3 |
-
-
+| `resonance` | Optional | The filter resonance (Q) | 0.001 - 5.0, where 5 is big, 0 is small.                                                   |     0.7 |
+| `frequency` | Optional | The filter frequency     | 0 - 22000                                                                                  |   22000 |
 
 ### Notch EQ Filter
 
@@ -208,14 +206,14 @@ Example:
 
 Attributes:
 
-| Attribute         |          | Type                        | Valid Range   | Default  |
-| ----------------- | -------- | --------------------------- | ------------- | -------- |
-| `type`            | Required | Must be `phaser`            | `phaser`      |          |
-| `mix`             | Optional | The wet/dry mix which controls how much of the chorus signal we hear | 0 - 1.0, where 1.0 is just chorus, 0 is just dry signal.     | 0.5      |
-| `modDepth`        | Optional | The modulation depth of the effect    | 0 - 1.0, where 0 is no modulation, 1.0 is max modulation. | 0.2      |
-| `modRate`         | Optional | The modulation speed in Hz. | 0 - 10.0       | 0.2        |
-| `centerFrequency` | Optional | The center frequency (in Hz) of the phaser all-pass filters modulation | 0 - 1.0       | 400        |
-| `feedback`        | Optional | Sets the feedback volume of the phaser. | -1 - 1.0       | 0.7        |
+| Attribute         |          | Type                                                                   | Valid Range                                               | Default |
+| ----------------- | -------- | ---------------------------------------------------------------------- | --------------------------------------------------------- | ------- |
+| `type`            | Required | Must be `phaser`                                                       | `phaser`                                                  |         |
+| `mix`             | Optional | The wet/dry mix which controls how much of the phaser signal we hear   | 0 - 1.0, where 1.0 is just phaser, 0 is just dry signal.  | 0.5     |
+| `modDepth`        | Optional | The modulation depth of the effect                                     | 0 - 1.0, where 0 is no modulation, 1.0 is max modulation. | 0.2     |
+| `modRate`         | Optional | The modulation speed in Hz.                                            | 0 - 10.0                                                  | 0.2     |
+| `centerFrequency` | Optional | The center frequency (in Hz) of the phaser all-pass filters modulation | 0 - 22000                                                 | 400     |
+| `feedback`        | Optional | Sets the feedback volume of the phaser.                                | -1 - 1.0                                                  | 0.7     |
 
 ### Convolution effect
 
@@ -281,7 +279,7 @@ Attributes:
 
 | Attribute     |          | Type                                                                                                                                      | Valid Range                                                                                                    | Default |
 |:--------------|:---------|:------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------|:--------|
-| `type`        | Required | Must be `wave_shaper`                                                                                                                     | `wave_folder`                                                                                                  |         |
+| `type`        | Required | Must be `wave_shaper`                                                                                                                     | `wave_shaper`                                                                                                  |         |
 | `drive`       | Optional | The amount of distortion. This really just controls the volume of the input signal. The volume of the input signal                        | 1 - 1000, where 1000 means the signal is amplified by a factor of 1000 and 1 means no amplification is applied | 1       |
 | `driveBoost`  | Optional | Introduces an extra gain boost to the drive                                                                                               | 0 - 1.0                                                                                                        | 1       |
 | `outputLevel` | Optional | The linear output level of the signal                                                                                                     | 0 - 1.0                                                                                                        | 0.1     |
