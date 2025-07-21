@@ -74,6 +74,7 @@ Each sample has its own ADSR amplitude envelope.
 
 | Attribute         |            | Description       |
 |-------------------|------------| ------------------|
+| **`ampEnvEnabled`**      | (optional) | This turns the amplitude envelope on and off. Valid values are: `false` and `true` (default).  |
 | **`attack`**      | (optional) | The attack time in seconds of the amplitude envelope of this zone. This can also be set at the `<group>` or `<groups>` levels.  |
 | **`decay`**       | (optional) | The decay time in seconds of the amplitude envelope of this zone.  This can also be set at the `<group>` or `<groups>` levels.  |
 | **`sustain`**     | (optional) | The sustain level (0.0 - 1.0) of the amplitude envelope of this zone.  This can also be set at the `<group>` or `<groups>` levels. |
@@ -116,3 +117,26 @@ Round robins allow different samples to be played each time a zone is triggered.
 | **`silencingMode`**  | (optional) | Controls how quickly voices get silenced. `fast` = immediately; `normal` = triggers the sample's release phase. This second option, when used in conjunction with the `release` attribute, allows you to specify a longer release time. Values: `fast`, `normal`. Default: `fast`                                                                                                                                                                                           |
 | **`previousNotes`**  | (optional) | Only play this sample if the previously triggered note equals one of these notes. Format: a comma-separated list of MIDI note numbers (from 1 to 127) of the note.                                                                                                                                                                                                                                                                                                          |
 | **`legatoInterval`** | (optional) | This is similar to the `previousNote` attribute. This causes the engine to only play the sample if the previously triggered note is exactly this semitone distance from the previous note. For example, if the note for which this sample is being triggered is a C3 and the `legatoInterval` is set to `-2`, then the sample will only play if the previous note was a D3 because D3 minus 2 semitones equals C3. Format: This can be a positive or negative whole number. |
+
+**Routing Audio**
+
+My default all audio is routed to the main output. However, using the attributes below you can route audio to any of the 16 buses or directly to any one of the 16 auxiliary outputs. You can also specify the volume of the audio being sent to each output.
+
+| Attribute         |            | Description       |
+|-------------------|------------| ------------------|
+| **`output1Target`** | (optional) | The first audio output for this sample. This is a string that specifies the audio output that the sample should be routed to. The available options are `MAIN_OUTPUT` (the main audio output), `NO_OUTPUT` (audio is not routed anywhere), `BUS_1` (the first bus defined in the `<buses>` element), `BUS_2` (the second bus), ..., `BUS_16` (bus 16), `AUX_STEREO_OUTPUT_1` (auxiliary output 1), `AUX_STEREO_OUTPUT_2` (auxiliary output 2), ..., `AUX_STEREO_OUTPUT_16` (auxiliary output 16). Default: `MAIN_OUTPUT` |
+| **`output2Target`** | (optional) | The second audio output for this sample. This is a string that specifies the audio output that the sample should be routed to. The available options are the same as for `output1Target`. Default: `NO_OUTPUT` |
+| **`output3Target`** | (optional) | The third audio output for this sample. This is a string that specifies the audio output that the sample should be routed to. The available options are the same as for `output1Target`. Default: `NO_OUTPUT` |
+| **`output4Target`** | (optional) | The fourth audio output for this sample. This is a string that specifies the audio output that the sample should be routed to. The available options are the same as for `output1Target`. Default: `NO_OUTPUT` |
+| **`output5Target`** | (optional) | The fifth audio output for this sample. This is a string that specifies the audio output that the sample should be routed to. The available options are the same as for `output1Target`. Default: `NO_OUTPUT` |
+| **`output6Target`** | (optional) | The sixth audio output for this sample. This is a string that specifies the audio output that the sample should be routed to. The available options are the same as for `output1Target`. Default: `NO_OUTPUT` |
+| **`output7Target`** | (optional) | The seventh audio output for this sample. This is a string that specifies the audio output that the sample should be routed to. The available options are the same as for `output1Target`. Default: `NO_OUTPUT` |
+| **`output8Target`** | (optional) | The eighth audio output for this sample. This is a string that specifies the audio output that the sample should be routed to. The available options are the same as for `output1Target`. Default: `NO_OUTPUT` |
+| **`output1Volume`** | (optional) | The volume of the audio being sent to the sample's first output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume. Default: 1.0 |
+| **`output2Volume`** | (optional) | The volume of the audio being sent to the sample's second output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume. Default: 1.0 |
+| **`output3Volume`** | (optional) | The volume of the audio being sent to the sample's third output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume. Default: 1.0 |
+| **`output4Volume`** | (optional) | The volume of the audio being sent to the sample's fourth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume. Default: 1.0 |
+| **`output5Volume`** | (optional) | The volume of the audio being sent to the sample's fifth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume. Default: 1.0 |
+| **`output6Volume`** | (optional) | The volume of the audio being sent to the sample's sixth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume. Default: 1.0 |
+| **`output7Volume`** | (optional) | The volume of the audio being sent to the sample's seventh output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume. Default: 1.0 |
+| **`output8Volume`** | (optional) | The volume of the audio being sent to the sample's eighth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume. Default: 1.0 |

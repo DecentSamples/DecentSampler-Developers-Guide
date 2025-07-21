@@ -26,6 +26,7 @@ Within the `<midi>` element, you can have any number of `<note>` elements. These
 Here are the attributes of the `<note />` element:
 
 - **note** (required): This attribute specifies the MIDI note number (from 0 to 127) you would like to listen on. You can also specify ranges of notes by using a dash. For example `note="24-35"` would be used to specify bindings for the range of notes 24 thorugh 35. 
+- **eventType** (optional): This attribute specifies the type of event to listen for. The default is `note_on`, but you can also specify `note_off` or `any`. The default is `any` if this attribute is not specified.
 - **enabled** (optional): A true/false value that specifies whether this note listener is turned on.
 - **swallowNotes** (optional): The bindings that live below this note listener are called before any notes are played. By default, swallowNotes is false, which means that the keypress will then be received by the sampler. If `swallowNotes` is true, the sampler will not receive the note. This is useful if you wish to prevent certain keys from triggers notes.
 
@@ -35,11 +36,11 @@ Beneath the `<note>` element, you can have any number of bindings. Here is an ex
 
 ```xml
 <midi>
-  <note note="11" enabled="true">
+  <note note="11" enabled="true" eventType="note_on">
     <binding enabled="true" type="general" level="group" groupIndex="0" parameter="ENABLED" translation="fixed_value" translationValue="true" />
     <binding enabled="true" type="general" level="group" groupIndex="1" parameter="ENABLED" translation="fixed_value" translationValue="false" />
   </note>
-  <note note="12" enabled="true">
+  <note note="12" enabled="true" eventType="note_on">
     <binding enabled="true" type="general" level="group" groupIndex="0" parameter="ENABLED" translation="fixed_value" translationValue="false" />
     <binding enabled="true" type="general" level="group" groupIndex="1" parameter="ENABLED" translation="fixed_value" translationValue="true" />
   </note>
@@ -65,10 +66,10 @@ You'll notice that the `control` type has a `level` value of `ui` and a `paramet
 An example of changing a menu option based on a MIDI note (keyswitch) would look like this:
 ```xml
 <midi>
-  <note note="11">
+  <note note="11" eventType="note_on">
     <binding type="control" level="ui" position="1" parameter="VALUE" translation="fixed_value" translationValue="1" />
   </note>
-  <note note="12">
+  <note note="12" eventType="note_on">
     <binding type="control" level="ui" position="1" parameter="VALUE" translation="fixed_value" translationValue="2" />
   </note>
 </midi>

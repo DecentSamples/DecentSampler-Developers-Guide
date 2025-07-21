@@ -40,10 +40,8 @@ Attributes:
 |  Attribute  |          |           Type           |                                 Valid Range                                                | Default |
 | ----------- | -------- | ------------------------ | ------------------------------------------------------------------------------------------ | ------- |
 | `type`      | Required | The type of filter       | Must be either `lowpass` (legacy: `lowpass_4pl`), `lowpass_1pl`, `bandpass`, or `highpass` |         |
-| `resonance` | Optional | The filter resonance (Q) | 0 - 1.0, where 1.0 is big, 0 is small.                                                     |     0.7 |
+| `resonance` | Optional | The filter resonance (Q) | 0.001 - 5.0, where 5 is big, 0 is small.                                                   |     0.7 |
 | `frequency` | Optional | The filter frequency     | 0 - 22000                                                                                  |   22000 |
-
-
 
 ### Notch EQ Filter
 

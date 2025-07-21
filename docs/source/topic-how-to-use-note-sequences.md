@@ -106,6 +106,7 @@ Here is a description of all of the useful attributes for the `<binding>` elemen
 - `level` (required): When triggering note sequences, this should always be `instrument`, as these all live at the `instrument` level.
 - `type` (required): The type of binding. When triggering note sequences, this should always be `note_sequence`.
 - `seqIndex` (required): The index of the sequence in the sequence manager that you want to trigger. This is a zero-based index.
+- `seqFollowGlobalTempo` (optional): Whether or not the sequence should follow the global tempo. Valid values are `true` and `false`. If this is set to false, then playback will be hardcoded at 120BPM. This can be useful if you want to assure that sequences will always play back at the same rate regardless of the DAW clock.
 - `seqLoopMode` (optional): The loop mode of the sequence. This can be `forward`, `reverse`, `random`, or `no_loop`.
 - `seqTriggerBehavior` (optional): The trigger behavior of the sequence. this can be `midi_key`, `on`, or `off`. When you are triggering a sequence using a MIDI key, this should always be `midi_key`.
 - `seqTransposeWithRootNote` (optional): The amount by which the sequence should be transposed when it is triggered, relative to the incoming note. For example, if you set this to 24, and the MIDI note that triggered it was 28, the sequence would be transposed up by 4 semitones, since 28 - 24 = 4.

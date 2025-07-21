@@ -3,11 +3,11 @@
 # -- Project information
 
 project = 'DecentSampler'
-copyright = '2024, David Hilowitz'
+copyright = '2025, David Hilowitz'
 author = 'David Hilowitz'
 
-release = '1.11'
-version = '1.11.0'
+release = '1.13'
+version = '1.13.0'
 
 # -- General configuration
 

@@ -8,10 +8,12 @@ topic-colored-keys
 topic-dropdown-menus
 How to add Buttons to your user interfaces<https://www.decentsamples.com/2022/11/27/for-sample-creators-how-to-create-buttons-in-your-sample-libraries/?swcfpc=1>
 Example: How to control two groups with knobs<https://www.decentsamples.com/decent-sampler-developer-resources/how-to-control-two-groups-with-knobs/?swcfpc=1>
+topic-how-to-use-animations
 ```
 ## Sample Mapping and Effects
 ```{toctree}
 :maxdepth: 1
+topic-how-to-use-buses-and-auxiliary-outputs
 topic-how-to-use-note-sequences
 topic-how-to-control-parameters-using-tags
 topic-how-to-do-voice-muting-for-drums

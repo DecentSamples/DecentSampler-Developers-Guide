@@ -30,7 +30,7 @@ Example:
 
 ## The &lt;tab&gt; element
 
-The `<tab>` element lives underneath the `<ui>` element. This architecture was chosen because we may, at some point, add support for multiple tabs. At present it is only possible to have a single tab within DecentSampler instruments. As such, every UI must have at most one `<tab>` element. 
+The `<tab>` element lives underneath the `<ui>` element. Every `<ui>` must have at most one `<tab>` element.
 
 Attributes:
 
@@ -41,18 +41,22 @@ The `<button>` element allows you to create a button within your UI. It lives un
 
 Attributes:
 
-| Attribute        | Required                       | Description                                                                                                                                                                                             | Default |
-|:-----------------|:-------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------|
-| **`x`**          | (required)                     | The x position of the menu                                                                                                                                                                              | None    |
-| **`y`**          | (required)                     | The y position of the menu                                                                                                                                                                              | None    |
-| **`width`**      | (required)                     | The width of the menu                                                                                                                                                                                   | None    |
-| **`height`**     | (required)                     | The height of the menu                                                                                                                                                                                  | None    |
-| **`value`**      | (optional)                     | The is the 0-based index of the button state that is currently selected. A value of 0 means that the first state is active.                                                                             | 0       |
-| **`style`**      | (optional)                     | The type of button we want. There are two valid values: `text`, `image`.                                                                                                                                | `text`  |
-| **`mainImage`**  | (required for `image` buttons) | For `image` buttons only. The path of the main image to display for this button. This can also be set at the state level so that it only applies to a specific state.                                   | None    |
-| **`hoverImage`** | (optional)                     | For `image` buttons only. The path of the main image to display when the user hovers their mouse over this button. This can also be set at the state level so that it only applies to a specific state. | None    |
-| **`clickImage`** | (optional)                     | For `image` buttons only. The path of the main image to display when the user clicks down on this button. This can also be set at the state level so that it only applies to a specific state.          | None    |
-| **`visible`**    | (optional)                     | This controls whether or not this button is visible. There are two valid values: `true`, `false`.                                                                                                       | `true`  |
+| Attribute             | Required                       | Description                                                                                                                                                                                             | Default |
+|:----------------------|:-------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------|
+| **`x`**               | (required)                     | The x position of the menu                                                                                                                                                                              | None    |
+| **`y`**               | (required)                     | The y position of the menu                                                                                                                                                                              | None    |
+| **`width`**           | (required)                     | The width of the menu                                                                                                                                                                                   | None    |
+| **`height`**          | (required)                     | The height of the menu                                                                                                                                                                                  | None    |
+| **`value`**           | (optional)                     | The is the 0-based index of the button state that is currently selected. A value of 0 means that the first state is active.                                                                             | 0       |
+| **`style`**           | (optional)                     | The type of button we want. There are two valid values: `text`, `image`.                                                                                                                                | `text`  |
+| **`mainImage`**       | (required for `image` buttons) | For `image` buttons only. The path of the main image to display for this button. This can also be set at the state level so that it only applies to a specific state.                                   | None    |
+| **`hoverImage`**      | (optional)                     | For `image` buttons only. The path of the main image to display when the user hovers their mouse over this button. This can also be set at the state level so that it only applies to a specific state. | None    |
+| **`clickImage`**      | (optional)                     | For `image` buttons only. The path of the main image to display when the user clicks down on this button. This can also be set at the state level so that it only applies to a specific state.          | None    |
+| **`disabledOpacity`** | (optional)                     | The opacity of the button when it is disabled. This is a floating point value between 0 and 1. Default: 0.5                                                                                                 | 0.5     |
+| **`visible`**         | (optional)                     | This controls whether or not this button is visible. There are two valid values: `true`, `false`.                                                                                                       | `true`  |
+| **`enabled`**         | (optional)                     | This controls whether or not this button is enabled. There are two valid values: `true`, `false`.                                                                                                       | `true`  |
+| **`tags`**            | (optional)                     | A comma-separated list of tags to be associated with this button. These can be used in conjunction with any binding that takes a `controlIndex` (instead of the `controlIndex`)                          | None    |
+| **`tooltip`**         | (optional)                     | A tool tip to display when the user hovers over this control.  |   |
 
 Example:
 ```xml
@@ -94,7 +98,7 @@ In order to have your `<button>` elements actually do something useful, you need
 
 As you can see, this example uses a button to switch between two groups. You'll note the liberal use of the `fixed_value` translation mode above. This means that when any of these options are selected, a fixed predetermined value is used for the value of that binding. 
 
-### The &lt;image&gt; element
+## The &lt;image&gt; element
 The `<image>` element allows you to place a static image into your user interface. It lives underneath the `<tab>` element. Attributes:
 
 - **`x`** (required): The `x` position of your image where (0,0) is the top-left corner
@@ -103,9 +107,35 @@ The `<image>` element allows you to place a static image into your user interfac
 - **`height`** (required): The height in pixels of the image component
 - **`path`** (required): The relative path of the image file to show in this component
 - **`aspectRatioMode`** (required): Whether or not the engine should preserve the aspect ratio of the image. Note: regardless of these settings, you still need to specify a width and height for your image element. Valid values: `preserve`, `stretch`. Default value is `preserve`. 
+- **`opacity`** (optional): The opacity of the image. This is a floating point value between 0 and 1. Default: 1
 - **`visible`** (optional): This controls whether or not this image is visible. There are two valid values: `true` (default), `false`.
+- **`tooltip`** (optional): A tool tip to display when the user hovers over this image.
 
-### The &lt;label&gt; element
+## The &lt;multiFrameImage&gt; element
+
+The `<multiFrameImage>` element allows you to play a sequence of images as an animation. The expectation is that all the frames of the animation will be loaded in a single image, arranged in a strip – either horizontal or vertical. This is the same format as is used by the custom knobs above. It lives underneath the `<tab>` element. Attributes:
+
+- **`x`** (required): The `x` position of your image where (0,0) is the top-left corner
+- **`y`** (required): The `y` position of your image where (0,0) is the top-left corner
+- **`width`** (required): The width in pixels of the image component
+- **`height`** (required): The height in pixels of the image component
+- **`path`** (required): The relative path of the image file to show in this component
+- **`numFrames`** (required): The number of frames in the animation
+- **`frameRate`** (required): The frame rate of the animation in frames per second. The maximum supported frame rate is 24 frames per second.
+- **`opacity`** (optional): The opacity of the animation. This is a floating point value between 0 and 1. Default: 1
+- **`sourceFormat`** (required): The orientation of the frames within the image strip. Valid values: `horizontal_image_strip`, `vertical_image_strip`.
+- **`playbackMode`** (optional): The direction in which the animation should play. Valid values: `forward_loop`, `forward_once`, `reverse_loop`, `reverse_once`, `ping_pong_loop` (forth and back), and `stopped`. Default value is `forward_loop`.
+- **`visible`** (optional): This controls whether or not this image is visible. There are two valid values: `true` (default), `false`.
+- **`tags`** (optional): A comma-separated list of tags to be associated with this image. These can be used in conjunction with any binding that takes a `controlIndex` (instead of the `controlIndex`)
+- **`tooltip`** (optional): A tool tip to display when the user hovers over this image.
+
+Example:
+
+```xml
+<multiFrameImage x="10" y="10" width="64" height="64" path="Images/Animation.png" numFrames="31" imageStripOrientaton="vertical" frameRate="24" playbackMode="forward"/>
+```
+
+## The &lt;label&gt; element
 The `<label>` element allows you to place a static block of text into yoru user interface. It lives underneath the `<tab>` element. Attributes:
 
 - **`x`** (required): The `x` position of your control where (0,0) is the top-left corner
@@ -117,11 +147,14 @@ The `<label>` element allows you to place a static block of text into yoru user 
 - **`height`** (required): The height in pixels of the label.
 - **`vAlign`** (optional): The vertical alignment of the text within the box described by the width and height attributes. Valid values: `top`,`bottom`, `center`. Default is `center`.
 - **`hAlign`** (optional): The horizontal alignment of the text within the box described by the width and height attributes. Valid values: `left`,`right`, `center`. Default is `center`.
+- **`orientation`** (optional): The orientation of the text within the box described by the width and height attributes. Valid values: `horizontal`, `vertical_up`, `vertical_down`. Default is `horizontal`.
+- **`tags`** (optional): A comma-separated list of tags to be associated with this label. These can be used in conjunction with any binding that takes a `controlIndex` (instead of the `controlIndex`)
 - **`visible`** (optional): This controls whether or not this text label is visible. There are two valid values: `true` (default), `false`.
+- **`tooltip`** (optional): A tool tip to display when the user hovers over this label.
 
 A label's text can also be set dynamically using bindings using the `TEXT` binding parameter name.
 
-### The &lt;labeled-knob&gt; and &lt;control&gt; elements
+## The &lt;labeled-knob&gt; and &lt;control&gt; elements
 
 The `<labeled-knob>` and `<control>` elements live underneath the `<tab>` element. These tags correspond to user controls (usually round radial dials) that can be used as part of a UI. These two element types are the same except that `<labeled-knob>` elements contain built-in labels, where as `<control>` elements do not.  Every tab can have many `<control>` or `<labeled-knob>` elements underneath it. 
 
@@ -147,11 +180,17 @@ Attributes:
 - **`textSize`** (optional): A font size for the text label. Default: 12
 - **`trackForegroundColor`** (optional): An 8 digit hex value indicating the foreground color to use for the knob track. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
 - **`trackBackgroundColor`** (optional): An 8 digit hex value indicating the background color to use for the knob track. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
+- **`tags`** (optional): A comma-separated list of tags to be associated with this control. These can be used in conjunction with any binding that takes a `controlIndex` (instead of the `controlIndex`)
 - **`visible`** (optional): This controls whether or not this control is visible. There are two valid values: `true` (default), `false`.
+- **`enabled`** (optional): This controls whether or not this control is enabled. There are two valid values: `true` (default), `false`.
+- **`tooltip`** (optional): A tool tip to display when the user hovers over this control.
+- **`snapMode`** (optional): This attribute controls how the control should snap to values. Valid values: `none`, `whole_numbers`, `tenths`, `hundredths`, `thousandths`, and `stop_points`. Default: none.
+- **`snapStopPoints`** (optional): A comma-separated list of values that the control should snap to when `snapMode` is set to `stop_points`. Default: none.
+- **`defeatSnapWithShift`** (optional): A true/false value indicating whether or not the user can defeat the snap-to-value behavior by holding down the shift key. Default: false.
 
 It is also possible to use custom control graphics using the following attributes:
 
-- **`customSkinImage`** (optional): This is path to an image to use for the control. This is expected to be a JPEG or PNG in KnobMan format. A huge gallery of compatible knobs can be found here (https://www.g200kg.com/en/webknobman/gallery.php).
+- **`customSkinImage`** (optional): This is path to an image to use for the control. This is expected to be a JPEG or PNG in KnobMan format. A huge gallery of compatible knobs can be found [here](https://www.g200kg.com/en/webknobman/gallery.php).
 - **`customSkinNumFrames`** (optional): The number of animation frames contained in the KnobMan image pointed to by `customSkinImage`.
 - **`customSkinImageOrientation`** (optional): The orientation of the frames within the KnobMan image pointed to by `customSkinImage`. Valid values: `horizontal`, `vertical`. Default: vertical.
 - **`mouseDragSensitivity`** (optional): An integer number describing how sensitive the control should be to mouse drags. The higher the number, the less sensitive the control will be to mouse movements.
@@ -183,14 +222,17 @@ The `<menu>` element allows you to create a drop-down menu within your UI.
 
 Attributes:
 
-| Attribute   | Required   | Description                                                                                                                                                             |        |
-|:------------|:-----------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------|
-| **x**       | (required) | The x position of the menu                                                                                                                                              |        |
-| **y**       | (required) | The y position of the menu                                                                                                                                              |        |
-| **width**   | (required) | The width of the menu                                                                                                                                                   |        |
-| **height**  | (required) | The height of the menu                                                                                                                                                  |        |
-| **value**   | (optional) | The is the 1-based index of the menu option that is currently selected. **NOTE: Index numbers for menu items start at 1.** A value of 0 means that no item is selected. |        |
-| **visible** | (optional) | This controls whether or not this menu is visible. There are two valid values: `true`, `false`.                                                                         | `true` |
+| Attribute      | Required   | Description                                                                                                                                                             |        |
+|:---------------|:-----------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------|
+| **x**          | (required) | The x position of the menu                                                                                                                                              |        |
+| **y**          | (required) | The y position of the menu                                                                                                                                              |        |
+| **width**      | (required) | The width of the menu                                                                                                                                                   |        |
+| **height**     | (required) | The height of the menu                                                                                                                                                  |        |
+| **value**      | (optional) | The is the 1-based index of the menu option that is currently selected. **NOTE: Index numbers for menu items start at 1.** A value of 0 means that no item is selected. |        |
+| **tags**       | (optional) | A comma-separated list of tags to be associated with this menu. These can be used in conjunction with any binding that takes a `controlIndex` (instead of the `controlIndex`) |        |
+| **visible**    | (optional) | This controls whether or not this menu is visible. There are two valid values: `true`, `false`.                                                                       | `true` |
+| **enabled**    | (optional) | This controls whether or not this menu is enabled. There are two valid values: `true`, `false`.                                                                       | `true` |
+| **tooltip**    | (optional) | A tool tip to display when the user hovers over this control.                                                                                                           |        |
 
 Example:
 ```xml
@@ -232,6 +274,45 @@ That's right. The `<option>` element has only one attribute. In order to have yo
 ```
 
 As you can see, this example uses a menu to switch between two groups. It also sets the text of a text label. You'll note the liberal use of the new `fixed_value` translation mode above. This means that when any of these options are selected, a fixed predetermined value is used for the value of that binding. 
+
+## The &lt;xyPad&gt; element
+The `<xyPad>` element allows you to create a two-dimensional pad control within your UI. This control functions almost like two sliders, one for the x-axis and one for the y-axis. Each axis has a range from 0.0 to 1.0. Each axis can be bound to a different parameter. The `<xyPad>` element lives underneath the `<tab>` element.
+
+Attributes:
+- **`x`** (required): The `x` position of your control where (0,0) is the top-left corner
+- **`y`** (required): The `y` position of your control where (0,0) is the top-left corner
+- **`width`** (required): The width in pixels of the control.
+- **`height`** (required): The height in pixels of the control.
+- **`markerDiameter`** (optional): The diameter of the marker that moves around the control. Default: 10
+- **`markerOutlineColor`** (optional): An 8 digit hex value indicating the color of the marker's outline. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
+- **`markerFillColor`** (optional): An 8 digit hex value indicating the color of the marker's fill. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
+- **`outlineColor`** (optional): An 8 digit hex value indicating the color of the control's outline. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
+- **`bgColor`** (optional): An 8 digit hex value indicating the color of the control's background. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
+- **`tooltip`** (optional): A tool tip to display when the user hovers over this control.
+- **`xValue`** (optional): The initial value of the x-axis. Default: 0
+- **`yValue`** (optional): The initial value of the y-axis. Default: 0
+- **`tags`** (optional): A comma-separated list of tags to be associated with this control. These can be used in conjunction with any binding that takes a `controlIndex` (instead of the `controlIndex`)
+- **`visible`** (optional): This controls whether or not this control is visible. There are two valid values: `true` (default), `false`.
+- **`enabled`** (optional): This controls whether or not this control is enabled. There are two valid values: `true` (default), `false`.
+
+### The &lt;x&gt; and &lt;y&gt; elements
+
+Below the `<xyPad>` element, you can specify `<x>` and `<y>` elements. These elements are used to specify the bindings for the x and y axes of the control.
+
+Example:
+```xml
+<xyPad x="10" y="10" width="300" height="100" parameterName="Pad" xValue="0.5" yValue="0.5" bgColor="77FFCC00" markerFillColor="FFFFFFFF" outlineColor="77FFFFFFF">
+  <x>
+    <binding type="amp" level="group" groupIndex="0" parameter="AMP_VOLUME" translation="linear" translationOutputMin="0" translationOutputMax="1" />
+    <binding type="amp" level="group" groupIndex="1" parameter="AMP_VOLUME" translation="linear" translationOutputMin="1" translationOutputMax="0" />
+  </x>
+  <y>
+    <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY"
+        translation="table" 
+        translationTable="0,33;0.3,150;0.4,450;0.5,1100;0.7,4100;0.9,11000;1.0001,22000"/>
+    </y>
+  </xyPad>
+```
 
 ## The &lt;keyboard&gt; element
 
