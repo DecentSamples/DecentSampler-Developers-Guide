@@ -236,6 +236,25 @@ Attributes:
 | `mix`     | Optional | The wet/dry mix controls how much of the convolution signal we hear | 0 - 1.0, where 1.0 is just convolution, 0 is just dry signal. | 0.5        |
 | `irFile`  | Required | The path of the WAV or AIFF to use as an Impulse Response (IR) file | String                                                        | No default |
 
+### Pitch Shifter effect
+
+As of version 1.13.3, Decent Sampler contains an old-school pitch shifter effect, which allows you to shift the pitch of the audio signal up or down by a specified number of semitones. This can be useful for creating harmonies or for adding subtle chorus effects.
+
+Attributes:
+| Attribute    |          | Type                                                                 | Valid Range                                                                                                 | Default |
+|:-------------|:---------|:----------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------|:--------|
+| `type`       | Required | Must be `pitch_shift`                                                | `pitch_shift`                                                                                               |         |
+| `pitchShift` | Optional | The number of semitones to shift the pitch of the audio signal | -24 - 24, where -24 means two octaves down, 0 means no pitch shift, and 24 means two octaves up |
+| `mix`        | Optional | The wet/dry mix controls how much of the pitch-shifted signal we hear | 0 - 1.0, where 1.0 is just pitch-shifted signal, 0 is just dry signal. | 0.5       |
+
+Example:
+```xml
+<DecentSampler>
+  <effects>
+    <effect type="pitch_shift" pitchShift="2" mix="0.5" />
+  </effects>
+</DecentSampler>
+
 ### Wave Folder effect
 
 Introduced in version 1.7.2.  This effect allows you to fold a waveform back on itself. This is very useful for generating additional harmonic content.

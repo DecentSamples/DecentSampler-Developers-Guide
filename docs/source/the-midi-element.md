@@ -3,6 +3,7 @@ The &lt;midi&gt; element
 
 MIDI mappings can be added to your instrument by adding a `<midi>` element right below your top-level `<DecentSampler>` element. 
 
+
 ## The &lt;cc&gt; element
 Within the `<midi>` element, you can have any number of `<cc>` elements. These allow you to map changes in incoming continuous controller messages to specific parameters of your instrument. To use this functionality, you'll want to add a separate `<cc>` element for each CC number you would like to respond to. The `<cc>` element has a single required attribute `number=""` which specifies the number (from 0 to 127) of the continuous controller you would like to listen on. Beneath the `<cc>` element, you can have any number of bindings. 
 
@@ -49,9 +50,25 @@ Beneath the `<note>` element, you can have any number of bindings. Here is an ex
 
 In the above keyswitch example, MIDI note 11 turns on group 0 and turns off group 1, whereas MIDI note 12 does the opposite. Note the use of the `fixed_value` translation type.
 
+## The &lt;velocity&gt; element
+Within the `<midi>` element, you can also have a `<velocity>` element. This element allows you to control an instrument in response to MIDI velocity messages. This is useful for creating dynamic responses based on how hard a note is played.
+
+Example usage:
+
+```xml
+<midi>
+    <velocity>
+      <binding modAmount="0.3" level="group" parameter="FX_FILTER_FREQUENCY"
+               groupIndex="0" effectIndex="0" type="effect"/>
+    </velocity>
+  </midi>
+```
+
+In this example, the `<velocity>` element contains a single `<binding>` that modifies the `FX_FILTER_FREQUENCY` parameter of the first effect (effectIndex: 0) in the first group (groupIndex: 0) based on the velocity of incoming MIDI notes. The `modAmount` attribute specifies how much the velocity will affect the parameter.
+
 ### Bindings within the `<midi>` section
 
-The bindings that the `<cc>` and `<note>` element listens on are the same as those used by the UI controls. See [Appendix B](#appendix-b-the-binding-element) for a complete description of these.
+The bindings that the `<cc>`, `<note>`, and `<velocity>` element listens on are the same as those used by the UI controls. See [Appendix B](#appendix-b-the-binding-element) for a complete description of these.
 
 If you have a UI control mapped to the same internal parameter as a MIDI mapping, you'll want to have your MIDI mapping control the UI control instead of the parameter directly. The benefit of doing this is that, as the MIDI CC input is received, the UI control will be updated as well as the desired internal parameter. 
 
