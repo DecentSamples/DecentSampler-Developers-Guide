@@ -175,7 +175,7 @@ Attributes:
 - **`maxValue`** (optional): The maximum value of your control. Default: 1
 - **`value`** (optional): The initial value of your control. Default: 0
 - **`defaultValue`** (optional): If a user double-clicks on the control, the control's value will be set to this default value. If no default value is specified, then nothing will happen on double-click.
-- **`valueType`** (optional): There are three possible values for this `float` which yields numbers with two decimal points, `integer` which yields whole numbers, and `musical_time` which yields musical time increments in beats and measures. This last option is for use with the built-in delay effect only. Default: float
+- **`valueType`** (optional): There are several possible values for this: `float` which yields numbers with two decimal points, `integer` which yields whole numbers, `multi_state`, which allows the user to choose between multiple states, and `musical_time` which yields musical time increments in beats and measures (for use with the built-in delay effect only). In order to use the `multi_state` option, you must also specify several `<state name="something">` type elements. Default: float
 - **`textColor`** (optional): An 8 digit hex value indicating the text color to be used for the label. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
 - **`textSize`** (optional): A font size for the text label. Default: 12
 - **`trackForegroundColor`** (optional): An 8 digit hex value indicating the foreground color to use for the knob track. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
@@ -216,6 +216,25 @@ Example:
 ```
 
 To learn how to make knobs actually control parameters of your instrument, see "Appendix B: Bindings" section below.
+
+### Multi-State Controls
+
+As of 1.13.6, it is now possible to use the `multi_state` value type for controls. This allows you to create controls that can switch between multiple states, rather than just a continuous range of values. Here is an example of how you might use one of these:
+
+```xml
+<ui>
+    <tab>
+      <control x="80" y="10" style="rotary" width="84" height="84" trackForegroundColor="FFF06C55" trackBackgroundColor="66999999" parameterName="Language" valueType="multi_state" value="10.0">
+        <state name="English" mainImage="samples/EFlag_MainImage.png" hoverImage="samples/EFlag_HoverImage.png" clickImage="samples/EFlag_SelectedImage.png">
+          <!-- Various <binding />s that get triggered when the first state is selected -->
+        </state>
+        <state name="French" mainImage="Samples/FFlag_MainImage.png" hoverImage="Samples/FFlag_HoverImage.png" clickImage="Samples/FFlag_SelectedImage.png">
+          <!-- Various <binding />s that get triggered when the second state is selected -->
+        </state>
+      </control>
+    </tab>
+  </ui>
+```
 
 ## The &lt;menu&gt; element
 The `<menu>` element allows you to create a drop-down menu within your UI.
