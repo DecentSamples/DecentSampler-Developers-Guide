@@ -94,6 +94,31 @@ Here's a practical example of how to use the `<mpePressure>` element:
 
 This example shows an MPE pressure modulator that modifies the volume of a group based on the MPE pressure value. The translation is linear, meaning that the pressure value directly scales the volume between 0.5 and 1.
 
+## The &lt;random&gt; element
+
+The `<random>` element allows you to generate random values for modulation. This can be useful for adding unpredictability and variation to your sounds. The `<random>` element always produces a value between -1 and 1. It has the following attributes:
+
+- **`mode`**: The event that triggers the random value generation. This can be either `note_on` or `periodic`.
+- **`frequency`**: How often the random value is generated. This is only relevant if the `mode` is set to `periodic`.
+- **`trigger`**: Two possible values: `attack` means that the random value generator is reset on note-on events, `none` means that it is not. This is really only help for periodic random value generators.
+- **`seed`**: An integer seed value for the random number generator. This can be useful for creating reproducible results.
+- **`scope`**: Whether or not this modulator exists for all notes or whether each keypress gets its own modulator. Possible values are `global` and `voice`. If `voice` is chosen, a new random modulator is started each time a new note is pressed.
+
+Here's an example of how to use the `<random>` element:
+
+```xml
+<modulators>
+    <random mode="note_on" seed="12345" scope="voice">
+        <binding type="amp" level="group" groupIndex="0" effectIndex="0" parameter="AMP_VOLUME" 
+            modBehavior="set"
+            translation="linear"
+            translationOutputMin="0.5"
+            translationOutputMax="1"  />
+    </random>
+</modulators>
+
+```
+
 ## How to use &lt;binding&gt;s in conjunction with modulators
 
 In order to actually have your LFOs and envelopes do anything, you need to have bindings under them. If you are not familiar with the concept of bindings, you may want to read [this section](https://www.decentsamples.com/wp-content/uploads/2020/06/format-documentation.html#appendix-b-the-binding-element) then return here. Bindings tell the engine which parameters the LFO should be affecting and how. Here is an example:
@@ -111,12 +136,7 @@ There are a few differences between bindings as they are used by knobs and the o
 
 Modulators, on the other hand, are temporary. If a modulator (such as an LFO) changes its value, the engine looks at the bindings associated with that LFO and then makes a list of _temporary_ changes to the underlying data. When it comes time to render out the effect, it consults both the _permanent_ value and the _temporary_ modulation values. As a result of this difference in the way bindings are handled, only some parameters are "modulatable." At time of press, the following parameters are modulatable:
 
-- All gain effect parameters
-- All delay effect parameters
-- All phaser effect parameters
-- All filter effect parameters
-- All reverb effect parameters
-- All chorus effect parameters
+- Almost all effect parameters
 - Group Volume
 - Global Volume
 - Group Pan
