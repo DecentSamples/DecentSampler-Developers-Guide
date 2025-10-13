@@ -21,11 +21,20 @@ Underneath the `<modulators>` section, you can have any number of different LFOs
 </modulators>
 ```
 
+For an LFO with a 500ms delay before starting:
+
+```xml
+<modulators>
+  <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="500"></lfo>
+</modulators>
+```
+
 This element has the following attributes:
 
 - **`shape`**: controls the oscillator shape. Possible values are `sine`, `square`, `saw`. 
 - **`frequency`**: The speed of the LFO in cycles per second. For example, a value of 10 would mean that the waveform repeats ten times per second.
 - **`modAmount`**: This value between 0 and 1 controls how much the  modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
+- **`delayTime`**: The time in milliseconds to wait before the LFO starts outputting signal. During this delay period, the LFO outputs zero. Default value: 0.0 (no delay).
 - **`scope`**: Whether or not this LFO exists for all notes or whether each keypress gets its own LFO. Possible values are `global` (default for LFOs) and `voice`. If `voice` is chosen, a new LFO is started each time a new note is pressed.
 - **`modBehavior`**: This attribute controls how the LFO affects the parameter it is targeting. Possible values are `add`, `multiply`, and `set`. If `add` is chosen, the LFO will add its value to the parameter it is targeting. If `multiply` is chosen, the LFO will multiply its value by the parameter it is targeting. If `set` is chosen, the LFO will set the parameter it is targeting to its value. Default value: `set`. 
 
@@ -130,6 +139,49 @@ In order to actually have your LFOs and envelopes do anything, you need to have 
         <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY" modBehavior="add" translation="linear" translationOutputMin="0" translationOutputMax="2000.0"  />
     </lfo>
 </modulators>
+```
+
+### Controlling LFO Parameters with Bindings
+
+You can also bind to LFO parameters themselves to control them in real-time. For example, to control the delay time of an LFO with a UI knob:
+
+```xml
+<DecentSampler>
+  <ui>
+    <tab>
+      <labeled_knob x="10" y="30" width="90" textSize="16" textColor="AA000000" 
+                    minValue="0" maxValue="2000" value="500">
+        <binding type="modulator" level="instrument" parameter="MOD_DELAY_TIME" 
+                 modulatorIndex="0" translation="linear" />
+      </labeled_knob>
+    </tab>
+  </ui>
+  <modulators>
+    <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="500">
+      <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY" 
+               modBehavior="add" translation="linear" translationOutputMin="0" translationOutputMax="2000.0" />
+    </lfo>
+  </modulators>
+</DecentSampler>
+```
+
+You can also control the delay time via MIDI CC:
+
+```xml
+<DecentSampler>
+  <midi>
+    <cc number="74">
+      <binding type="modulator" level="instrument" parameter="MOD_DELAY_TIME" 
+               modulatorIndex="0" translation="linear" translationOutputMin="0" translationOutputMax="2000" />
+    </cc>
+  </midi>
+  <modulators>
+    <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="500">
+      <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY" 
+               modBehavior="add" translation="linear" translationOutputMin="0" translationOutputMax="2000.0" />
+    </lfo>
+  </modulators>
+</DecentSampler>
 ```
 
 There are a few differences between bindings as they are used by knobs and the ones used by modulators. Specifically, when you move a UI control that has a binding attached, the engine actually goes out and changes the value of the parameter that is targeted by that binding. For example, if you have a knob that controls a lowpass filter's cutoff frequency, moving that knob will cause that actual frequency of that filter to change. In other words, the changes that the knob is making on the underlying sample library are _permanent_. The same is also true for bindings associated with MIDI continuous controllers. 
