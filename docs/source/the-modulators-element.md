@@ -25,7 +25,7 @@ For an LFO with a 500ms delay before starting:
 
 ```xml
 <modulators>
-  <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="500"></lfo>
+  <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="0.500"></lfo>
 </modulators>
 ```
 
@@ -34,7 +34,7 @@ This element has the following attributes:
 - **`shape`**: controls the oscillator shape. Possible values are `sine`, `square`, `saw`. 
 - **`frequency`**: The speed of the LFO in cycles per second. For example, a value of 10 would mean that the waveform repeats ten times per second.
 - **`modAmount`**: This value between 0 and 1 controls how much the  modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
-- **`delayTime`**: The time in milliseconds to wait before the LFO starts outputting signal. During this delay period, the LFO outputs zero. Default value: 0.0 (no delay).
+- **`delayTime`**: The time in seconds to wait before the LFO starts outputting signal. During this delay period, the LFO outputs zero. Default value: 0.0 (no delay).
 - **`scope`**: Whether or not this LFO exists for all notes or whether each keypress gets its own LFO. Possible values are `global` (default for LFOs) and `voice`. If `voice` is chosen, a new LFO is started each time a new note is pressed.
 - **`modBehavior`**: This attribute controls how the LFO affects the parameter it is targeting. Possible values are `add`, `multiply`, and `set`. If `add` is chosen, the LFO will add its value to the parameter it is targeting. If `multiply` is chosen, the LFO will multiply its value by the parameter it is targeting. If `set` is chosen, the LFO will set the parameter it is targeting to its value. Default value: `set`. 
 
@@ -157,7 +157,7 @@ You can also bind to LFO parameters themselves to control them in real-time. For
     </tab>
   </ui>
   <modulators>
-    <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="500">
+    <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="0.500">
       <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY" 
                modBehavior="add" translation="linear" translationOutputMin="0" translationOutputMax="2000.0" />
     </lfo>
@@ -176,7 +176,7 @@ You can also control the delay time via MIDI CC:
     </cc>
   </midi>
   <modulators>
-    <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="500">
+    <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="0.500">
       <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY" 
                modBehavior="add" translation="linear" translationOutputMin="0" translationOutputMax="2000.0" />
     </lfo>
