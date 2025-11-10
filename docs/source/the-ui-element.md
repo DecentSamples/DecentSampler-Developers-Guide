@@ -251,6 +251,12 @@ Attributes:
 | **tags**       | (optional) | A comma-separated list of tags to be associated with this menu. These can be used in conjunction with any binding that takes a `controlIndex` (instead of the `controlIndex`) |        |
 | **visible**    | (optional) | This controls whether or not this menu is visible. There are two valid values: `true`, `false`.                                                                       | `true` |
 | **enabled**    | (optional) | This controls whether or not this menu is enabled. There are two valid values: `true`, `false`.                                                                       | `true` |
+| **textColor**  | (optional) | A hex ARGB color value for the menu text (e.g., "FFFFFFFF" for white text).                                                                                            |        |
+| **backgroundColor** | (optional) | A hex ARGB color value for the menu background (e.g., "FF333333" for dark gray).                                                                                   |        |
+| **highlightedTextColor** | (optional) | A hex ARGB color value for the highlighted (selected) menu text (e.g., "FF000000" for black text).                                                             |        |
+| **highlightedBackgroundColor** | (optional) | A hex ARGB color value for the highlighted (selected) menu background (e.g., "FFCCCCCC" for light gray).                                               |        |
+| **vAlign**     | (optional) | The vertical alignment of the menu text. Valid values are "top", "center", "bottom".                                                                               | "center" |
+| **hAlign**     | (optional) | The horizontal alignment of the menu text. Valid values are "left", "center", "right".                                                                             | "left"   |
 | **tooltip**    | (optional) | A tool tip to display when the user hovers over this control.                                                                                                           |        |
 
 Example:
