@@ -1,0 +1,16 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"build_systems":
+    [
+        {
+            "name": "Sphinx",
+        	"shell_cmd": "make html",
+            "working_dir": "$project_path/docs"
+        }
+    ]
+}

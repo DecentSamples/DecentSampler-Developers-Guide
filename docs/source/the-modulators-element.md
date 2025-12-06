@@ -56,6 +56,108 @@ This element has the following attributes:
 - **`decayCurve`**: A numeric value from -100 to 100 that determines the shape of the decay portion of the ADSR envelope. Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential). Default value: `100` (exponential).
 - **`releaseCurve`**: A numeric value from -100 to 100 that determines the shape of the release portion of the ADSR envelope. Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential). Default value: `100` (exponential).
 
+## The &lt;midiCC&gt; element
+
+The `<midiCC>` element allows you to use MIDI Continuous Controller (CC) messages as modulation sources. This makes it possible to control various parameters of your instrument in response to incoming MIDI CC data, such as the mod wheel, expression pedal, or any other MIDI controller.
+
+```xml
+<modulators>
+  <midiCC number="1" modAmount="1.0" channel="voice">
+    <!-- Bindings go here -->
+  </midiCC>
+</modulators>
+```
+
+This element has the following attributes:
+
+- **`number`**: The MIDI CC number to respond to (0-127). Common CC numbers include 1 (mod wheel), 7 (volume), 10 (pan), 11 (expression), and 74 (filter cutoff). This attribute is required.
+- **`modAmount`**: This value between 0 and 1 controls how much the modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
+- **`channel`**: Determines which MIDI channel's CC values to read. Options are:
+  - **`"voice"`** (default): Uses the MIDI channel of the note that triggered the voice. This is essential for MPE and multi-channel setups where each voice may be on a different channel.
+  - **`1-16`**: A specific channel number. The modulator will always read CC values from this channel, regardless of which channel triggered the voice. Useful for global control in non-MPE setups.
+  
+  For voice-scope modulators, the default is `"voice"`. For global-scope modulators, the default is `"1"`.
+
+Here's a practical example that uses the mod wheel (CC#1) to control filter cutoff with per-voice channel tracking:
+
+```xml
+<modulators>
+    <midiCC number="1" modAmount="1.0" channel="voice" scope="voice">
+        <binding type="effect" level="group" groupIndex="0" effectIndex="0" parameter="FX_FILTER_FREQUENCY"
+            modBehavior="add"
+            translation="table"
+            translationTable="0,33;0.3,150;0.4,450;0.5,1100;0.7,4100;0.9,11000;1.0001,22000" />
+    </midiCC>
+</modulators>
+```
+
+Example of a global CC modulator that always reads from channel 1:
+
+```xml
+<modulators>
+    <midiCC number="11" modAmount="1.0" channel="1" scope="global">
+        <binding type="amp" level="instrument" parameter="AMP_VOLUME"
+            modBehavior="set"
+            translation="linear"
+            translationOutputMin="0"
+            translationOutputMax="1" />
+    </midiCC>
+</modulators>
+```
+
+**Important distinction:** The `<midiCC>` modulator creates _temporary_ modulation that only lasts for the life of each note. This means the modulation values are computed per-note and do not permanently change the underlying parameter values. In contrast, the `<midi><cc>` element (documented in [the MIDI section](the-midi-element.md)) allows MIDI continuous controllers to make _permanent_ value changes to parameters, similar to how UI knobs work. Use `<midiCC>` modulators when you want per-note modulation behavior (like using the mod wheel to add vibrato to individual notes), and use `<midi><cc>` bindings when you want global parameter changes (like using a CC to control the overall cutoff frequency of a filter).
+
+**MPE and Multi-Channel Considerations:** In MPE mode or multi-channel setups, CC messages are sent per-channel. The `channel` attribute determines how the modulator handles this:
+- With `channel="voice"`, each note reads CC values from its own MIDI channel, allowing independent control per note (essential for MPE)
+- With `channel="1"` (or any specific channel), all voices read from that channel's CC values, providing global control
+
+## The &lt;midiVelocity&gt; element
+
+The `<midiVelocity>` element allows you to use note-on velocity as a modulation source. This makes it possible to control various parameters based on how hard a key is pressed, providing dynamic expression in your instrument.
+
+```xml
+<modulators>
+  <midiVelocity modAmount="1.0" scope="voice">
+    <!-- Bindings go here -->
+  </midiVelocity>
+</modulators>
+```
+
+This element has the following attributes:
+
+- **`modAmount`**: This value between 0 and 1 controls how much the modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
+- **`scope`**: Whether or not this modulator exists for all notes or whether each keypress gets its own modulator. Possible values are `global` and `voice` (default for midiVelocity). If `voice` is chosen, each note retains its own velocity value for modulation.
+
+Here's a practical example that uses velocity to control the brightness of a sound:
+
+```xml
+<modulators>
+    <midiVelocity scope="voice" modAmount="1.0">
+        <binding type="effect" level="group" groupIndex="0" effectIndex="0" parameter="FX_FILTER_FREQUENCY"
+            modBehavior="add"
+            translation="linear"
+            translationOutputMin="0"
+            translationOutputMax="5000" />
+    </midiVelocity>
+</modulators>
+```
+
+This example uses velocity to modulate the cutoff frequency of a low-pass filter, making softer notes sound darker and harder notes sound brighter. This is a common technique for adding expressiveness to sampled instruments.
+
+Another example showing velocity controlling reverb amount:
+
+```xml
+<modulators>
+    <midiVelocity scope="voice" modAmount="1.0">
+        <binding type="effect" level="group" groupIndex="0" effectIndex="1" parameter="FX_REVERB_WET_LEVEL"
+            modBehavior="set"
+            translation="linear"
+            translationOutputMin="0.0"
+            translationOutputMax="0.5" />
+    </midiVelocity>
+</modulators>
+```
+
 ## The &lt;mpeTimbre&gt; element
 
 The `<mpeTimbre>` element allows users to control the timbre of an instrument in response to MPE messages. NOTE: In order for this to work, the plugin must be in MPE mode. This can be turned on by going into the **File > MIDI Input Settings..** dialog box. The `<mpeTimbre>` element has the following attributes:
