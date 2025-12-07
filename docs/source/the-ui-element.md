@@ -154,6 +154,69 @@ The `<label>` element allows you to place a static block of text into yoru user 
 
 A label's text can also be set dynamically using bindings using the `TEXT` binding parameter name.
 
+## The &lt;rectangle&gt; element
+
+The `<rectangle>` element allows you to draw filled rectangles with optional borders in your UI. It lives underneath the `<tab>` element. This is useful for creating backgrounds, panels, dividers, or decorative elements.
+
+Attributes:
+
+| Attribute              | Required   | Description                                                                                                                                              | Default      |
+|:-----------------------|:-----------|:---------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|
+| **`x`**                | (required) | The x position of the rectangle's top-left corner                                                                                                         | None         |
+| **`y`**                | (required) | The y position of the rectangle's top-left corner                                                                                                         | None         |
+| **`width`**            | (required) | The width of the rectangle in pixels                                                                                                                      | None         |
+| **`height`**           | (required) | The height of the rectangle in pixels                                                                                                                     | None         |
+| **`fillColor`**        | (optional) | An 8-character hex value for the fill color. See [Appendix A](#appendix-a-the-color-format) for format details. Use `#00000000` for transparent fill.    | `#FF808080`  |
+| **`borderColor`**      | (optional) | An 8-character hex value for the border color. See [Appendix A](#appendix-a-the-color-format) for format details.                                       | `#00000000`  |
+| **`borderThickness`**  | (optional) | The thickness of the border in pixels. Set to 0 for no border.                                                                                           | 0            |
+| **`visible`**          | (optional) | Controls whether the rectangle is visible. Valid values: `true`, `false`.                                                                                | `true`       |
+
+Example:
+
+```xml
+<tab name="main">
+  <!-- Background panel -->
+  <rectangle x="0" y="0" width="812" height="375" fillColor="#FF2a2a2a"/>
+  
+  <!-- Panel with border -->
+  <rectangle x="30" y="70" width="240" height="135" fillColor="#FF2d2d2d" borderColor="#FFe74c3c" borderThickness="1"/>
+  
+  <!-- Decorative stripe -->
+  <rectangle x="0" y="0" width="8" height="255" fillColor="#FF4a90e2"/>
+</tab>
+```
+
+## The &lt;line&gt; element
+
+The `<line>` element allows you to draw lines in your UI. It lives underneath the `<tab>` element. This is useful for creating dividers, borders, or decorative elements.
+
+Attributes:
+
+| Attribute           | Required   | Description                                                                                                                     | Default      |
+|:--------------------|:-----------|:--------------------------------------------------------------------------------------------------------------------------------|:-------------|
+| **`x1`**            | (required) | The x coordinate of the line's start point                                                                                       | None         |
+| **`y1`**            | (required) | The y coordinate of the line's start point                                                                                       | None         |
+| **`x2`**            | (required) | The x coordinate of the line's end point                                                                                         | None         |
+| **`y2`**            | (required) | The y coordinate of the line's end point                                                                                         | None         |
+| **`lineColor`**     | (optional) | An 8-character hex value for the line color. See [Appendix A](#appendix-a-the-color-format) for format details.                | `#FFFFFFFF`  |
+| **`lineThickness`** | (optional) | The thickness of the line in pixels                                                                                              | 1.0          |
+| **`visible`**       | (optional) | Controls whether the line is visible. Valid values: `true`, `false`.                                                            | `true`       |
+
+Example:
+
+```xml
+<tab name="main">
+  <!-- Horizontal divider line -->
+  <line x1="30" y1="95" x2="270" y2="95" lineColor="#FFe74c3c" lineThickness="2"/>
+  
+  <!-- Vertical divider line -->
+  <line x1="280" y1="70" x2="280" y2="205" lineColor="#FF555555" lineThickness="1"/>
+  
+  <!-- Diagonal decorative line -->
+  <line x1="790" y1="155" x2="804" y2="215" lineColor="#804a90e2" lineThickness="2"/>
+</tab>
+```
+
 ## The &lt;labeled-knob&gt; and &lt;control&gt; elements
 
 The `<labeled-knob>` and `<control>` elements live underneath the `<tab>` element. These tags correspond to user controls (usually round radial dials) that can be used as part of a UI. These two element types are the same except that `<labeled-knob>` elements contain built-in labels, where as `<control>` elements do not.  Every tab can have many `<control>` or `<labeled-knob>` elements underneath it. 

@@ -6,8 +6,8 @@ project = 'DecentSampler'
 copyright = '2025, David Hilowitz'
 author = 'David Hilowitz'
 
-release = '1.14'
-version = '1.14.1'
+release = '1.15'
+version = '1.15.0'
 
 # -- General configuration
 
