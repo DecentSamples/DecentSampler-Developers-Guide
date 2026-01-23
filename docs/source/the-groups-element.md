@@ -59,6 +59,7 @@ Underneath the `<group>` elements are `<sample>` elements. Each sample correspon
 | **`glideTime`** | (optional) | The glide/portamento time in seconds for this sample. A value of 0.0 means no portamento. Inherits from \`<group>\` or \`<groups>\` level if not specified. Default: 0.0 |
 | **`glideMode`** | (optional) | Controls the glide/portamento behavior for this sample. Possible values: \`always\`, \`legato\`, or \`off\`. Inherits from \`<group>\` or \`<groups>\` level if not specified. Default: \`legato\` |
 | **`trigger`**               | (optional) | Valid values: `attack` means a sample is played when the *note on* message is received. `release` means the sample is played when the *note off* message is received (aka a release trigger). `first` means that the sample will only be played if no other notes are playing. `legato` means that the sample will only be played if _some_ other notes are already playing. `continuous` means that the sample will always play. This can also be set at the `<group>` level. Default: `attack`. |  
+| **`releaseTriggerDecay`**   | (optional) | Controls the volume decay rate for release-triggered samples based on how long the note was held. When a release trigger sample plays, its volume decreases based on the time elapsed since the note was initially pressed. The value can be specified in two formats: **Decibel format (recommended):** Append "dB" to specify decay in decibels per second. For example, `"3dB"` means the volume decreases by 3dB for each second the note was held. If you specify a positive dB value, it will be automatically converted to negative (decay direction). **Linear format:** A decimal value between 0.0 and 1.0 specifying the linear gain decay factor per second. For example, `0.3` means the volume decreases by a factor of 0.3 each second. This is useful for piano pedal-up samples and other release triggers where shorter notes should have louder release samples. This can also be set at the `<group>` or `<groups>` levels. Default: 0.0 (no decay). |
 | **`tags`**                  | (optional) | A command-separated list of tags. Example: tags="rt,mic1". These are useful when controlling volumes using tags. See Appendix D. |  
 | **`onLoCCN`** **`onHiCCN`** | (optional) | If you want a sample to be triggered when a MIDI CC controller message comes in, for example for piano pedal down and pedal up samples, you use these attributes to specify the range of values that should trigger the sample. If you use `onLoCCN`, you must also use a corresponding `onHiCCN` for the same MIDI CC number. Example: `onLoCC64="90"` and `onHiCC64="127"` would mean that values of CC64 (Sustain Pedal) between 90 and 127 will trigger the given sample. This can also be set at the `<group>` level. Default:-1 (off) |
 | **`playbackMode`**          | (optional) | By default, the choice of playback engine is left up to the discretion of the user–they can set this in the Preferences screen. However, a sample creator can override this setting by setting the playbackMode for a specific sample, a group, or the entire instrument. Possible values are `memory`, `disk_streaming`, and `auto` (default). |
@@ -175,7 +176,9 @@ The `<oscillator>` element itself has only one attribute:
 
 | Attribute | Required/Optional | Description | Default |
 |-----------|-------------------|-------------|---------|
-| **\`waveform\`** | (optional) | The waveform shape. Valid values: \`sine\`, \`saw\`, \`square\`, \`triangle\`, \`noise\` (or \`white_noise\`). | \`sine\` |
+| **\`waveform\`** | (optional) | The waveform shape. Valid values: \`sine\`, \`saw\`, \`square\`, \`triangle\`, \`noise\` (or \`white_noise\`), \`pluck1\`. | \`sine\` |
+| **\`damping\`** | (optional) | **Only for \`pluck1\` waveform.** Controls the decay time of the plucked string. Range: 0.0 to 1.0. Lower values (closer to 0.0) create heavily damped, shorter sounds. Higher values (closer to 1.0) create minimal damping with longer, more resonant decay. This simulates the natural damping characteristics of string materials and playing techniques. | \`0.5\` |
+| **\`pluckType\`** | (optional) | **Only for \`pluck1\` waveform.** Blends between different excitation signals to control the timbral character. Range: 0.0 to 1.0. At 0.0, the oscillator uses a smooth triangle wave excitation producing a softer, mellower tone. At 1.0, it uses a noise burst excitation producing a brighter, more aggressive attack with richer harmonics. Intermediate values blend between the two extremes. | \`0.5\` |
 
 All other oscillator parameters are inherited from the parent `<group>` element.
 
@@ -186,6 +189,7 @@ All other oscillator parameters are inherited from the parent `<group>` element.
 - **\`square\`**: A square wave with odd harmonics. Useful for hollow, reed-like tones.
 - **\`triangle\`**: A triangle wave with fewer harmonics than saw. Produces a mellower tone.
 - **\`noise\`** (or **\`white_noise\`**): White noise generator. Perfect for percussion textures, hi-hats, snares, wind sounds, and adding grit to other sounds.
+- **\`pluck1\`**: A physical modeling oscillator based on digital waveguide synthesis that simulates plucked string behavior. Unlike traditional waveforms that cycle continuously, pluck1 generates a single excitation (like plucking a string) that decays naturally over time. Ideal for synthesizing plucked string instruments like guitar, bass, harp, koto, gayageum, and other stringed instruments. This oscillator includes two parameters for controlling the sound character: \`damping\` and \`pluckType\`.
 
 **Group-Level Parameters:**
 
@@ -364,6 +368,46 @@ Or use separate groups for independent control:
     </group>
 </groups>
 ```
+
+**Physical Modeling with pluck1:**
+
+The \`pluck1\` waveform uses digital waveguide synthesis to simulate plucked string instruments. Unlike traditional oscillator waveforms that cycle continuously, pluck1 generates a transient excitation that decays naturally, making it ideal for realistic plucked string sounds:
+
+```xml
+<DecentSampler minVersion="1.15.0">
+    <ui width="812" height="375">
+        <tab name="main">
+            <labeled-knob x="10" y="20" width="90" label="Damping" type="float" 
+                          minValue="0.0" maxValue="1.0" value="0.5">
+                <binding type="general" level="group" position="0" 
+                         parameter="OSCILLATOR_DAMPING"/>
+            </labeled-knob>
+            <labeled-knob x="110" y="20" width="90" label="Pluck Type" type="float" 
+                          minValue="0.0" maxValue="1.0" value="0.5">
+                <binding type="general" level="group" position="0" 
+                         parameter="OSCILLATOR_PLUCK_TYPE"/>
+            </labeled-knob>
+        </tab>
+    </ui>
+    
+    <groups attack="0.001" decay="0.1" sustain="0.8" release="0.2">
+        <group name="Plucked String" volume="0.8">
+            <oscillator waveform="pluck1" damping="0.5" pluckType="0.5" />
+        </group>
+    </groups>
+</DecentSampler>
+```
+
+In this example:
+- **\`damping="0.5"\`**: Moderate decay time - the string sustains for a reasonable duration
+- **\`pluckType="0.5"\`**: Balanced between smooth (triangle wave) and bright (noise burst) excitation
+- **OSCILLATOR_DAMPING** and **OSCILLATOR_PLUCK_TYPE** binding parameters allow real-time control from the UI
+
+The pluck1 oscillator is particularly effective for:
+- **Bass guitars**: Use lower \`damping\` values (0.3-0.5) with higher \`pluckType\` (0.6-0.8) for percussive attack
+- **Acoustic guitars**: Medium \`damping\` (0.5-0.7) with balanced \`pluckType\` (0.4-0.6)
+- **Harps and lyres**: Higher \`damping\` (0.7-0.9) with lower \`pluckType\` (0.2-0.4) for softer, sustained tones
+- **Ethnic stringed instruments**: Experiment with \`pluckType\` to match the excitation character of traditional instruments like koto, sitar, gayageum, etc.
 
 **UI Control for Oscillators:**
 
