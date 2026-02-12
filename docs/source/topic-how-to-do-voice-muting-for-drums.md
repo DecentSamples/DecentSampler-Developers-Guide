@@ -14,4 +14,4 @@ Here’s an example:
 </DecentSampler>
 ```
 
-Note the use of the `silencingMode` attribute as well (a value of “fast” means we immediately silence, whereas “normal” means we trigger the ADSR release phase).
+Note the use of the `silencingMode` attribute (a value of "fast" means we immediately silence, whereas "normal" means we trigger the ADSR release phase). Alternatively, you can use the `silencingDecay` attribute to specify an exact fade-out time in seconds. For example, `silencingDecay="0.02"` creates a 20ms fade-out when hi-hats are muted, which can sound more natural than an immediate cutoff.

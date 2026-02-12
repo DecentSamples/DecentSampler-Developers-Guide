@@ -27,7 +27,7 @@ In Decent Sampler, voice-muting makes use of tags. These are text labels that yo
 
 In the above scenario, if a legato sample is matched, any sample that might be playing from the "sustain" group will be stopped.
 
-It's also worth mention the `silencingMode` attribute as well (a value of `fast` means we immediately silence that sample, whereas `normal` means we trigger the ADSR release phase).
+It's also worth mentioning the `silencingMode` attribute (a value of `fast` means we immediately silence that sample, whereas `normal` means we trigger the ADSR release phase). Alternatively, you can use the `silencingDecay` attribute to specify an exact fade-out time in seconds, which overrides the `silencingMode` behavior. For example, `silencingDecay="0.05"` creates a 50ms fade-out when voices are silenced.
 
 **Step 2: Legato**
 
