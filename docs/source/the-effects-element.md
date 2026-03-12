@@ -330,3 +330,58 @@ Because wave shaping tends to sound better when applied on a per-voice basis, it
     </group>
   </groups>
 ```
+
+### Stereo Simulator effect
+
+Introduced in version 1.12.0. This effect converts a mono input signal into a pseudo-stereo signal using one of three classic algorithms.
+
+```xml
+<effect type="stereo_simulator"
+        algorithm="adt"
+        width="0.5"
+        delayTime="0.005"
+        modRate="0.5"
+        modDepth="0.3" />
+```
+
+Attributes:
+
+| Attribute     |          | Type                                                                              | Valid Range                                 | Default |
+|:--------------|:---------|:----------------------------------------------------------------------------------|:--------------------------------------------|:--------|
+| `type`        | Required | Must be `stereo_simulator`                                                        | `stereo_simulator`                          |         |
+| `algorithm`   | Optional | Pseudo-stereo algorithm to use                                                    | `lauridsen`, `schroeder`, `adt`             | `adt`   |
+| `width`       | Optional | Stereo spread and dry/wet amount; 0 = mono/dry, 1 = full stereo effect           | 0–1                                         | 0.5     |
+| `delayTime`   | Optional | Delay time in seconds                                                              | 0.001–0.030                                 | 0.005   |
+| `modRate`     | Optional | LFO modulation rate in Hz (ADT algorithm only)                                    | 0.1–10.0                                    | 0.5     |
+| `modDepth`    | Optional | LFO modulation depth (ADT algorithm only)                                         | 0–1                                         | 0.3     |
+
+The three algorithms are:
+
+- **`lauridsen`**: Complementary comb filters — simple and CPU-efficient.
+- **`schroeder`**: Double-delay comb filters — slightly richer stereo image.
+- **`adt`** (default): Artificial Double Tracking with LFO-modulated delay — the most convincing stereo widening effect. The `modRate` and `modDepth` parameters only affect this algorithm.
+
+The `width` parameter serves as both the stereo spread amount and the dry/wet control. Setting `width` to `0` produces a mono dry signal; setting it to `1` applies the full stereo effect.
+
+All parameters except `algorithm` are bindable. Example with a width knob:
+
+```xml
+<DecentSampler pluginVersion="1">
+  <ui>
+    <tab>
+      <labeled-knob x="100" y="40" label="Width" type="float" minValue="0" maxValue="1" value="0.5" textColor="FF000000">
+        <binding type="effect" level="instrument" effectIndex="0" parameter="FX_WIDTH" translation="linear" translationOutputMin="0" translationOutputMax="1"/>
+      </labeled-knob>
+    </tab>
+  </ui>
+  <groups>
+    <group>
+      <!-- Samples go here. -->
+    </group>
+  </groups>
+  <effects>
+    <effect type="stereo_simulator" algorithm="adt" width="0.5" delayTime="0.005" modRate="0.5" modDepth="0.3" />
+  </effects>
+</DecentSampler>
+```
+```

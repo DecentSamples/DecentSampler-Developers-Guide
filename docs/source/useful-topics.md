@@ -25,3 +25,8 @@ How to do Voice-Muting (like for hi-hats) and create Legato samples<https://www.
 How to use Convolution Reverb in Decent Sampler<https://www.decentsamples.com/2022/11/23/for-sample-creators-how-to-use-convolution-in-your-decent-sampler-presets/?swcfpc=1>
 How to add Tempo-synced Delay<https://www.decentsamples.com/2024/02/08/for-sample-creators-how-to-add-tempo-synced-delay-to-your-instruments/>
 ```
+## Developer Tools
+```{toctree}
+:maxdepth: 1
+topic-validate-preset
+```
