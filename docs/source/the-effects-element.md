@@ -333,7 +333,7 @@ Because wave shaping tends to sound better when applied on a per-voice basis, it
 
 ### Stereo Simulator effect
 
-Introduced in version 1.12.0. This effect converts a mono input signal into a pseudo-stereo signal using one of three classic algorithms.
+Introduced in version 1.17.0. This effect converts a mono input signal into a pseudo-stereo signal using one of three classic algorithms.
 
 ```xml
 <effect type="stereo_simulator"
@@ -383,5 +383,4 @@ All parameters except `algorithm` are bindable. Example with a width knob:
     <effect type="stereo_simulator" algorithm="adt" width="0.5" delayTime="0.005" modRate="0.5" modDepth="0.3" />
   </effects>
 </DecentSampler>
-```
 ```
