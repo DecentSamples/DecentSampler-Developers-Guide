@@ -384,3 +384,66 @@ All parameters except `algorithm` are bindable. Example with a width knob:
   </effects>
 </DecentSampler>
 ```
+### Bit Crusher effect
+
+The bit crusher reduces the bit depth and sample rate of the audio signal, producing a characteristic lo-fi, digital, crunchy sound. Bit depth reduction introduces quantisation noise, while sample rate reduction creates aliasing artifacts.
+
+```xml
+<effect type="bit_crusher" bitDepth="8" sampleRateReduction="4" mix="1.0"/>
+```
+
+Attributes:
+
+| Attribute             |          | Type                                                                                                                  | Valid Range                                                                     | Default |
+|:----------------------|:---------|:----------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------|:--------|
+| `type`                | Required | Must be `bit_crusher`                                                                                                 | `bit_crusher`                                                                   |         |
+| `bitDepth`            | Optional | The number of bits used to quantise the audio signal. Lower values = more aggressive crushing.                        | 1–24, where 24 is clean and 1 is maximum crushing.                              | 24      |
+| `sampleRateReduction` | Optional | Sample-rate reduction factor. A value of 4 means the effective sample rate is reduced to one quarter of the original. | 1–32, where 1 is no reduction and 32 is maximum downsampling.                  | 1       |
+| `mix`                 | Optional | The wet/dry mix which controls how much of the bit-crushed signal we hear.                                            | 0–1.0, where 1.0 is fully crushed and 0.0 is the original dry signal.          | 1.0     |
+
+Both `bitDepth` and `sampleRateReduction` are bindable, so you can attach knobs to control them in real time.
+
+Binding parameters for the bit crusher effect:
+
+| Binding `parameter` value   | Description                                     |
+|:----------------------------|:------------------------------------------------|
+| `FX_BIT_DEPTH`              | Controls the bit depth (1–24)                   |
+| `FX_SAMPLE_RATE_REDUCTION`  | Controls the sample-rate reduction factor (1–32) |
+| `FX_MIX`                    | Controls the wet/dry mix (0–1)                  |
+
+Example with knobs for all three parameters:
+
+```xml
+<DecentSampler pluginVersion="1">
+  <ui>
+    <tab>
+      <labeled-knob x="80"  y="40" label="Bit Depth" type="float"
+                    minValue="1" maxValue="24" value="24" textColor="FF000000">
+        <binding type="effect" level="instrument" effectIndex="0"
+                 parameter="FX_BIT_DEPTH" translation="linear"
+                 translationOutputMin="1" translationOutputMax="24"/>
+      </labeled-knob>
+      <labeled-knob x="185" y="40" label="Rate Reduction" type="float"
+                    minValue="1" maxValue="32" value="1" textColor="FF000000">
+        <binding type="effect" level="instrument" effectIndex="0"
+                 parameter="FX_SAMPLE_RATE_REDUCTION" translation="linear"
+                 translationOutputMin="1" translationOutputMax="32"/>
+      </labeled-knob>
+      <labeled-knob x="290" y="40" label="Mix" type="float"
+                    minValue="0" maxValue="1" value="1" textColor="FF000000">
+        <binding type="effect" level="instrument" effectIndex="0"
+                 parameter="FX_MIX" translation="linear"
+                 translationOutputMin="0" translationOutputMax="1"/>
+      </labeled-knob>
+    </tab>
+  </ui>
+  <groups>
+    <group>
+      <!-- Samples go here. -->
+    </group>
+  </groups>
+  <effects>
+    <effect type="bit_crusher" bitDepth="24" sampleRateReduction="1" mix="1.0"/>
+  </effects>
+</DecentSampler>
+```
