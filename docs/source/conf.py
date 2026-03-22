@@ -7,7 +7,7 @@ copyright = '2025, David Hilowitz'
 author = 'David Hilowitz'
 
 release = '1.17'
-version = '1.17.0'
+version = '1.17.1'
 
 # -- General configuration
 
