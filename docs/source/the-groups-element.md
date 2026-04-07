@@ -43,7 +43,7 @@ Underneath the `<group>` elements are `<sample>` elements. Each sample correspon
 
 | Attribute                   |            | Description       |
 |-----------------------------|------------| ------------------|
-| **`path`**                  | (required) | The relative path of the sample file to play for this zone.  |
+| **`path`**                  | (required) | The relative path of the sample file to play for this zone. Supported audio formats are WAV (`.wav`), AIFF (`.aif`, `.aiff`), and FLAC (`.flac`).  |
 | **`rootNote`**              | (required) | The MIDI note number (from 1 to 127) of the note. |
 | **`loNote`**                | (optional) | The MIDI note number (from 1 to 127) of the lowest note for which the zone should be triggered. Default: 0. |
 | **`hiNote`**                | (optional) | The MIDI note number (from 1 to 127) of the highest note for which the zone should be triggered. Default: 127. |
