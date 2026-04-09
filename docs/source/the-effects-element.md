@@ -103,10 +103,11 @@ Example:
 
 Attributes:
 
-| Attribute |          | Type                                                                                                      | Default | Valid Range |
-| --------- | -------- | --------------------------------------------------------------------------------------------------------- | ------- | ----------- |
-| `type`    | Required | Must be `gain`                                                                                            |         | `gain`      |
-| `level`   | Required | The amount of gain to be applied expressed in decibels. In other words, gain of -6dB reduces sound by 50% | 0       | -99 - 24    |
+| Attribute    |          | Type                                                                                                                                                                                                                                                                                                                                                              | Default    | Valid Range   |
+| ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ------------- |
+| `type`       | Required | Must be `gain`                                                                                                                                                                                                                                                                                                                                                    |            | `gain`        |
+| `level`      | Required | The amount of gain to apply. By default (and for backwards compatibility) this is expressed in **decibels** (e.g. `-6` reduces the signal by ~50%). If `levelUnit="linear"` is also set, this value is treated as a **linear multiplier** (e.g. `0.5` reduces the signal by 50%, `1.0` is unity gain, `2.0` doubles it). | `0`        | dB: -99 – 24; linear: 0.0 – 8.0 |
+| `levelUnit`  | Optional | Specifies the unit for the `level` attribute. Valid values are `decibels` (default, for backwards compatibility) and `linear`. When set to `linear`, the `level` attribute is treated as a linear multiplier rather than a dB value. **Note:** this attribute must appear before `level` in the XML element.                                                       | `decibels` | `decibels`, `linear` |
 
 ### Reverb effect
 
