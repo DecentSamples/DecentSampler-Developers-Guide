@@ -177,9 +177,13 @@ The `<oscillator>` element itself has only one attribute:
 
 | Attribute | Required/Optional | Description | Default |
 |-----------|-------------------|-------------|---------|
-| **\`waveform\`** | (optional) | The waveform shape. Valid values: \`sine\`, \`saw\`, \`square\`, \`triangle\`, \`noise\` (or \`white_noise\`), \`pluck1\`. | \`sine\` |
-| **\`damping\`** | (optional) | **Only for \`pluck1\` waveform.** Controls the decay time of the plucked string. Range: 0.0 to 1.0. Lower values (closer to 0.0) create heavily damped, shorter sounds. Higher values (closer to 1.0) create minimal damping with longer, more resonant decay. This simulates the natural damping characteristics of string materials and playing techniques. | \`0.5\` |
-| **\`pluckType\`** | (optional) | **Only for \`pluck1\` waveform.** Blends between different excitation signals to control the timbral character. Range: 0.0 to 1.0. At 0.0, the oscillator uses a smooth triangle wave excitation producing a softer, mellower tone. At 1.0, it uses a noise burst excitation producing a brighter, more aggressive attack with richer harmonics. Intermediate values blend between the two extremes. | \`0.5\` |
+| **`waveform`** | (optional) | The waveform shape. Valid values: `sine`, `saw`, `square`, `triangle`, `noise` (or `white_noise`), `pluck1`, `wavetable`. | `sine` |
+| **`damping`** | (optional) | **Only for `pluck1` waveform.** Controls the decay time of the plucked string. Range: 0.0 to 1.0. Lower values (closer to 0.0) create heavily damped, shorter sounds. Higher values (closer to 1.0) create minimal damping with longer, more resonant decay. This simulates the natural damping characteristics of string materials and playing techniques. | `0.5` |
+| **`pluckType`** | (optional) | **Only for `pluck1` waveform.** Blends between different excitation signals to control the timbral character. Range: 0.0 to 1.0. At 0.0, the oscillator uses a smooth triangle wave excitation producing a softer, mellower tone. At 1.0, it uses a noise burst excitation producing a brighter, more aggressive attack with richer harmonics. Intermediate values blend between the two extremes. | `0.5` |
+| **`wavetableFile`** | (optional) | **Only for `wavetable` waveform.** Path to the multi-frame wavetable `.wav` file, relative to the `.dspreset` file. The file should contain all wavetable frames concatenated in a single audio file. If the file contains a `clm ` RIFF chunk (Serum-compatible format), the frame size is detected automatically. | (none) |
+| **`wavetableFrameSize`** | (optional) | **Only for `wavetable` waveform.** Number of audio samples per wavetable frame. When the wavetable file contains a `clm ` RIFF chunk, this value is read automatically and any explicit setting is overridden. | `2048` |
+| **`wavetablePosition`** | (optional) | **Only for `wavetable` waveform.** The initial playback position within the wavetable, expressed as a normalized value from 0.0 (first frame) to 1.0 (last frame). Intermediate values produce a linear crossfade between adjacent frames. Can be animated using the `OSCILLATOR_WAVETABLE_POSITION` binding parameter. | `0.0` |
+| **`randomPhase`** | (optional) | **Only for `wavetable` waveform.** When `true`, each note-on randomizes the oscillator's start phase instead of always resetting to zero. Strongly recommended when layering multiple wavetable groups (e.g. detuned unison voices) to prevent phase cancellation between voices. Has no effect on other waveform types. | `false` |
 
 All other oscillator parameters are inherited from the parent `<group>` element.
 
@@ -190,8 +194,7 @@ All other oscillator parameters are inherited from the parent `<group>` element.
 - **\`square\`**: A square wave with odd harmonics. Useful for hollow, reed-like tones.
 - **\`triangle\`**: A triangle wave with fewer harmonics than saw. Produces a mellower tone.
 - **\`noise\`** (or **\`white_noise\`**): White noise generator. Perfect for percussion textures, hi-hats, snares, wind sounds, and adding grit to other sounds.
-- **\`pluck1\`**: A physical modeling oscillator based on digital waveguide synthesis that simulates plucked string behavior. Unlike traditional waveforms that cycle continuously, pluck1 generates a single excitation (like plucking a string) that decays naturally over time. Ideal for synthesizing plucked string instruments like guitar, bass, harp, koto, gayageum, and other stringed instruments. This oscillator includes two parameters for controlling the sound character: \`damping\` and \`pluckType\`.
-
+- **\`pluck1\`**: A physical modeling oscillator based on digital waveguide synthesis that simulates plucked string behavior. Unlike traditional waveforms that cycle continuously, pluck1 generates a single excitation (like plucking a string) that decays naturally over time. Ideal for synthesizing plucked string instruments like guitar, bass, harp, koto, gayageum, and other stringed instruments. This oscillator includes two parameters for controlling the sound character: \`damping\` and \`pluckType\`.- **`wavetable`**: A user-defined wavetable oscillator that reads frames from a multi-frame `.wav` file. The playback position (which frame is played) is controlled by the `wavetablePosition` attribute and can be scanned in real time using the `OSCILLATOR_WAVETABLE_POSITION` binding parameter—allowing LFOs, envelopes, MIDI CCs, or UI knobs to sweep through timbres. Supports Serum-compatible wavetable files with automatic frame size detection via the `clm ` RIFF chunk.
 **Group-Level Parameters:**
 
 Oscillators inherit and respect most of the same parameters as samples when set at the `<group>` level, including:
@@ -409,7 +412,124 @@ The pluck1 oscillator is particularly effective for:
 - **Acoustic guitars**: Medium \`damping\` (0.5-0.7) with balanced \`pluckType\` (0.4-0.6)
 - **Harps and lyres**: Higher \`damping\` (0.7-0.9) with lower \`pluckType\` (0.2-0.4) for softer, sustained tones
 - **Ethnic stringed instruments**: Experiment with \`pluckType\` to match the excitation character of traditional instruments like koto, sitar, gayageum, etc.
+**User-Defined Wavetable Oscillator:**
 
+The `wavetable` waveform lets you load any multi-frame `.wav` file as a wavetable. Each frame is a fixed-size window of samples that the oscillator cycles through at the correct pitch. Moving the position between frames transitions between different timbres, enabling classic wavetable scanning effects.
+
+**Wavetable File Format:**
+
+- The file must be a standard `.wav` containing all frames concatenated in sequence (e.g., 128 frames × 2048 samples = 262144 samples total).
+- If the file contains a **`clm ` RIFF chunk** (Serum-compatible format), the frame size is detected automatically. Files exported from Serum or other compatible tools include this chunk.
+- If no `clm ` chunk is present, the frame size defaults to 2048 samples. You can override this by setting `wavetableFrameSize` on the `<oscillator>` element.
+
+**Wavetable Scanning with a Knob:**
+
+```xml
+<DecentSampler minVersion="1.15.0">
+    <ui width="812" height="375">
+        <tab name="main">
+            <labeled-knob x="10" y="20" width="90" label="Position" type="float"
+                          minValue="0.0" maxValue="1.0" value="0.0">
+                <binding type="general" level="group" position="0"
+                         parameter="OSCILLATOR_WAVETABLE_POSITION"
+                         translation="linear"
+                         translationOutputMin="0.0" translationOutputMax="1.0"/>
+            </labeled-knob>
+        </tab>
+    </ui>
+
+    <groups attack="0.01" decay="0.5" sustain="1.0" release="0.5">
+        <group name="Wavetable Oscillator">
+            <oscillator waveform="wavetable"
+                        wavetableFile="Wavetables/MyWavetable.wav"
+                        wavetablePosition="0.0"/>
+        </group>
+    </groups>
+</DecentSampler>
+```
+
+**Wavetable Scanning with an LFO:**
+
+```xml
+<DecentSampler minVersion="1.15.0">
+    <ui width="812" height="375">
+        <tab name="main">
+            <labeled-knob x="10" y="20" width="90" label="LFO Rate" type="float"
+                          minValue="0.1" maxValue="10.0" value="1.0">
+                <binding type="modulator" level="instrument" modulatorIndex="0"
+                         parameter="FREQUENCY"/>
+            </labeled-knob>
+            <labeled-knob x="110" y="20" width="90" label="LFO Depth" type="float"
+                          minValue="0.0" maxValue="1.0" value="0.5">
+                <binding type="modulator" level="instrument" modulatorIndex="0"
+                         parameter="MOD_AMOUNT"/>
+            </labeled-knob>
+        </tab>
+    </ui>
+
+    <groups attack="0.01" decay="0.5" sustain="1.0" release="0.5">
+        <group name="Wavetable Oscillator" wavetablePosition="0.5">
+            <oscillator waveform="wavetable"
+                        wavetableFile="Wavetables/MyWavetable.wav"/>
+        </group>
+    </groups>
+
+    <modulators>
+        <lfo shape="sine" frequency="1.0" modAmount="0.5" scope="voice">
+            <binding type="general" level="group" position="0"
+                     parameter="OSCILLATOR_WAVETABLE_POSITION"
+                     modBehavior="add"
+                     translationOutputMin="0.0" translationOutputMax="0.5"/>
+        </lfo>
+    </modulators>
+</DecentSampler>
+```
+
+In this example, the LFO continuously sweeps the wavetable position around a center value of `0.5`, scanning through timbres at the LFO rate. The `modBehavior="add"` means the LFO value is added on top of the static `wavetablePosition` set on the group.
+
+**Selecting the active wavetable from a menu:**
+
+Because `wavetableFile` cannot be changed at runtime via a binding, the way to offer a wavetable selector is to define one `<group>` per wavetable (each with a unique tag) and use a `<menu>` with `TAG_ENABLED` bindings to switch between them:
+
+```xml
+<ui width="812" height="375">
+    <tab name="main">
+        <menu x="20" y="68" width="220" height="26" value="1">
+            <option name="Growl 01">
+                <binding type="amp" level="tag" identifier="growl" parameter="TAG_ENABLED"
+                         translation="fixed_value" translationValue="true"/>
+                <binding type="amp" level="tag" identifier="fm"    parameter="TAG_ENABLED"
+                         translation="fixed_value" translationValue="false"/>
+            </option>
+            <option name="FM 01">
+                <binding type="amp" level="tag" identifier="growl" parameter="TAG_ENABLED"
+                         translation="fixed_value" translationValue="false"/>
+                <binding type="amp" level="tag" identifier="fm"    parameter="TAG_ENABLED"
+                         translation="fixed_value" translationValue="true"/>
+            </option>
+        </menu>
+    </tab>
+</ui>
+
+<groups>
+    <group tags="growl">
+        <oscillator waveform="wavetable" wavetableFile="Wavetables/Growl/Growl 01.wav" randomPhase="true"/>
+    </group>
+    <group tags="fm" enabled="false">
+        <oscillator waveform="wavetable" wavetableFile="Wavetables/FM/FM 01.wav" randomPhase="true"/>
+    </group>
+</groups>
+```
+
+Each menu option enables exactly one tag and disables all others. The initial `enabled="false"` on non-default groups matches the menu's default selection (value="1" = first option).
+
+**Tips for Wavetable Sounds:**
+
+- Use **Serum-format** wavetables (exported from Serum or compatible tools) for automatic frame size detection.
+- A **knob** scanning the position gives manual timbral control, while an **LFO** creates evolving, animated textures.
+- Combine with envelope modulation on `OSCILLATOR_WAVETABLE_POSITION` for timbral sweeps triggered by note velocity or the amplitude envelope.
+- Pair with `groupTuning` detuning and panning for unison-style / supersaw-like layering.
+- Always set **`randomPhase="true"`** when layering multiple wavetable groups. Without it, all voices start at phase zero and cancel each other.
 **UI Control for Oscillators:**
 
 You can create UI controls to switch waveforms dynamically:
