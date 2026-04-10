@@ -243,43 +243,116 @@ In order to actually have your LFOs and envelopes do anything, you need to have 
 </modulators>
 ```
 
-### Controlling LFO Parameters with Bindings
+### Controlling Modulator Parameters with Bindings
 
-You can also bind to LFO parameters themselves to control them in real-time. For example, to control the delay time of an LFO with a UI knob:
+You can bind to modulator parameters themselves to control them in real-time from UI controls, MIDI CC, or other sources. The binding uses `type="modulator"` and `level="instrument"`, with a `modulatorIndex` attribute pointing to the modulator (0-based) and a `parameter` attribute specifying which property to change.
+
+#### Bindable parameters by modulator type
+
+**`<lfo>`**
+
+| `parameter` value | Description |
+|---|---|
+| `MOD_AMOUNT` | Modulation depth (0.0–1.0) |
+| `FREQUENCY` | LFO rate in Hz |
+| `SHAPE` | Waveform shape (`"sine"`, `"saw"`, `"square"`, `"triangle"`) |
+| `MOD_DELAY_TIME` | Delay before the LFO begins (seconds) |
+| `TRIGGER` | Reset behavior (`"attack"` or `"none"`) |
+
+**`<envelope>`**
+
+| `parameter` value | Description |
+|---|---|
+| `MOD_AMOUNT` | Modulation depth (0.0–1.0) |
+| `ENV_ATTACK` | Attack time (seconds) |
+| `ENV_ATTACK_CURVE` | Attack curve shape |
+| `ENV_DECAY` | Decay time (seconds) |
+| `ENV_DECAY_CURVE` | Decay curve shape |
+| `ENV_SUSTAIN` | Sustain level (0.0–1.0) |
+| `ENV_RELEASE` | Release time (seconds) |
+| `ENV_RELEASE_CURVE` | Release curve shape |
+| `MOD_DELAY_TIME` | Delay before the envelope begins (seconds) |
+
+**`<random>`**
+
+| `parameter` value | Description |
+|---|---|
+| `MOD_AMOUNT` | Modulation depth (0.0–1.0) |
+| `FREQUENCY` | Generation rate in Hz (only relevant when `mode="periodic"`) |
+| `TRIGGER` | Reset behavior (`"attack"` or `"none"`) |
+
+**`<midiCC>`**
+
+| `parameter` value | Description |
+|---|---|
+| `MOD_AMOUNT` | Modulation depth (0.0–1.0) |
+
+**`<midiVelocity>`**
+
+| `parameter` value | Description |
+|---|---|
+| `MOD_AMOUNT` | Modulation depth (0.0–1.0) |
+
+**`<mpeTimbre>`**
+
+| `parameter` value | Description |
+|---|---|
+| `MOD_AMOUNT` | Modulation depth (0.0–1.0) |
+
+**`<mpePressure>`**
+
+| `parameter` value | Description |
+|---|---|
+| `MOD_AMOUNT` | Modulation depth (0.0–1.0) |
+
+#### Example: controlling LFO parameters from UI knobs
 
 ```xml
 <DecentSampler>
   <ui>
     <tab>
-      <labeled_knob x="10" y="30" width="90" textSize="16" textColor="AA000000" 
-                    minValue="0" maxValue="2000" value="500">
-        <binding type="modulator" level="instrument" parameter="MOD_DELAY_TIME" 
+      <!-- Controls LFO depth -->
+      <labeled_knob x="10" y="30" width="90" textSize="16" textColor="AA000000"
+                    parameterName="Depth" minValue="0" maxValue="1" value="1">
+        <binding type="modulator" level="instrument" parameter="MOD_AMOUNT"
+                 modulatorIndex="0" translation="linear" />
+      </labeled_knob>
+      <!-- Controls LFO rate -->
+      <labeled_knob x="110" y="30" width="90" textSize="16" textColor="AA000000"
+                    parameterName="Rate" minValue="0.1" maxValue="20" value="2">
+        <binding type="modulator" level="instrument" parameter="FREQUENCY"
+                 modulatorIndex="0" translation="linear" />
+      </labeled_knob>
+      <!-- Controls LFO delay time -->
+      <labeled_knob x="210" y="30" width="90" textSize="16" textColor="AA000000"
+                    parameterName="Delay" minValue="0" maxValue="2" value="0.5">
+        <binding type="modulator" level="instrument" parameter="MOD_DELAY_TIME"
                  modulatorIndex="0" translation="linear" />
       </labeled_knob>
     </tab>
   </ui>
   <modulators>
     <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="0.500">
-      <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY" 
+      <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY"
                modBehavior="add" translation="linear" translationOutputMin="0" translationOutputMax="2000.0" />
     </lfo>
   </modulators>
 </DecentSampler>
 ```
 
-You can also control the delay time via MIDI CC:
+You can also control modulator parameters via MIDI CC:
 
 ```xml
 <DecentSampler>
   <midi>
     <cc number="74">
-      <binding type="modulator" level="instrument" parameter="MOD_DELAY_TIME" 
-               modulatorIndex="0" translation="linear" translationOutputMin="0" translationOutputMax="2000" />
+      <binding type="modulator" level="instrument" parameter="MOD_AMOUNT"
+               modulatorIndex="0" translation="linear" translationOutputMin="0" translationOutputMax="1" />
     </cc>
   </midi>
   <modulators>
     <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="0.500">
-      <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY" 
+      <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY"
                modBehavior="add" translation="linear" translationOutputMin="0" translationOutputMax="2000.0" />
     </lfo>
   </modulators>
