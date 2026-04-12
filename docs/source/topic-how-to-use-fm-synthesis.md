@@ -201,6 +201,6 @@ Algorithm 19 routes a single Op6 modulator into both Op5 and Op4. Setting their 
 - **Start simple.** Pick algorithm 5 and set only Op1 (carrier) + Op2 (modulator) to non-default values. Gradually raise `fmOp2Level` from 0 to 1 to hear FM modulation build from a sine wave to a complex timbre.
 - **Keep loudness consistent.** When many operators have high levels the output can clip. Lower `volume` on the `<group>` or reduce carrier levels accordingly.
 - **Per-operator release tuning.** Set per-operator releases independently to make different parts of the spectrum fade at different rates — carriers fade slowly (long `release`), modulators fade faster (short `release`) for a natural brightness decay.
-- **Inharmonic ratios for metallic textures.** Try ratios like `3.5`, `7.07`, `1.41` (√2), or other non-integers on modulators for bells, gongs, and metallic sounds.
+- **Inharmonic ratios for metallic textures.** Try ratios like `3.5`, `7.07`, `1.41` (sqrt(2)), or other non-integers on modulators for bells, gongs, and metallic sounds.
 - **Operator 6 first.** `fmOp6Feedback` is nearly always the feedback operator. Start by adjusting this first when you want to add harmonic richness.
 - **Combine with samples.** A group containing `<sample>` elements can share a track with an `fm6op` group. Use the groups' `output*` routing to send them to different buses if needed.

@@ -27,4 +27,3 @@ Contents
    appendix-b-the-binding-element
    appendix-c-boilerplate-dspreset-file
    useful-topics
-   topic-how-to-use-fm-synthesis

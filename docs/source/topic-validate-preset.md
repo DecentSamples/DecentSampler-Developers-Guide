@@ -53,7 +53,7 @@ The report dialog shows:
 A clean preset produces the message:
 
 ```
-✅ Validation passed. No issues were found.
+Validation passed. No issues were found.
 ```
 
 ## Common Errors and How to Fix Them

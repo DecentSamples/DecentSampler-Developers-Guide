@@ -595,14 +595,14 @@ You can create UI controls to switch waveforms dynamically:
 **Feature Parity with Samples:**
 
 As of DecentSampler 1.15.0, oscillators support most sample features including:
-- ✅ **Pitch key tracking** (\`pitchKeyTrack\`) - Control how oscillators respond to keyboard pitch
-- ✅ **Portamento/Glide** (\`glideTime\`, \`glideMode\`) - Smooth pitch transitions between notes
-- ✅ **Modulation bindings** - Full support for GROUP_TUNING, GLOBAL_TUNING, and GROUP_VOLUME modulation
-- ✅ **Tag-based polyphony** - Use tags with polyphony limits for monophonic/polyphonic control
-- ✅ **ADSR envelopes** - Complete amplitude envelope control with curve shaping
-- ✅ **Effects chains** - Group-level and global effects apply to oscillators
-- ✅ **Velocity tracking** - \`ampVelTrack\` for velocity-sensitive volume
-- ✅ **Note range filtering** - \`loNote\`/\`hiNote\` for keyboard zones
+- **Pitch key tracking** (`pitchKeyTrack`) - Control how oscillators respond to keyboard pitch
+- **Portamento/Glide** (`glideTime`, `glideMode`) - Smooth pitch transitions between notes
+- **Modulation bindings** - Full support for GROUP_TUNING, GLOBAL_TUNING, and GROUP_VOLUME modulation
+- **Tag-based polyphony** - Use tags with polyphony limits for monophonic/polyphonic control
+- **ADSR envelopes** - Complete amplitude envelope control with curve shaping
+- **Effects chains** - Group-level and global effects apply to oscillators
+- **Velocity tracking** - `ampVelTrack` for velocity-sensitive volume
+- **Note range filtering** - `loNote`/`hiNote` for keyboard zones
 
 **Limitations:**
 
