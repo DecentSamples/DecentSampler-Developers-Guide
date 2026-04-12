@@ -36,7 +36,8 @@ This element has the following attributes:
 - **`modAmount`**: This value between 0 and 1 controls how much the  modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
 - **`delayTime`**: The time in seconds to wait before the LFO starts outputting signal. During this delay period, the LFO outputs zero. Default value: 0.0 (no delay).
 - **`scope`**: Whether or not this LFO exists for all notes or whether each keypress gets its own LFO. Possible values are `global` (default for LFOs) and `voice`. If `voice` is chosen, a new LFO is started each time a new note is pressed.
-- **`modBehavior`**: This attribute controls how the LFO affects the parameter it is targeting. Possible values are `add`, `multiply`, and `set`. If `add` is chosen, the LFO will add its value to the parameter it is targeting. If `multiply` is chosen, the LFO will multiply its value by the parameter it is targeting. If `set` is chosen, the LFO will set the parameter it is targeting to its value. Default value: `set`. 
+- **`modBehavior`**: This attribute controls how the LFO affects the parameter it is targeting. Possible values are `add`, `multiply`, and `set`. If `add` is chosen, the LFO will add its value to the parameter it is targeting. If `multiply` is chosen, the LFO will multiply its value by the parameter it is targeting. If `set` is chosen, the LFO will set the parameter it is targeting to its value. Default value: `set`.
+- **`tags`**: A comma-separated list of tag names. Tags allow bindings to target this LFO by name instead of by numeric `modulatorIndex`. For example, `tags="vibrato-lfo"` lets a binding use `tags="vibrato-lfo"` instead of `modulatorIndex="0"`. 
 
 ## The &lt;envelope&gt; element
 
@@ -55,6 +56,7 @@ This element has the following attributes:
 - **`attackCurve`**: A numeric value from -100 to 100 that determines the shape of the attack portion of the ADSR envelope. Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential). Default value: `-100` (logarithmic).
 - **`decayCurve`**: A numeric value from -100 to 100 that determines the shape of the decay portion of the ADSR envelope. Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential). Default value: `100` (exponential).
 - **`releaseCurve`**: A numeric value from -100 to 100 that determines the shape of the release portion of the ADSR envelope. Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential). Default value: `100` (exponential).
+- **`tags`**: A comma-separated list of tag names. Tags allow bindings to target this envelope by name instead of by numeric `modulatorIndex`. For example, `tags="filter-env"` lets a binding use `tags="filter-env"` instead of `modulatorIndex="1"`.
 
 ## The &lt;mpeTimbre&gt; element
 

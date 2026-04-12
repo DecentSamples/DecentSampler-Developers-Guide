@@ -145,3 +145,468 @@ My default all audio is routed to the main output. However, using the attributes
 | **`output6Volume`** | (optional) | The volume of the audio being sent to the sample's sixth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume. Default: 1.0 |
 | **`output7Volume`** | (optional) | The volume of the audio being sent to the sample's seventh output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume. Default: 1.0 |
 | **`output8Volume`** | (optional) | The volume of the audio being sent to the sample's eighth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume. Default: 1.0 |
+
+### The &lt;oscillator&gt; element
+
+The `<oscillator>` element allows you to add synthesized waveforms to your instrument, which can be used alongside or instead of traditional audio samples. Oscillators are useful for creating sub-bass layers, adding harmonic content, or building entirely synthesized instruments within DecentSampler.
+
+Oscillators live inside `<group>` elements, just like `<sample>` elements. Each group can contain samples, an oscillator, or both, allowing you to layer oscillators with samples within the same group or create multi-oscillator patches by using multiple groups.
+
+**Basic Usage:**
+
+The simplest oscillator configuration requires only a waveform type:
+
+```xml
+<group name="Sub Bass" volume="0.6" groupTuning="-12">
+    <oscillator waveform="sine" />
+</group>
+```
+
+This creates a sine wave oscillator tuned one octave below the played note.
+
+**Attributes:**
+
+The `<oscillator>` element itself has only one attribute:
+
+| Attribute | Required/Optional | Description | Default |
+|-----------|-------------------|-------------|---------|
+| **`waveform`** | (optional) | The waveform shape. Valid values: `sine`, `saw`, `square`, `triangle`, `noise` (or `white_noise`), `pluck1`, `wavetable`, `fm6op`. | `sine` |
+| **`damping`** | (optional) | **Only for `pluck1` waveform.** Controls the decay time of the plucked string. Range: 0.0 to 1.0. Lower values (closer to 0.0) create heavily damped, shorter sounds. Higher values (closer to 1.0) create minimal damping with longer, more resonant decay. This simulates the natural damping characteristics of string materials and playing techniques. | `0.5` |
+| **`pluckType`** | (optional) | **Only for `pluck1` waveform.** Blends between different excitation signals to control the timbral character. Range: 0.0 to 1.0. At 0.0, the oscillator uses a smooth triangle wave excitation producing a softer, mellower tone. At 1.0, it uses a noise burst excitation producing a brighter, more aggressive attack with richer harmonics. Intermediate values blend between the two extremes. | `0.5` |
+| **`wavetableFile`** | (optional) | **Only for `wavetable` waveform.** Path to the multi-frame wavetable `.wav` file, relative to the `.dspreset` file. The file should contain all wavetable frames concatenated in a single audio file. If the file contains a `clm ` RIFF chunk (Serum-compatible format), the frame size is detected automatically. | (none) |
+| **`wavetableFrameSize`** | (optional) | **Only for `wavetable` waveform.** Number of audio samples per wavetable frame. When the wavetable file contains a `clm ` RIFF chunk, this value is read automatically and any explicit setting is overridden. | `2048` |
+| **`wavetablePosition`** | (optional) | **Only for `wavetable` waveform.** The initial playback position within the wavetable, expressed as a normalized value from 0.0 (first frame) to 1.0 (last frame). Intermediate values produce a linear crossfade between adjacent frames. Can be animated using the `OSCILLATOR_WAVETABLE_POSITION` binding parameter. | `0.0` |
+| **`randomPhase`** | (optional) | **Only for `wavetable` waveform.** When `true`, each note-on randomizes the oscillator's start phase instead of always resetting to zero. Strongly recommended when layering multiple wavetable groups (e.g. detuned unison voices) to prevent phase cancellation between voices. Has no effect on other waveform types. | `false` |
+| **`wavetableFrameInterpolation`** | (optional) | **Only for `wavetable` waveform.** Controls whether adjacent wavetable frames are linearly crossfaded as the position moves. When `true` (default), the position knob smoothly interpolates between adjacent frames — ideal for morphing wavetables where intermediate timbres are musically meaningful. When `false`, the oscillator snaps to the nearest integer frame with no crossfading — useful for wavetables that contain discrete, unrelated shapes (e.g. sine, triangle, saw, square) where blended intermediates are unwanted. Can be changed at runtime via the `OSCILLATOR_WAVETABLE_FRAME_INTERPOLATION` binding parameter. | `true` |
+
+When using `waveform="fm6op"`, set the FM parameters on the parent `<group>` element (they are inherited by the oscillator). All FM attributes are optional:
+
+| Attribute | Description | Default |
+|-----------|-------------|----------|
+| **`fmAlgorithm`** | DX7-compatible algorithm number (1–32). Selects the operator routing topology—which operators are carriers (produce audio) and which are modulators. | `1` |
+| **`fmOp1Ratio`** | Frequency ratio for operator 1 (primary carrier in most algorithms). Multiplies the played note frequency. `2.0` = one octave up, `0.5` = one octave down. | `1.0` |
+| **`fmOp1Level`** | Output/modulation level for operator 1. Range 0.0–1.0. | `1.0` |
+| **`fmOp1Feedback`** | Self-feedback amount for operator 1. Range 0.0–1.0. Note: only the physically correct feedback operator for each algorithm produces sound (usually Op6). | `0.0` |
+| **`fmOp1Attack`** | ADSR attack time (seconds) for operator 1's internal envelope. A value of `-1` means the operator has no independent envelope and is gated only by the outer group ADSR. | `0.0` |
+| **`fmOp1Decay`** | ADSR decay time (seconds) for operator 1. | `0.0` |
+| **`fmOp1Sustain`** | ADSR sustain level (0.0–1.0) for operator 1. | `1.0` |
+| **`fmOp1Release`** | ADSR release time (seconds) for operator 1. A value of `-1` (sentinel) lets the outer group ADSR control the release. | `-1.0` |
+| **`fmOp2Ratio`** … **`fmOp6Ratio`** | Frequency ratios for operators 2–6. Same semantics as `fmOp1Ratio`. | `1.0` |
+| **`fmOp2Level`** … **`fmOp6Level`** | Output/modulation levels for operators 2–6. Range 0.0–1.0. | `1.0` |
+| **`fmOp2Feedback`** … **`fmOp6Feedback`** | Self-feedback amounts for operators 2–6. `fmOp6Feedback` is the primary feedback and affects all algorithms. | `0.0` |
+| **`fmOp2Attack`** … **`fmOp6Attack`** | ADSR attack times for operators 2–6. | `0.0` |
+| **`fmOp2Decay`** … **`fmOp6Decay`** | ADSR decay times for operators 2–6. | `0.0` |
+| **`fmOp2Sustain`** … **`fmOp6Sustain`** | ADSR sustain levels for operators 2–6. Range 0.0–1.0. | `1.0` |
+| **`fmOp2Release`** … **`fmOp6Release`** | ADSR release times for operators 2–6. `-1` = sentinel (outer ADSR controls). | `-1.0` |
+
+All FM operator parameters can be modulated in real time using bindings with the parameter names `OSCILLATOR_FM_ALGORITHM`, `OSCILLATOR_FM_OP1_LEVEL` … `OSCILLATOR_FM_OP6_LEVEL`, `OSCILLATOR_FM_OP1_RATIO` … `OSCILLATOR_FM_OP6_RATIO`, and `OSCILLATOR_FM_OP1_FEEDBACK` … `OSCILLATOR_FM_OP6_FEEDBACK`. See [Appendix B](appendix-b-the-binding-element.md) for details.
+
+All other oscillator parameters are inherited from the parent `<group>` element.
+
+**Waveform Types:**
+
+- **\`sine\`**: A pure sine wave with no harmonics. Ideal for sub-bass and clean tones.
+- **\`saw\`**: A sawtooth wave with rich harmonics. Great for bright, cutting sounds.
+- **\`square\`**: A square wave with odd harmonics. Useful for hollow, reed-like tones.
+- **\`triangle\`**: A triangle wave with fewer harmonics than saw. Produces a mellower tone.
+- **\`noise\`** (or **\`white_noise\`**): White noise generator. Perfect for percussion textures, hi-hats, snares, wind sounds, and adding grit to other sounds.
+- **`pluck1`**: A physical modeling oscillator based on digital waveguide synthesis that simulates plucked string behavior. Unlike traditional waveforms that cycle continuously, pluck1 generates a single excitation (like plucking a string) that decays naturally over time. Ideal for synthesizing plucked string instruments like guitar, bass, harp, koto, gayageum, and other stringed instruments. This oscillator includes two parameters for controlling the sound character: `damping` and `pluckType`.
+- **`wavetable`**: A user-defined wavetable oscillator that reads frames from a multi-frame `.wav` file. The playback position (which frame is played) is controlled by the `wavetablePosition` attribute and can be scanned in real time using the `OSCILLATOR_WAVETABLE_POSITION` binding parameter—allowing LFOs, envelopes, MIDI CCs, or UI knobs to sweep through timbres. Supports Serum-compatible wavetable files with automatic frame size detection via the `clm ` RIFF chunk.
+- **`fm6op`**: A 6-operator FM synthesizer implementing the 32 classic Yamaha DX7 algorithm topologies. Each algorithm defines which operators are carriers (they produce the final audio output) and which are modulators (they phase-modulate another operator to add harmonics). Every operator has its own frequency ratio, output level, feedback amount, and an independent per-operator ADSR envelope. Set `fmAlgorithm` plus the `fmOp1`–`fmOp6` family of attributes on the parent `<group>` element. See [How to Use FM Synthesis](topic-how-to-use-fm-synthesis.md) for a full guide.
+**Group-Level Parameters:**
+
+Oscillators inherit and respect most of the same parameters as samples when set at the `<group>` level, including:
+- \`groupTuning\` - Pitch adjustment in semitones
+- \`loNote\` / \`hiNote\` - Note range triggering
+- \`attack\`, \`decay\`, \`sustain\`, \`release\` - ADSR envelope parameters
+- \`attackCurve\`, \`decayCurve\`, \`releaseCurve\` - Envelope curve shapes
+- \`volume\` - Oscillator group volume
+- \`pan\` - Stereo positioning
+- \`ampVelTrack\` - Velocity sensitivity
+- \`pitchKeyTrack\` - Keyboard pitch tracking (0.0 to 1.0). A value of 0 means the oscillator stays at a fixed pitch regardless of which key is pressed. A value of 1 means normal keyboard tracking (default)
+- \`glideTime\` - Portamento/glide time in seconds (inherited from \`<groups>\` level if not specified)
+- \`glideMode\` - Portamento behavior: \`always\`, \`legato\`, or \`off\` (inherited from \`<groups>\` level if not specified)
+
+**Modulation Support:**
+
+Oscillators fully support modulation through bindings and modulators, just like samples:
+- **GROUP_TUNING** - Modulate oscillator pitch (e.g., for vibrato LFOs)
+- **GLOBAL_TUNING** - Global pitch modulation affects all oscillators
+- **GROUP_VOLUME** - Modulate oscillator amplitude
+- **AMP_VOLUME** - Control oscillator volume with UI controls or MIDI
+
+Example with LFO vibrato:
+```xml
+<modulators>
+    <lfo shape="sine" frequency="5.0" modAmount="0.15" scope="global">
+        <binding type="amp" level="group" position="0" parameter="GROUP_TUNING" 
+                 modBehavior="add" translation="linear" 
+                 translationOutputMin="-0.5" translationOutputMax="0.5"/>
+    </lfo>
+</modulators>
+```
+
+**Multi-Oscillator Example:**
+
+Here's a practical example showing how to layer multiple oscillators to create a rich synthesized sound:
+
+```xml
+<DecentSampler minVersion="1.15.0">
+    <groups>
+        <!-- Fundamental saw wave -->
+        <group name="Fundamental" volume="0.5" attack="0.01" decay="0.3" sustain="0.7" release="0.5">
+            <oscillator waveform="saw" />
+        </group>
+        
+        <!-- Sine wave octave up for brightness -->
+        <group name="Octave Up" volume="0.3" groupTuning="12" attack="0.02" decay="0.3" sustain="0.7" release="0.5">
+            <oscillator waveform="sine" />
+        </group>
+        
+        <!-- Sub bass (limited to lower notes) -->
+        <group name="Sub Bass" volume="0.6" groupTuning="-12" loNote="0" hiNote="60" 
+               attack="0.01" decay="0.3" sustain="0.7" release="0.8">
+            <oscillator waveform="sine" />
+        </group>
+        
+        <!-- Detuned oscillators for stereo width -->
+        <group name="Detuned Left" volume="0.25" pan="-50" groupTuning="-0.1" 
+               attack="0.01" decay="0.3" sustain="0.7" release="0.5">
+            <oscillator waveform="saw" />
+        </group>
+        
+        <group name="Detuned Right" volume="0.25" pan="50" groupTuning="0.1" 
+               attack="0.01" decay="0.3" sustain="0.7" release="0.5">
+            <oscillator waveform="saw" />
+        </group>
+    </groups>
+    
+    <effects>
+        <effect type="lowpass" frequency="8000.0" resonance="1.0"/>
+        <effect type="reverb" wetLevel="0.15" roomSize="0.5"/>
+    </effects>
+</DecentSampler>
+```
+
+**Monophonic Lead Synth with Portamento:**
+
+Here's a complete example of a Moog-style monophonic lead synthesizer with portamento:
+
+```xml
+<DecentSampler minVersion="1.15.0">
+  <ui width="812" height="375">
+    <tab name="main">
+      <labeled-knob x="10" y="20" width="90" label="Attack" type="float" 
+                    minValue="0.0" maxValue="2.0" value="0.01">
+        <binding type="amp" level="instrument" position="0" parameter="ENV_ATTACK"/>
+      </labeled-knob>
+      <labeled-knob x="110" y="20" width="90" label="Glide Time" type="float" 
+                    minValue="0.0" maxValue="2.0" value="0.3">
+        <binding type="general" level="instrument" position="0" parameter="GLIDE_TIME"/>
+      </labeled-knob>
+      <labeled-knob x="210" y="20" width="90" label="Cutoff" type="float" 
+                    minValue="0" maxValue="22000" value="2000.0">
+        <binding type="effect" level="instrument" position="0" parameter="FX_FILTER_FREQUENCY"/>
+      </labeled-knob>
+      <labeled-knob x="10" y="130" width="90" label="Detune" type="float" 
+                    minValue="-1" maxValue="1" value="0.1">
+        <binding type="amp" level="group" position="1" parameter="GROUP_TUNING"/>
+      </labeled-knob>
+    </tab>
+  </ui>
+  
+  <!-- glideTime and glideMode set at groups level apply to all oscillators -->
+  <groups glideTime="0.3" glideMode="legato" attack="0.01" decay="0.3" 
+          sustain="0.7" release="0.5" volume="0.8">
+    <!-- Two detuned saw oscillators for thickness -->
+    <group name="Osc1" tags="osc1">
+      <oscillator waveform="saw" />
+    </group>
+    <group name="Osc2" tags="osc2">
+      <oscillator waveform="saw" />
+    </group>
+  </groups>
+  
+  <effects>
+    <effect type="lowpass" frequency="2000.0" resonance="0.3" 
+            envelope_amount="3000.0" envelope_attack="0.01" 
+            envelope_decay="0.3" envelope_sustain="0.0" envelope_release="0.5"/>
+  </effects>
+  
+  <modulators>
+    <!-- LFO vibrato -->
+    <lfo shape="sine" frequency="5.0" modAmount="0.15" scope="global">
+      <binding type="amp" level="group" tags="osc1,osc2" parameter="GROUP_TUNING" 
+               modBehavior="add" translation="linear" 
+               translationOutputMin="-0.5" translationOutputMax="0.5"/>
+    </lfo>
+  </modulators>
+  
+  <!-- Use tag polyphony to enforce monophonic behavior -->
+  <tags>
+    <tag name="osc1" volume="1" pan="0" polyphony="1" />
+    <tag name="osc2" volume="1" pan="0" polyphony="1" />
+  </tags>
+</DecentSampler>
+```
+
+This preset demonstrates:
+- **Portamento/Glide**: Set via \`glideTime\` (0.3 seconds) and \`glideMode\` (legato - only glides between connected notes)
+- **Monophonic behavior**: Achieved using tag polyphony limits (\`polyphony="1"\`)
+- **Detuned oscillators**: Two saw waves with slightly different tuning for a fatter sound
+- **Modulation**: LFO vibrato applied to both oscillators via GROUP_TUNING binding
+- **Filter envelope**: Adds movement to the timbre
+
+**Combining Oscillators with Samples:**
+
+You can combine oscillators and samples within the same group or across separate groups. Here's an example mixing them in a single group to add a sub-bass layer to piano samples:
+
+```xml
+<groups>
+    <!-- Piano samples with built-in sine wave sub-bass -->
+    <group name="Piano with Sub" volume="1.0">
+        <sample path="Samples/Piano/C3.wav" rootNote="60" loNote="59" hiNote="61" />
+        <sample path="Samples/Piano/D3.wav" rootNote="62" loNote="61" hiNote="63" />
+        <!-- more samples... -->
+        <!-- Oscillator mixed in the same group -->
+        <oscillator waveform="sine" />
+    </group>
+</groups>
+```
+
+Or use separate groups for independent control:
+
+```xml
+<groups>
+    <!-- Sample-based piano sound -->
+    <group name="Piano Samples" volume="1.0">
+        <sample path="Samples/Piano/C3.wav" rootNote="60" loNote="59" hiNote="61" />
+        <!-- more samples... -->
+    </group>
+    
+    <!-- Sine wave sub-bass layer -->
+    <group name="Sub Layer" volume="0.3" groupTuning="-12" hiNote="60">
+        <oscillator waveform="sine" />
+    </group>
+</groups>
+```
+
+**Physical Modeling with pluck1:**
+
+The \`pluck1\` waveform uses digital waveguide synthesis to simulate plucked string instruments. Unlike traditional oscillator waveforms that cycle continuously, pluck1 generates a transient excitation that decays naturally, making it ideal for realistic plucked string sounds:
+
+```xml
+<DecentSampler minVersion="1.15.0">
+    <ui width="812" height="375">
+        <tab name="main">
+            <labeled-knob x="10" y="20" width="90" label="Damping" type="float" 
+                          minValue="0.0" maxValue="1.0" value="0.5">
+                <binding type="general" level="group" position="0" 
+                         parameter="OSCILLATOR_DAMPING"/>
+            </labeled-knob>
+            <labeled-knob x="110" y="20" width="90" label="Pluck Type" type="float" 
+                          minValue="0.0" maxValue="1.0" value="0.5">
+                <binding type="general" level="group" position="0" 
+                         parameter="OSCILLATOR_PLUCK_TYPE"/>
+            </labeled-knob>
+        </tab>
+    </ui>
+    
+    <groups attack="0.001" decay="0.1" sustain="0.8" release="0.2">
+        <group name="Plucked String" volume="0.8">
+            <oscillator waveform="pluck1" damping="0.5" pluckType="0.5" />
+        </group>
+    </groups>
+</DecentSampler>
+```
+
+In this example:
+- **\`damping="0.5"\`**: Moderate decay time - the string sustains for a reasonable duration
+- **\`pluckType="0.5"\`**: Balanced between smooth (triangle wave) and bright (noise burst) excitation
+- **OSCILLATOR_DAMPING** and **OSCILLATOR_PLUCK_TYPE** binding parameters allow real-time control from the UI
+
+The pluck1 oscillator is particularly effective for:
+- **Bass guitars**: Use lower \`damping\` values (0.3-0.5) with higher \`pluckType\` (0.6-0.8) for percussive attack
+- **Acoustic guitars**: Medium \`damping\` (0.5-0.7) with balanced \`pluckType\` (0.4-0.6)
+- **Harps and lyres**: Higher \`damping\` (0.7-0.9) with lower \`pluckType\` (0.2-0.4) for softer, sustained tones
+- **Ethnic stringed instruments**: Experiment with \`pluckType\` to match the excitation character of traditional instruments like koto, sitar, gayageum, etc.
+**User-Defined Wavetable Oscillator:**
+
+The `wavetable` waveform lets you load any multi-frame `.wav` file as a wavetable. Each frame is a fixed-size window of samples that the oscillator cycles through at the correct pitch. Moving the position between frames transitions between different timbres, enabling classic wavetable scanning effects.
+
+**Wavetable File Format:**
+
+- The file must be a standard `.wav` containing all frames concatenated in sequence (e.g., 128 frames × 2048 samples = 262144 samples total).
+- If the file contains a **`clm ` RIFF chunk** (Serum-compatible format), the frame size is detected automatically. Files exported from Serum or other compatible tools include this chunk.
+- If no `clm ` chunk is present, the frame size defaults to 2048 samples. You can override this by setting `wavetableFrameSize` on the `<oscillator>` element.
+
+**Wavetable Scanning with a Knob:**
+
+```xml
+<DecentSampler minVersion="1.15.0">
+    <ui width="812" height="375">
+        <tab name="main">
+            <labeled-knob x="10" y="20" width="90" label="Position" type="float"
+                          minValue="0.0" maxValue="1.0" value="0.0">
+                <binding type="general" level="group" position="0"
+                         parameter="OSCILLATOR_WAVETABLE_POSITION"
+                         translation="linear"
+                         translationOutputMin="0.0" translationOutputMax="1.0"/>
+            </labeled-knob>
+        </tab>
+    </ui>
+
+    <groups attack="0.01" decay="0.5" sustain="1.0" release="0.5">
+        <group name="Wavetable Oscillator">
+            <oscillator waveform="wavetable"
+                        wavetableFile="Wavetables/MyWavetable.wav"
+                        wavetablePosition="0.0"/>
+        </group>
+    </groups>
+</DecentSampler>
+```
+
+**Wavetable Scanning with an LFO:**
+
+```xml
+<DecentSampler minVersion="1.15.0">
+    <ui width="812" height="375">
+        <tab name="main">
+            <labeled-knob x="10" y="20" width="90" label="LFO Rate" type="float"
+                          minValue="0.1" maxValue="10.0" value="1.0">
+                <binding type="modulator" level="instrument" modulatorIndex="0"
+                         parameter="FREQUENCY"/>
+            </labeled-knob>
+            <labeled-knob x="110" y="20" width="90" label="LFO Depth" type="float"
+                          minValue="0.0" maxValue="1.0" value="0.5">
+                <binding type="modulator" level="instrument" modulatorIndex="0"
+                         parameter="MOD_AMOUNT"/>
+            </labeled-knob>
+        </tab>
+    </ui>
+
+    <groups attack="0.01" decay="0.5" sustain="1.0" release="0.5">
+        <group name="Wavetable Oscillator" wavetablePosition="0.5">
+            <oscillator waveform="wavetable"
+                        wavetableFile="Wavetables/MyWavetable.wav"/>
+        </group>
+    </groups>
+
+    <modulators>
+        <lfo shape="sine" frequency="1.0" modAmount="0.5" scope="voice">
+            <binding type="general" level="group" position="0"
+                     parameter="OSCILLATOR_WAVETABLE_POSITION"
+                     modBehavior="add"
+                     translationOutputMin="0.0" translationOutputMax="0.5"/>
+        </lfo>
+    </modulators>
+</DecentSampler>
+```
+
+In this example, the LFO continuously sweeps the wavetable position around a center value of `0.5`, scanning through timbres at the LFO rate. The `modBehavior="add"` means the LFO value is added on top of the static `wavetablePosition` set on the group.
+
+**Selecting the active wavetable from a menu:**
+
+Because `wavetableFile` cannot be changed at runtime via a binding, the way to offer a wavetable selector is to define one `<group>` per wavetable (each with a unique tag) and use a `<menu>` with `TAG_ENABLED` bindings to switch between them:
+
+```xml
+<ui width="812" height="375">
+    <tab name="main">
+        <menu x="20" y="68" width="220" height="26" value="1">
+            <option name="Growl 01">
+                <binding type="amp" level="tag" identifier="growl" parameter="TAG_ENABLED"
+                         translation="fixed_value" translationValue="true"/>
+                <binding type="amp" level="tag" identifier="fm"    parameter="TAG_ENABLED"
+                         translation="fixed_value" translationValue="false"/>
+            </option>
+            <option name="FM 01">
+                <binding type="amp" level="tag" identifier="growl" parameter="TAG_ENABLED"
+                         translation="fixed_value" translationValue="false"/>
+                <binding type="amp" level="tag" identifier="fm"    parameter="TAG_ENABLED"
+                         translation="fixed_value" translationValue="true"/>
+            </option>
+        </menu>
+    </tab>
+</ui>
+
+<groups>
+    <group tags="growl">
+        <oscillator waveform="wavetable" wavetableFile="Wavetables/Growl/Growl 01.wav" randomPhase="true"/>
+    </group>
+    <group tags="fm" enabled="false">
+        <oscillator waveform="wavetable" wavetableFile="Wavetables/FM/FM 01.wav" randomPhase="true"/>
+    </group>
+</groups>
+```
+
+Each menu option enables exactly one tag and disables all others. The initial `enabled="false"` on non-default groups matches the menu's default selection (value="1" = first option).
+
+**Tips for Wavetable Sounds:**
+
+- Use **Serum-format** wavetables (exported from Serum or compatible tools) for automatic frame size detection.
+- A **knob** scanning the position gives manual timbral control, while an **LFO** creates evolving, animated textures.
+- Combine with envelope modulation on `OSCILLATOR_WAVETABLE_POSITION` for timbral sweeps triggered by note velocity or the amplitude envelope.
+- Pair with `groupTuning` detuning and panning for unison-style / supersaw-like layering.
+- Always set **`randomPhase="true"`** when layering multiple wavetable groups. Without it, all voices start at phase zero and cancel each other.
+**UI Control for Oscillators:**
+
+You can create UI controls to switch waveforms dynamically:
+
+```xml
+<ui width="812" height="375">
+    <tab name="main">
+        <menu x="10" y="70" width="150" height="30" value="1">
+            <option name="Sine">
+                <binding type="general" level="group" position="0" 
+                         parameter="OSCILLATOR_WAVEFORM" 
+                         translation="fixed_value" translationValue="sine"/>
+            </option>
+            <option name="Saw">
+                <binding type="general" level="group" position="0" 
+                         parameter="OSCILLATOR_WAVEFORM" 
+                         translation="fixed_value" translationValue="saw"/>
+            </option>
+            <option name="Square">
+                <binding type="general" level="group" position="0" 
+                         parameter="OSCILLATOR_WAVEFORM" 
+                         translation="fixed_value" translationValue="square"/>
+            </option>
+        </menu>
+    </tab>
+</ui>
+```
+
+**Tips and Best Practices:**
+
+1. **Layer multiple waveforms**: Combine different waveform types at different octaves for complexity.
+2. **Use detuning**: Create stereo width by layering slightly detuned oscillators panned left and right.
+3. **Limit note ranges**: Use \`loNote\` and \`hiNote\` to restrict certain oscillators to specific registers (e.g., sub-bass only on low notes).
+4. **Add envelope variation**: Use different ADSR settings on each oscillator group for evolving textures.
+5. **Monophonic leads**: Use tag polyphony (\`polyphony="1"\`) combined with \`glideMode="legato"\` for classic synthesizer lead sounds.
+6. **Modulation**: Apply LFOs and envelopes to \`GROUP_TUNING\` for vibrato, tremolo, and evolving textures.
+
+**Feature Parity with Samples:**
+
+As of DecentSampler 1.15.0, oscillators support most sample features including:
+- ✅ **Pitch key tracking** (\`pitchKeyTrack\`) - Control how oscillators respond to keyboard pitch
+- ✅ **Portamento/Glide** (\`glideTime\`, \`glideMode\`) - Smooth pitch transitions between notes
+- ✅ **Modulation bindings** - Full support for GROUP_TUNING, GLOBAL_TUNING, and GROUP_VOLUME modulation
+- ✅ **Tag-based polyphony** - Use tags with polyphony limits for monophonic/polyphonic control
+- ✅ **ADSR envelopes** - Complete amplitude envelope control with curve shaping
+- ✅ **Effects chains** - Group-level and global effects apply to oscillators
+- ✅ **Velocity tracking** - \`ampVelTrack\` for velocity-sensitive volume
+- ✅ **Note range filtering** - \`loNote\`/\`hiNote\` for keyboard zones
+
+**Limitations:**
+
+- Oscillators do not support looping parameters (\`loopStart\`, \`loopEnd\`, etc.) since they generate continuous waveforms.
+- Round-robin sequencing (\`seqMode\`, \`seqPosition\`) is not applicable to oscillators.
+- Sample-specific features like \`start\`/\`end\` positions and embedded loop markers don't apply.
+
+**Version Requirements:**
+
+Oscillators were introduced in **DecentSampler version 1.15.0**. All oscillator features including portamento and modulation support require **version 1.15.0 or higher**. Set the appropriate \`minVersion\` attribute:
+
+```xml
+<DecentSampler minVersion="1.15.0">
+```

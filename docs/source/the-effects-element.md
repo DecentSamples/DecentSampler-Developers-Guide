@@ -12,6 +12,21 @@ NOTE: Only certain effects will work as group-level effects: lowpass filter, hip
 ## The &lt;effect&gt; element
 Within the `<effects>` element, you can have any number of `<effect>` sub-elements. These specify parameters for each individual effect that you would like to have in your global effects chain. There are currently only a handful effects available although more could definitely be added on request:
 
+All `<effect>` elements support a **`tags`** attribute — a comma-separated list of tag names. Tags allow bindings to target effects by name instead of by numeric index. For example:
+
+```xml
+<effects>
+  <effect type="lowpass" frequency="22000" tags="main-filter" />
+</effects>
+```
+
+A binding can then reference this effect using `tags="main-filter"` instead of `effectIndex="0"`:
+
+```xml
+<binding type="effect" level="instrument" tags="main-filter" parameter="FX_FILTER_FREQUENCY"
+         translation="linear" translationOutputMin="100" translationOutputMax="8000" />
+```
+
 ### Low-pass, Band pass, and Hi-pass filter
 
 A 2-pole resonant filter that can be either a lowpass, bandpass, or highpass filter
