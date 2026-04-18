@@ -270,6 +270,7 @@ Example:
     <effect type="pitch_shift" pitchShift="2" mix="0.5" />
   </effects>
 </DecentSampler>
+```
 
 ### Wave Folder effect
 
