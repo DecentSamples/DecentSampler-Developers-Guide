@@ -30,6 +30,7 @@ The fm6op oscillator has six *operators* numbered 1–6. Each operator is a sine
 - An **output level** (`fmOpNLevel`) — how much the operator contributes (0.0–1.0).
 - A **feedback amount** (`fmOpNFeedback`) — how much the operator feeds its own output back into its phase input (0.0–1.0). In the DX7 architecture only one operator per algorithm physically carries the feedback path; see the note on feedback below.
 - An independent **per-operator ADSR envelope** (`fmOpNAttack`, `fmOpNDecay`, `fmOpNSustain`, `fmOpNRelease`).
+- An optional **DX7-compatible 4-stage rate/level envelope** (`fmOpNEgType="dx7"` plus `fmOpNEgRate1`–`fmOpNEgLevel4`).
 
 ### Carriers and Modulators
 
@@ -67,6 +68,61 @@ Each operator has its own ADSR envelope that shapes how that operator's contribu
 - **Modulator envelopes** shape the modulation depth: high modulation at attack = bright attack transient; low modulation after decay = simpler sustained tone.
 
 **Sentinel value (`-1.0` for release):** If you omit a per-operator release, or set it to `-1.0`, the operator has no independent release — it is fully controlled by the outer `<group>` ADSR's release stage. This is the default, so you only need to specify per-operator release when you want the operator to decay independently while the note is held.
+
+## DX7-Compatible 4-Stage Operator Envelope
+
+In addition to the standard ADSR envelope, each operator can use a 4-stage rate/level envelope that matches the parameter conventions of classic 6-operator DX7 synthesizers. This mode is activated per-operator by setting `fmOpNEgType="dx7"`.
+
+The DX7 envelope has four segments, each defined by a **rate** (how fast the level moves) and a **target level** (where it stops):
+
+| Stage | Attributes | Meaning |
+|-------|-----------|---------|
+| Attack  | `fmOpNEgRate1`, `fmOpNEgLevel1` | Rise from silence to L1 at speed R1 |
+| Decay   | `fmOpNEgRate2`, `fmOpNEgLevel2` | Move from L1 to L2 at speed R2 |
+| Sustain | `fmOpNEgRate3`, `fmOpNEgLevel3` | Move toward L3 at speed R3; held while key is down |
+| Release | `fmOpNEgRate4`, `fmOpNEgLevel4` | Move from current level to L4 at speed R4 after key-off |
+
+All rates and levels use the range **0–99**, matching standard DX7 patch banks:
+
+- **Rate 99** = near-instant transition. **Rate 0** = extremely slow.
+- **Level 99** = full amplitude. **Level 0** = silence.
+
+**Default flat envelope** (instant attack, infinite sustain, instant release):
+```
+R1=99  L1=99   ← instant rise to full
+R2=99  L2=99   ← instant move (stays at full)
+R3=0   L3=99   ← rate 0: holds at L3 indefinitely while key is down
+R4=99  L4=0    ← instant fall to silence after key-off
+```
+
+When `fmOpNEgType="dx7"` is set, the `fmOpNAttack`/`fmOpNDecay`/`fmOpNSustain`/`fmOpNRelease` ADSR attributes are ignored for that operator.
+
+### Example: Brass patch with DX7 envelope
+
+Classic brass sounds have a fast attack to L1, a small dip to a slightly lower sustain level, and a moderate release. This example uses algorithm 1, with Op1 as the carrier and Op2 as a modulator with its own shape:
+
+```xml
+<group fmAlgorithm="1"
+       attack="0.001" decay="0.0" sustain="1.0" release="0.3"
+       fmOp1Ratio="1.0"  fmOp1Level="0.9"
+       fmOp1EgType="dx7"
+       fmOp1EgRate1="99" fmOp1EgLevel1="99"
+       fmOp1EgRate2="86" fmOp1EgLevel2="94"
+       fmOp1EgRate3="0"  fmOp1EgLevel3="94"
+       fmOp1EgRate4="60" fmOp1EgLevel4="0"
+       fmOp2Ratio="1.0"  fmOp2Level="0.55"
+       fmOp2EgType="dx7"
+       fmOp2EgRate1="99" fmOp2EgLevel1="99"
+       fmOp2EgRate2="70" fmOp2EgLevel2="60"
+       fmOp2EgRate3="0"  fmOp2EgLevel3="60"
+       fmOp2EgRate4="55" fmOp2EgLevel4="0"
+       fmOp6Feedback="0.08">
+  <oscillator waveform="fm6op" loNote="0" hiNote="127" rootNote="60"
+              loVel="0" hiVel="127" volume="1.0"/>
+</group>
+```
+
+DX7 rate/level values from standard patch banks can be used directly without conversion — the numbers are the same.
 
 ## Per-Operator ADSR Example: DX7 E. Piano Transient
 

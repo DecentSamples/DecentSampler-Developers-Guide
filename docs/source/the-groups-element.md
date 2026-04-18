@@ -206,7 +206,33 @@ When using `waveform="fm6op"`, set the FM parameters on the parent `<group>` ele
 | **`fmOp2Sustain`** … **`fmOp6Sustain`** | ADSR sustain levels for operators 2–6. Range 0.0–1.0. | `1.0` |
 | **`fmOp2Release`** … **`fmOp6Release`** | ADSR release times for operators 2–6. `-1` = sentinel (outer ADSR controls). | `-1.0` |
 
-All FM operator parameters can be modulated in real time using bindings with the parameter names `OSCILLATOR_FM_ALGORITHM`, `OSCILLATOR_FM_OP1_LEVEL` … `OSCILLATOR_FM_OP6_LEVEL`, `OSCILLATOR_FM_OP1_RATIO` … `OSCILLATOR_FM_OP6_RATIO`, and `OSCILLATOR_FM_OP1_FEEDBACK` … `OSCILLATOR_FM_OP6_FEEDBACK`. See [Appendix B](appendix-b-the-binding-element.md) for details.
+**DX7-compatible operator envelope (optional).** Each operator can alternatively use a 4-stage DX7-style envelope instead of the ADSR above. Set `fmOpNEgType="dx7"` on the group to activate it, then provide the eight rate/level parameters:
+
+| Attribute | Description | Default |
+|-----------|-------------|----------|
+| **`fmOp1EgType`** | Envelope type for operator 1. `adsr` = standard ADSR (default). `dx7` = 4-stage DX7-compatible envelope using integer rate/level parameters below. | `adsr` |
+| **`fmOp1EgRate1`** … **`fmOp1EgRate4`** | Envelope rates R1–R4 for operator 1 (DX7 mode only). Range 0–99. Higher values are faster. R1 = attack rate, R2 = decay rate, R3 = sustain rate (holds at L3 while key is held), R4 = release rate. | `99, 99, 0, 99` |
+| **`fmOp1EgLevel1`** … **`fmOp1EgLevel4`** | Envelope target levels L1–L4 for operator 1 (DX7 mode only). Range 0–99. L1 = peak after attack, L2 = level after first decay, L3 = sustain level (held while key is down), L4 = level after release. | `99, 99, 99, 0` |
+| **`fmOp2EgType`** … **`fmOp6EgType`** | Envelope types for operators 2–6. Same as `fmOp1EgType`. | `adsr` |
+| **`fmOp2EgRate1`** … **`fmOp6EgRate4`** | Envelope rates R1–R4 for operators 2–6 (DX7 mode only). Same semantics as `fmOp1EgRate1`–`fmOp1EgRate4`. | `99, 99, 0, 99` |
+| **`fmOp2EgLevel1`** … **`fmOp6EgLevel4`** | Envelope levels L1–L4 for operators 2–6 (DX7 mode only). Same semantics as `fmOp1EgLevel1`–`fmOp1EgLevel4`. | `99, 99, 99, 0` |
+
+The DX7 rate/level envelope uses the same integer parameter conventions as classic 6-operator DX7 synthesizers: rates and levels are both in the range 0–99, and the values are directly compatible with patch data from vintage hardware and standard DX7 patch banks. See [How to Use FM Synthesis](topic-how-to-use-fm-synthesis.md) for worked examples.
+
+**DX7-compatible operator envelope (optional).** Each operator can alternatively use a 4-stage DX7-style envelope instead of the ADSR above. Set `fmOpNEgType="dx7"` on the group to activate it, then provide the eight rate/level parameters:
+
+| Attribute | Description | Default |
+|-----------|-------------|----------|
+| **`fmOp1EgType`** | Envelope type for operator 1. `adsr` = standard ADSR (default). `dx7` = 4-stage DX7-compatible envelope using integer rate/level parameters below. | `adsr` |
+| **`fmOp1EgRate1`** … **`fmOp1EgRate4`** | Envelope rates R1–R4 for operator 1 (DX7 mode only). Range 0–99. Higher values are faster. R1 = attack rate, R2 = decay rate, R3 = sustain rate (holds at L3 while key is held), R4 = release rate. | `99, 99, 0, 99` |
+| **`fmOp1EgLevel1`** … **`fmOp1EgLevel4`** | Envelope target levels L1–L4 for operator 1 (DX7 mode only). Range 0–99. L1 = peak after attack, L2 = level after first decay, L3 = sustain level (held while key is down), L4 = level after release. | `99, 99, 99, 0` |
+| **`fmOp2EgType`** … **`fmOp6EgType`** | Envelope types for operators 2–6. Same as `fmOp1EgType`. | `adsr` |
+| **`fmOp2EgRate1`** … **`fmOp6EgRate4`** | Envelope rates R1–R4 for operators 2–6 (DX7 mode only). Same semantics as `fmOp1EgRate1`–`fmOp1EgRate4`. | `99, 99, 0, 99` |
+| **`fmOp2EgLevel1`** … **`fmOp6EgLevel4`** | Envelope levels L1–L4 for operators 2–6 (DX7 mode only). Same semantics as `fmOp1EgLevel1`–`fmOp1EgLevel4`. | `99, 99, 99, 0` |
+
+The DX7 rate/level envelope uses the same integer parameter conventions as classic 6-operator DX7 synthesizers: rates and levels are both in the range 0–99, and the values are directly compatible with patch data from vintage hardware and standard DX7 patch banks. See [How to Use FM Synthesis](topic-how-to-use-fm-synthesis.md) for worked examples.
+
+All FM operator parameters can be modulated in real time using bindings with the parameter names `OSCILLATOR_FM_ALGORITHM`, `OSCILLATOR_FM_OP1_LEVEL` … `OSCILLATOR_FM_OP6_LEVEL`, `OSCILLATOR_FM_OP1_RATIO` … `OSCILLATOR_FM_OP6_RATIO`, and `OSCILLATOR_FM_OP1_FEEDBACK` … `OSCILLATOR_FM_OP6_FEEDBACK`. See [Appendix B](appendix-b-the-binding-element.md) fo independent per-operator ADSR envelope, and an optional DX7-compatible 4-stage rate/level
 
 All other oscillator parameters are inherited from the parent `<group>` element.
 
@@ -219,7 +245,7 @@ All other oscillator parameters are inherited from the parent `<group>` element.
 - **\`noise\`** (or **\`white_noise\`**): White noise generator. Perfect for percussion textures, hi-hats, snares, wind sounds, and adding grit to other sounds.
 - **`pluck1`**: A physical modeling oscillator based on digital waveguide synthesis that simulates plucked string behavior. Unlike traditional waveforms that cycle continuously, pluck1 generates a single excitation (like plucking a string) that decays naturally over time. Ideal for synthesizing plucked string instruments like guitar, bass, harp, koto, gayageum, and other stringed instruments. This oscillator includes two parameters for controlling the sound character: `damping` and `pluckType`.
 - **`wavetable`**: A user-defined wavetable oscillator that reads frames from a multi-frame `.wav` file. The playback position (which frame is played) is controlled by the `wavetablePosition` attribute and can be scanned in real time using the `OSCILLATOR_WAVETABLE_POSITION` binding parameter—allowing LFOs, envelopes, MIDI CCs, or UI knobs to sweep through timbres. Supports Serum-compatible wavetable files with automatic frame size detection via the `clm ` RIFF chunk.
-- **`fm6op`**: A 6-operator FM synthesizer implementing the 32 classic Yamaha DX7 algorithm topologies. Each algorithm defines which operators are carriers (they produce the final audio output) and which are modulators (they phase-modulate another operator to add harmonics). Every operator has its own frequency ratio, output level, feedback amount, and an independent per-operator ADSR envelope. Set `fmAlgorithm` plus the `fmOp1`–`fmOp6` family of attributes on the parent `<group>` element. See [How to Use FM Synthesis](topic-how-to-use-fm-synthesis.md) for a full guide.
+- **`fm6op`**: A 6-operator FM synthesizer implementing the 32 classic Yamaha DX7 algorithm topologies. Each algorithm defines which operators are carriers (they produce the final audio output) and which are modulators (they phase-modulate another operator to add harmonics). Every operator has its own frequency ratio, output level, feedback amount, an independent per-operator ADSR envelope, and an optional DX7-compatible 4-stage rate/level envelope. Set `fmAlgorithm` plus the `fmOp1`–`fmOp6` family of attributes on the parent `<group>` element. See [How to Use FM Synthesis](topic-how-to-use-fm-synthesis.md) for a full guide.
 **Group-Level Parameters:**
 
 Oscillators inherit and respect most of the same parameters as samples when set at the `<group>` level, including:
