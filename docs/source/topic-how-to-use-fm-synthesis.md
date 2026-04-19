@@ -60,6 +60,63 @@ Each algorithm designates exactly one operator as the feedback source. In the DX
 
 Small feedback values (0.0–0.15) add subtle harmonics and warmth. Larger values (0.3–0.6) create bright sawtooth-like waves. Very high values (0.7–1.0) produce noise and distortion.
 
+### Detune
+
+Each operator can be pitch-detuned using DX7-compatible detune values (`fmOpNDetune`, range -7 to +7). Detune creates subtle pitch offsets that add richness and movement to the sound:
+
+- **`0`** = no detune (default)
+- **Positive values** (1–7) = sharpen the pitch slightly
+- **Negative values** (-7 to -1) = flatten the pitch slightly
+
+The DX7 detune algorithm produces larger pitch offsets at lower notes and smaller offsets at higher notes, matching the classic hardware behavior. Common use cases:
+
+- **Chorus-like thickness:** Set operators at the same ratio but slightly different detune values (e.g., Op1 detune=0, Op2 detune=2).
+- **Detuned stacks:** Create evolving textures by detuning multiple carriers in algorithm 32.
+- **Bell-like inharmonicity:** Slight detunes on modulators add metallic character.
+
+### Fixed Frequency Mode
+
+By default, each operator's frequency is a **ratio** of the played note (`fmOpNMode="ratio"`). You can instead set an operator to **fixed frequency mode** (`fmOpNMode="fixed"`) and specify an absolute frequency in Hz using `fmOpNFixedFreq`:
+
+```xml
+<group fmAlgorithm="1"
+       fmOp1Ratio="1.0" fmOp1Level="0.8"
+       fmOp2Mode="fixed" fmOp2FixedFreq="987.5" fmOp2Level="0.4">
+```
+
+In this example, Op2 always oscillates at 987.5 Hz regardless of which note is played. This creates:
+
+- **Metallic/bell timbres:** Fixed-frequency modulators add inharmonic partials.
+- **Detuned octaves:** A fixed carrier at a specific frequency creates tension against the played note.
+- **Special effects:** Ring modulation and clangorous textures.
+
+Fixed frequency is often combined with ratio mode operators in the same patch for hybrid harmonic/inharmonic sounds.
+
+### Velocity Sensitivity
+
+Each operator can respond to MIDI velocity using `fmOpNVelocitySensitivity` (range 0–7, DX7 convention):
+
+- **`0`** = no velocity response (default) — operator always plays at full level.
+- **`1`–`7`** = increasing velocity scaling — level varies from near-zero at vel=1 to full at vel=127.
+
+Velocity sensitivity is most useful on:
+
+- **Carriers:** Make the overall volume respond to playing dynamics.
+- **Modulators:** Make the brightness/harmonic complexity respond to velocity — lighter touches produce simpler tones, harder strikes add more harmonics.
+
+Example: Velocity-sensitive electric piano (algorithm 5):
+
+```xml
+<group fmAlgorithm="5"
+       fmOp1Ratio="1.0"  fmOp1Level="0.85" fmOp1VelocitySensitivity="3"
+       fmOp2Ratio="14.0" fmOp2Level="0.45" fmOp2VelocitySensitivity="6"
+       fmOp2Attack="0.001" fmOp2Decay="0.6" fmOp2Sustain="0.0" fmOp2Release="0.1">
+  <oscillator waveform="fm6op" loNote="0" hiNote="127" rootNote="60"/>
+</group>
+```
+
+Here, Op1 (carrier) has moderate velocity response (3), while Op2 (modulator) has high velocity response (6) — soft notes are mellow, loud notes are bright.
+
 ### Per-Operator Envelopes
 
 Each operator has its own ADSR envelope that shapes how that operator's contribution evolves over time:

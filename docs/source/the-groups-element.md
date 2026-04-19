@@ -192,14 +192,22 @@ When using `waveform="fm6op"`, set the FM parameters on the parent `<group>` ele
 |-----------|-------------|----------|
 | **`fmAlgorithm`** | DX7-compatible algorithm number (1–32). Selects the operator routing topology—which operators are carriers (produce audio) and which are modulators. | `1` |
 | **`fmOp1Ratio`** | Frequency ratio for operator 1 (primary carrier in most algorithms). Multiplies the played note frequency. `2.0` = one octave up, `0.5` = one octave down. | `1.0` |
+| **`fmOp1Detune`** | DX7-compatible pitch detune for operator 1. Range -7 to +7. Uses the classic DX7 detune algorithm: higher pitch offsets at lower notes, smaller offsets at higher notes. `0` = no detune, positive values sharpen, negative values flatten. | `0` |
+| **`fmOp1Mode`** | Frequency mode for operator 1. `ratio` (default) = frequency is a ratio of the played note. `fixed` = absolute frequency in Hz specified by `fmOp1FixedFreq`. | `ratio` |
+| **`fmOp1FixedFreq`** | Fixed frequency in Hz for operator 1 when `fmOp1Mode="fixed"`. Ignored when mode is `ratio`. Useful for metallic/bell-like timbres. | `440.0` |
 | **`fmOp1Level`** | Output/modulation level for operator 1. Range 0.0–1.0. | `1.0` |
+| **`fmOp1VelocitySensitivity`** | Velocity sensitivity for operator 1. Range 0–7 (DX7 convention). `0` = no velocity response (full level regardless of velocity). `7` = maximum velocity scaling (level varies from 0 at vel=1 to full at vel=127). | `0` |
 | **`fmOp1Feedback`** | Self-feedback amount for operator 1. Range 0.0–1.0. Note: only the physically correct feedback operator for each algorithm produces sound (usually Op6). | `0.0` |
 | **`fmOp1Attack`** | ADSR attack time (seconds) for operator 1's internal envelope. A value of `-1` means the operator has no independent envelope and is gated only by the outer group ADSR. | `0.0` |
 | **`fmOp1Decay`** | ADSR decay time (seconds) for operator 1. | `0.0` |
 | **`fmOp1Sustain`** | ADSR sustain level (0.0–1.0) for operator 1. | `1.0` |
 | **`fmOp1Release`** | ADSR release time (seconds) for operator 1. A value of `-1` (sentinel) lets the outer group ADSR control the release. | `-1.0` |
 | **`fmOp2Ratio`** … **`fmOp6Ratio`** | Frequency ratios for operators 2–6. Same semantics as `fmOp1Ratio`. | `1.0` |
+| **`fmOp2Detune`** … **`fmOp6Detune`** | Pitch detune for operators 2–6. Range -7 to +7. Same semantics as `fmOp1Detune`. | `0` |
+| **`fmOp2Mode`** … **`fmOp6Mode`** | Frequency modes for operators 2–6. `ratio` or `fixed`. Same semantics as `fmOp1Mode`. | `ratio` |
+| **`fmOp2FixedFreq`** … **`fmOp6FixedFreq`** | Fixed frequencies in Hz for operators 2–6 when respective mode is `fixed`. | `440.0` |
 | **`fmOp2Level`** … **`fmOp6Level`** | Output/modulation levels for operators 2–6. Range 0.0–1.0. | `1.0` |
+| **`fmOp2VelocitySensitivity`** … **`fmOp6VelocitySensitivity`** | Velocity sensitivity for operators 2–6. Range 0–7. Same semantics as `fmOp1VelocitySensitivity`. | `0` |
 | **`fmOp2Feedback`** … **`fmOp6Feedback`** | Self-feedback amounts for operators 2–6. `fmOp6Feedback` is the primary feedback and affects all algorithms. | `0.0` |
 | **`fmOp2Attack`** … **`fmOp6Attack`** | ADSR attack times for operators 2–6. | `0.0` |
 | **`fmOp2Decay`** … **`fmOp6Decay`** | ADSR decay times for operators 2–6. | `0.0` |
