@@ -217,6 +217,36 @@ Example:
 </tab>
 ```
 
+## The &lt;oscilloscope&gt; element
+
+The `<oscilloscope>` element displays a live waveform of the plugin's audio output inside your UI. It lives underneath the `<tab>` element. The waveform is a mono mix of the left and right output channels and refreshes at approximately 20 fps.
+
+Attributes:
+
+| Attribute             | Required   | Description                                                                                                                                              | Default       |
+|:----------------------|:-----------|:---------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------|
+| **`x`**               | (required) | The x position of the element's top-left corner                                                                                                          | None          |
+| **`y`**               | (required) | The y position of the element's top-left corner                                                                                                          | None          |
+| **`width`**           | (required) | The width of the element in pixels                                                                                                                       | None          |
+| **`height`**          | (required) | The height of the element in pixels                                                                                                                      | None          |
+| **`backgroundColor`** | (optional) | An 8-character hex value for the background fill color. See [Appendix A](appendix-a-the-color-format.md) for format details.                            | `#FF000000`   |
+| **`waveColor`**       | (optional) | An 8-character hex value for the waveform line color. See [Appendix A](appendix-a-the-color-format.md) for format details.                              | `#FF00FF00`   |
+| **`lineThickness`**   | (optional) | The stroke width of the waveform line in pixels                                                                                                          | `1.5`         |
+| **`showCenterLine`**  | (optional) | When set to `true`, draws a faint horizontal center line at the zero-crossing level. Valid values: `true`, `false`.                                      | `false`       |
+| **`visible`**         | (optional) | Controls whether the oscilloscope is visible. Valid values: `true`, `false`.                                                                             | `true`        |
+
+Example:
+
+```xml
+<tab name="main">
+  <oscilloscope x="10" y="10" width="300" height="80"
+                backgroundColor="#FF101010"
+                waveColor="#FF00FF88"
+                lineThickness="1.5"
+                showCenterLine="true"/>
+</tab>
+```
+
 ## The &lt;labeled-knob&gt; and &lt;control&gt; elements
 
 The `<labeled-knob>` and `<control>` elements live underneath the `<tab>` element. These tags correspond to user controls (usually round radial dials) that can be used as part of a UI. These two element types are the same except that `<labeled-knob>` elements contain built-in labels, where as `<control>` elements do not.  Every tab can have many `<control>` or `<labeled-knob>` elements underneath it. 
