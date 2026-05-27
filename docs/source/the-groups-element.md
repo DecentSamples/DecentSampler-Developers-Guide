@@ -177,7 +177,7 @@ The `<oscillator>` element itself has only one attribute:
 
 | Attribute | Required/Optional | Description | Default |
 |-----------|-------------------|-------------|---------|
-| **`waveform`** | (optional) | The waveform shape. Valid values: `sine`, `saw`, `square`, `triangle`, `noise` (or `white_noise`), `pluck1`, `wavetable`, `fm6op`. | `sine` |
+| **`waveform`** | (optional) | The waveform shape. Valid values: `sine`, `saw`, `square`, `triangle`, `noise` (or `white_noise`), `pluck1`, `wavetable`, `harmonic`, `fm6op`. | `sine` |
 | **`damping`** | (optional) | **Only for `pluck1` waveform.** Controls the decay time of the plucked string. Range: 0.0 to 1.0. Lower values (closer to 0.0) create heavily damped, shorter sounds. Higher values (closer to 1.0) create minimal damping with longer, more resonant decay. This simulates the natural damping characteristics of string materials and playing techniques. | `0.5` |
 | **`pluckType`** | (optional) | **Only for `pluck1` waveform.** Blends between different excitation signals to control the timbral character. Range: 0.0 to 1.0. At 0.0, the oscillator uses a smooth triangle wave excitation producing a softer, mellower tone. At 1.0, it uses a noise burst excitation producing a brighter, more aggressive attack with richer harmonics. Intermediate values blend between the two extremes. | `0.5` |
 | **`wavetableFile`** | (optional) | **Only for `wavetable` waveform.** Path to the multi-frame wavetable `.wav` file, relative to the `.dspreset` file. The file should contain all wavetable frames concatenated in a single audio file. If the file contains a `clm ` RIFF chunk (Serum-compatible format), the frame size is detected automatically. | (none) |
@@ -185,6 +185,15 @@ The `<oscillator>` element itself has only one attribute:
 | **`wavetablePosition`** | (optional) | **Only for `wavetable` waveform.** The initial playback position within the wavetable, expressed as a normalized value from 0.0 (first frame) to 1.0 (last frame). Intermediate values produce a linear crossfade between adjacent frames. Can be animated using the `OSCILLATOR_WAVETABLE_POSITION` binding parameter. | `0.0` |
 | **`randomPhase`** | (optional) | **Only for `wavetable` waveform.** When `true`, each note-on randomizes the oscillator's start phase instead of always resetting to zero. Strongly recommended when layering multiple wavetable groups (e.g. detuned unison voices) to prevent phase cancellation between voices. Has no effect on other waveform types. | `false` |
 | **`wavetableFrameInterpolation`** | (optional) | **Only for `wavetable` waveform.** Controls whether adjacent wavetable frames are linearly crossfaded as the position moves. When `true` (default), the position knob smoothly interpolates between adjacent frames — ideal for morphing wavetables where intermediate timbres are musically meaningful. When `false`, the oscillator snaps to the nearest integer frame with no crossfading — useful for wavetables that contain discrete, unrelated shapes (e.g. sine, triangle, saw, square) where blended intermediates are unwanted. Can be changed at runtime via the `OSCILLATOR_WAVETABLE_FRAME_INTERPOLATION` binding parameter. | `true` |
+
+When using `waveform="harmonic"`, you can define additive harmonic content using these optional attributes (typically set on the parent `<group>` element):
+
+| Attribute | Description | Default |
+|-----------|-------------|----------|
+| **`numPartials`** | Number of active harmonic partials. Integer range: 1–64. | `8` |
+| **`harmonicPartial1Level`** … **`harmonicPartial64Level`** | Per-partial amplitude controls for partials 1–64. Each level is a floating-point value from 0.0 to 1.0. | `0.0` |
+
+`harmonicPartial1Level` controls the fundamental, `harmonicPartial2Level` controls the first overtone, and so on.
 
 When using `waveform="fm6op"`, set the FM parameters on the parent `<group>` element (they are inherited by the oscillator). All FM attributes are optional:
 
@@ -253,6 +262,7 @@ All other oscillator parameters are inherited from the parent `<group>` element.
 - **\`noise\`** (or **\`white_noise\`**): White noise generator. Perfect for percussion textures, hi-hats, snares, wind sounds, and adding grit to other sounds.
 - **`pluck1`**: A physical modeling oscillator based on digital waveguide synthesis that simulates plucked string behavior. Unlike traditional waveforms that cycle continuously, pluck1 generates a single excitation (like plucking a string) that decays naturally over time. Ideal for synthesizing plucked string instruments like guitar, bass, harp, koto, gayageum, and other stringed instruments. This oscillator includes two parameters for controlling the sound character: `damping` and `pluckType`.
 - **`wavetable`**: A user-defined wavetable oscillator that reads frames from a multi-frame `.wav` file. The playback position (which frame is played) is controlled by the `wavetablePosition` attribute and can be scanned in real time using the `OSCILLATOR_WAVETABLE_POSITION` binding parameter—allowing LFOs, envelopes, MIDI CCs, or UI knobs to sweep through timbres. Supports Serum-compatible wavetable files with automatic frame size detection via the `clm ` RIFF chunk.
+- **`harmonic`**: An additive oscillator that sums harmonic partials. Use `numPartials` to control how many partials are active (1–64), and `harmonicPartial1Level` … `harmonicPartial64Level` (0.0–1.0) to set each partial's level. These parameters are bindable and modulatable via oscillator harmonic binding parameters in [Appendix B](appendix-b-the-binding-element.md).
 - **`fm6op`**: A 6-operator FM synthesizer implementing the 32 classic Yamaha DX7 algorithm topologies. Each algorithm defines which operators are carriers (they produce the final audio output) and which are modulators (they phase-modulate another operator to add harmonics). Every operator has its own frequency ratio, output level, feedback amount, an independent per-operator ADSR envelope, and an optional DX7-compatible 4-stage rate/level envelope. Set `fmAlgorithm` plus the `fmOp1`–`fmOp6` family of attributes on the parent `<group>` element. See [How to Use FM Synthesis](topic-how-to-use-fm-synthesis.md) for a full guide.
 **Group-Level Parameters:**
 
