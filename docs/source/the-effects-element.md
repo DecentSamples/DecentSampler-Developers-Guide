@@ -319,7 +319,7 @@ Attributes:
 | `drive`       | Optional | The amount of distortion. This really just controls the volume of the input signal. The volume of the input signal                        | 1 - 1000, where 1000 means the signal is amplified by a factor of 1000 and 1 means no amplification is applied | 1       |
 | `driveBoost`  | Optional | Introduces an extra gain boost to the drive                                                                                               | 0 - 1.0                                                                                                        | 1       |
 | `outputLevel` | Optional | The linear output level of the signal                                                                                                     | 0 - 1.0                                                                                                        | 0.1     |
-| `highQuality` | Optional | Whether or not oversampling is performed. Oversampling sounds better, but it's CPU intensive. If you want to save CPU, set this to false. | true, false                                                                                                    | true    |
+| `highQuality` | Optional | Whether or not oversampling is performed. Oversampling sounds better, but it's CPU intensive. If you want to save CPU, set this to false. | true, false                                                                                                    | false    |
 
 Because wave shaping tends to sound better when applied on a per-voice basis, it usually makes sense to set up the wave shaper at the group level (separate group effects get created for each keypress). Example:
 
