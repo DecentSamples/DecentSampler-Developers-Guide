@@ -29,14 +29,25 @@ For an LFO with a 500ms delay before starting:
 </modulators>
 ```
 
+For a tempo-synced LFO using musical subdivisions:
+
+```xml
+<modulators>
+  <lfo shape="sine" frequencyFormat="musical_time" frequency="10" modAmount="1.0"></lfo>
+</modulators>
+```
+
+In this mode, `frequency` is not Hz. It is an integer index into the same musical subdivision list used by `valueType="musical_time"` controls (for example, `10` = `1/8`, `13` = `1/4`, `19` = `1`, `24` = `5/1`).
+
 This element has the following attributes:
 
 - **`shape`**: controls the oscillator shape. Possible values are `sine`, `square`, `saw`. 
-- **`frequency`**: The speed of the LFO in cycles per second. For example, a value of 10 would mean that the waveform repeats ten times per second.
+- **`frequency`**: The speed of the LFO. If `frequencyFormat` is `hz`, this is in cycles per second. If `frequencyFormat` is `musical_time`, this is a musical subdivision index.
+- **`frequencyFormat`**: How `frequency` is interpreted. Valid values are `hz` (default) and `musical_time`.
 - **`modAmount`**: This value between 0 and 1 controls how much the  modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
 - **`delayTime`**: The time in seconds to wait before the LFO starts outputting signal. During this delay period, the LFO outputs zero. Default value: 0.0 (no delay).
 - **`scope`**: Whether or not this LFO exists for all notes or whether each keypress gets its own LFO. Possible values are `global` (default for LFOs) and `voice`. If `voice` is chosen, a new LFO is started each time a new note is pressed.
-- **`modBehavior`**: This attribute controls how the LFO affects the parameter it is targeting. Possible values are `add`, `multiply`, and `set`. If `add` is chosen, the LFO will add its value to the parameter it is targeting. If `multiply` is chosen, the LFO will multiply its value by the parameter it is targeting. If `set` is chosen, the LFO will set the parameter it is targeting to its value. Default value: `set`. 
+- **`modBehavior`**: This attribute controls how the LFO affects the parameter it is targeting. Possible values are `add`, `modulate`, `multiply`, and `set`. If `add` is chosen, the LFO will add its translated value directly to the target parameter (legacy behavior). If `modulate` is chosen, the LFO adds a zero-centered modulation delta around the target parameter's current/base value, so a neutral LFO value contributes no offset. If `multiply` is chosen, the LFO will multiply its value by the parameter it is targeting. If `set` is chosen, the LFO will set the parameter it is targeting to its value. Default value: `set`. 
 
 ## The &lt;envelope&gt; element
 
@@ -51,7 +62,7 @@ This element has the following attributes:
 - **`release`**: The length in seconds of the release portion of the ADSR envelope
 - **`modAmount`**: This value between 0 and 1 controls how much the  modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
 - **`scope`**: Whether or not this LFO exists for all notes or whether each keypress gets its own LFO. Possible values are `global` and `voice` (default for envelopes). If `voice` is chosen, a new LFO is started each time a new note is pressed.
-- **`modBehavior`**: This attribute controls how the envelope affects the parameter it is targeting. Possible values are `add`, `multiply`, and `set`. If `add` is chosen, the envelope will add its value to the parameter it is targeting. If `multiply` is chosen, the envelope will multiply its value by the parameter it is targeting. If `set` is chosen, the envelope will set the parameter it is targeting to its value. Default value: `set`.
+- **`modBehavior`**: This attribute controls how the envelope affects the parameter it is targeting. Possible values are `add`, `modulate`, `multiply`, and `set`. If `add` is chosen, the envelope will add its translated value directly to the target parameter (legacy behavior). If `modulate` is chosen, the envelope adds a zero-centered modulation delta around the target parameter's current/base value, so a neutral envelope value contributes no offset. If `multiply` is chosen, the envelope will multiply its value by the parameter it is targeting. If `set` is chosen, the envelope will set the parameter it is targeting to its value. Default value: `set`.
 - **`attackCurve`**: A numeric value from -100 to 100 that determines the shape of the attack portion of the ADSR envelope. Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential). Default value: `-100` (logarithmic).
 - **`decayCurve`**: A numeric value from -100 to 100 that determines the shape of the decay portion of the ADSR envelope. Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential). Default value: `100` (exponential).
 - **`releaseCurve`**: A numeric value from -100 to 100 that determines the shape of the release portion of the ADSR envelope. Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential). Default value: `100` (exponential).
@@ -254,7 +265,7 @@ You can bind to modulator parameters themselves to control them in real-time fro
 | `parameter` value | Description |
 |---|---|
 | `MOD_AMOUNT` | Modulation depth (0.0–1.0) |
-| `FREQUENCY` | LFO rate in Hz |
+| `FREQUENCY` | LFO rate (Hz when `frequencyFormat="hz"`, subdivision index when `frequencyFormat="musical_time"`) |
 | `SHAPE` | Waveform shape (`"sine"`, `"saw"`, `"square"`, `"triangle"`) |
 | `MOD_DELAY_TIME` | Delay before the LFO begins (seconds) |
 | `TRIGGER` | Reset behavior (`"attack"` or `"none"`) |
