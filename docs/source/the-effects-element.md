@@ -464,3 +464,70 @@ Example with knobs for all three parameters:
   </effects>
 </DecentSampler>
 ```
+
+### Compressor effect
+
+A standard dynamics compressor that reduces the signal's volume once it crosses a threshold, by a ratio you specify. Detection is stereo-linked (both channels are measured together, so the stereo image doesn't shift under compression).
+
+The compressor also supports an optional **auto bypass** mode. When enabled, the compressor fades itself out (click-free) whenever the input signal stays below threshold, and fades back in as soon as the signal re-engages. This is useful for avoiding any audible noise-floor artifacts on program material that never actually triggers gain reduction.
+
+```xml
+<effect type="compressor" threshold="-12" ratio="4" attack="5" release="100" inputGain="0" outputGain="0" autoBypass="false"/>
+```
+
+Attributes:
+
+| Attribute    |          | Type                                                                                                                                                    | Valid Range                                                | Default |
+|:-------------|:---------|:----------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------|:--------|
+| `type`       | Required | Must be `compressor`                                                                                                                                  | `compressor`                                                 |         |
+| `threshold`  | Optional | The level (in dB) above which compression starts being applied                                                                                        | -60 – 0                                                     | -12     |
+| `ratio`      | Optional | The compression ratio                                                                                                                                  | 1 – 20, where 1 is no compression and 20 is near-limiting   | 4       |
+| `attack`     | Optional | How quickly (in milliseconds) the compressor reacts once the signal crosses the threshold                                                             | 0.1 – 200                                                   | 5       |
+| `release`    | Optional | How quickly (in milliseconds) the compressor lets go once the signal drops back below the threshold                                                   | 5 – 2000                                                    | 100     |
+| `inputGain`  | Optional | Gain (in dB) applied to the signal before compression                                                                                                  | -24 – 24                                                    | 0       |
+| `outputGain` | Optional | Makeup gain (in dB) applied to the signal after compression                                                                                            | -24 – 24                                                    | 0       |
+| `autoBypass` | Optional | When `true`, the compressor fades itself out (click-free) whenever the input stays below threshold, and fades back in as soon as the signal re-engages | `true`, `false`                                             | `false` |
+
+`threshold`, `ratio`, `attack`, `release`, `inputGain`, and `outputGain` are all bindable. `autoBypass` is not bindable.
+
+Binding parameters for the compressor effect:
+
+| Binding `parameter` value | Description                                        |
+|:---------------------------|:---------------------------------------------------|
+| `FX_THRESHOLD`              | Controls the threshold, in dB (-60 – 0)            |
+| `FX_RATIO`                  | Controls the compression ratio (1 – 20)            |
+| `FX_ATTACK`                 | Controls the attack time, in ms (0.1 – 200)        |
+| `FX_RELEASE`                | Controls the release time, in ms (5 – 2000)        |
+| `FX_INPUT_GAIN`             | Controls the input gain, in dB (-24 – 24)          |
+| `FX_OUTPUT_GAIN`            | Controls the output (makeup) gain, in dB (-24 – 24)|
+
+Example with knobs for threshold and ratio:
+
+```xml
+<DecentSampler pluginVersion="1">
+  <ui>
+    <tab>
+      <labeled-knob x="80" y="40" label="Threshold" type="float"
+                    minValue="-60" maxValue="0" value="-12" textColor="FF000000">
+        <binding type="effect" level="instrument" effectIndex="0"
+                 parameter="FX_THRESHOLD" translation="linear"
+                 translationOutputMin="-60" translationOutputMax="0"/>
+      </labeled-knob>
+      <labeled-knob x="185" y="40" label="Ratio" type="float"
+                    minValue="1" maxValue="20" value="4" textColor="FF000000">
+        <binding type="effect" level="instrument" effectIndex="0"
+                 parameter="FX_RATIO" translation="linear"
+                 translationOutputMin="1" translationOutputMax="20"/>
+      </labeled-knob>
+    </tab>
+  </ui>
+  <groups>
+    <group>
+      <!-- Samples go here. -->
+    </group>
+  </groups>
+  <effects>
+    <effect type="compressor" threshold="-12" ratio="4" attack="5" release="100" inputGain="0" outputGain="0"/>
+  </effects>
+</DecentSampler>
+```
