@@ -260,7 +260,7 @@ Attributes:
 - **`width`** (required): The width in pixels of the knob + label.
 - **`height`** (required): The height in pixels of the knob + label.
 - **`parameterName`** (required): In a situation where the sampler does not have enough room to display the full UI, a shrunken down version of the UI will be used. In such situations, this control will be labeled using the `parameterName`. It is good practice to always include a `parameterName`. If not `parameterName` is specified and a value `label` is specified, then that will be used instead. 
-- **`style`** (optional): The specific kind of control that is created. The following values are supported: `linear_bar`, `linear_bar_vertical`, `linear_horizontal`, `linear_vertical`, `rotary`, `rotary_horizontal_drag`, `rotary_horizontal_vertical_drag`, `rotary_vertical_drag`, `custom_skin_vertical_drag`, `custom_skin_horizontal_drag`. Default: `rotary_vertical_drag`.
+- **`style`** (optional): The specific kind of control that is created. The following values are supported: `linear_bar`, `linear_bar_vertical`, `linear_horizontal`, `linear_vertical`, `rotary`, `rotary_horizontal_drag`, `rotary_horizontal_vertical_drag`, `rotary_vertical_drag`, `custom_skin_vertical_drag`, `custom_skin_horizontal_drag`, `custom_skin_horizontal_vertical_drag`. Default: `rotary_vertical_drag`.
 - **`showLabel`** (optional): A true/false value dictating whether or not a built-in label should be displayed. Default: true for `<labeled-knob>` and false for `<control>` elements
 - **`label`** (optional): If `showLabel` is true, the actual text that should be displayed above the control.
 - **`parameterName`** (required): In a situation where the sampler does not have enough room to display the full UI, a shrunken down version of the UI will be used. In such situations, this control will be labeled using the `parameterName`. It is good practice to always include a `parameterName`.
@@ -288,7 +288,7 @@ It is also possible to use custom control graphics using the following attribute
 - **`customSkinImageOrientation`** (optional): The orientation of the frames within the KnobMan image pointed to by `customSkinImage`. Valid values: `horizontal`, `vertical`. Default: vertical.
 - **`mouseDragSensitivity`** (optional): An integer number describing how sensitive the control should be to mouse drags. The higher the number, the less sensitive the control will be to mouse movements.
 
-If you are using custom knobs, it's important that you specify a `style=` value of either `custom_skin_vertical_drag` or `custom_skin_horizontal_drag`. 
+If you are using custom knobs, it's important that you specify a `style=` value of `custom_skin_vertical_drag`, `custom_skin_horizontal_drag`, or `custom_skin_horizontal_vertical_drag`. 
 
 Example: 
 
