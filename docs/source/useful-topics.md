@@ -15,6 +15,7 @@ topic-how-to-use-animations
 :maxdepth: 1
 topic-how-to-use-buses-and-auxiliary-outputs
 topic-how-to-use-note-sequences
+topic-how-to-use-the-arpeggiator
 topic-how-to-control-parameters-using-tags
 topic-how-to-do-voice-muting-for-drums
 topic-how-to-implement-true-legato

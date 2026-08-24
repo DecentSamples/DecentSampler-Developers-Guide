@@ -20,6 +20,7 @@ Contents
    the-effects-element
    the-midi-element
    the-noteSequences-element
+   the-arpeggiator-element
    the-modulators-element
    the-tags-element
    the-buses-element
