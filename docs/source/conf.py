@@ -28,6 +28,10 @@ intersphinx_disabled_domains = ['std']
 
 templates_path = ['_templates']
 
+# Auto-generate anchors for Markdown headings (e.g. #order-modes) up to h3,
+# so in-page links like [Order Modes](#order-modes) resolve.
+myst_heading_anchors = 3
+
 # -- Options for HTML output
 
 html_theme = 'sphinx_rtd_theme'
