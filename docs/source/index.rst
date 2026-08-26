@@ -24,6 +24,7 @@ Contents
    the-modulators-element
    the-tags-element
    the-buses-element
+   the-dslibraryinfo-file
    appendix-a-the-color-format
    appendix-b-the-binding-element
    appendix-c-boilerplate-dspreset-file
