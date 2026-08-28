@@ -276,6 +276,7 @@ Attributes:
 - **`tags`** (optional): A comma-separated list of tags to be associated with this control. These can be used in conjunction with any binding that takes a `controlIndex` (instead of the `controlIndex`)
 - **`visible`** (optional): This controls whether or not this control is visible. There are two valid values: `true` (default), `false`.
 - **`enabled`** (optional): This controls whether or not this control is enabled. There are two valid values: `true` (default), `false`.
+- **`disabledOpacity`** (optional): The opacity of the control when it is disabled (see `enabled`). This is a floating point value between 0 and 1. Default: 0.5
 - **`tooltip`** (optional): A tool tip to display when the user hovers over this control.
 - **`snapMode`** (optional): This attribute controls how the control should snap to values. Valid values: `none`, `whole_numbers`, `tenths`, `hundredths`, `thousandths`, and `stop_points`. Default: none.
 - **`snapStopPoints`** (optional): A comma-separated list of values that the control should snap to when `snapMode` is set to `stop_points`. Default: none.
@@ -284,6 +285,7 @@ Attributes:
 It is also possible to use custom control graphics using the following attributes:
 
 - **`customSkinImage`** (optional): This is path to an image to use for the control. This is expected to be a JPEG or PNG in KnobMan format. A huge gallery of compatible knobs can be found [here](https://www.g200kg.com/en/webknobman/gallery.php).
+- **`customSkinHoverImage`** (optional): An alternate KnobMan-format image, matching `customSkinImage` in frame count and orientation, to display while the user's mouse is hovering over the control. If omitted, the control keeps using `customSkinImage` on hover.
 - **`customSkinNumFrames`** (optional): The number of animation frames contained in the KnobMan image pointed to by `customSkinImage`.
 - **`customSkinImageOrientation`** (optional): The orientation of the frames within the KnobMan image pointed to by `customSkinImage`. Valid values: `horizontal`, `vertical`. Default: vertical.
 - **`mouseDragSensitivity`** (optional): An integer number describing how sensitive the control should be to mouse drags. The higher the number, the less sensitive the control will be to mouse movements.
@@ -300,7 +302,7 @@ Example:
       <!-- Your <binding /> elements should go here -->
       </labeled-knob>
       <label x="360" y="0" width="50" height="30" text="Reverb"/>
-      <control x="360" y="30" parameterName="Reverb" type="float" minValue="0" maxValue="1" textColor="FF000000" value="0.5" style="custom_skin_vertical_drag" customSkinImage="Samples/ENIGMA-nolight.png" customSkinNumFrames="31" customSkinImageOrientation="horizontal" mouseDragSensitivity="100">
+      <control x="360" y="30" parameterName="Reverb" type="float" minValue="0" maxValue="1" textColor="FF000000" value="0.5" style="custom_skin_vertical_drag" customSkinImage="Samples/ENIGMA-nolight.png" customSkinHoverImage="Samples/ENIGMA-nolight-hover.png" customSkinNumFrames="31" customSkinImageOrientation="horizontal" mouseDragSensitivity="100">
       <!-- Your <binding /> elements should go here -->
       </control>
     </tab>
@@ -434,7 +436,24 @@ Example:
 
 ## The &lt;keyboard&gt; element
 
-The `<keyboard>` element lives underneath the `<ui>` element. This is where you specify settings relating to the on-screen keyboard. There should be only one `<keyboard>` element in your preset file. At this point, the only settings are color ranges which are specified using `<color>` sub-elements.
+The `<keyboard>` element lives underneath the `<ui>` element. This is where you specify settings relating to the on-screen keyboard. There should be only one `<keyboard>` element in your preset file.
+
+Attributes:
+
+| Attribute        |            | Description                                                                                                                                                                                                                     |
+|:-----------------|:-----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **`centerNote`** | (optional) | A MIDI note number (0-127) that the on-screen keyboard should be centered on when the preset loads. If omitted, DecentSampler auto-centers the keyboard based on the lowest and highest mapped notes in your instrument (including any keyswitches defined in `<midi><note>` elements). |
+
+```xml
+<DecentSampler>
+    <ui>
+        <!-- Other stuff here -->
+        <keyboard centerNote="60">
+        </keyboard>
+    </ui>
+    <!-- Other stuff here -->
+</DecentSampler>
+```
 
 ### The &lt;color&gt; element
 
