@@ -33,3 +33,44 @@ Then you can make controls with bindings that reference those tags:
     <binding type="amp" level="tag" identifier="mic2" parameter="AMP_VOLUME" />
 </control>
 ```
+## Targeting individual samples and oscillators
+
+The bindings above use `level="tag"`, which is a good fit for volume-style controls but only reaches
+a fixed set of parameters. If you need to change some *other* parameter on one specific sample, use
+`level="sample"` together with the `sampleTags` attribute. This targets every `<sample>` carrying one
+of those tags, in any group, instead of the whole group the sample happens to live in:
+
+```xml
+<group>
+  <sample loNote="0" hiNote="127" rootNote="60" path="Samples/close.wav" tags="mic1" />
+  <sample loNote="0" hiNote="127" rootNote="60" path="Samples/far.wav" tags="mic2" />
+</group>
+```
+
+```xml
+<control x="246" y="115" parameterName="MIC 1 TUNE" type="float" minValue="-12" maxValue="12" value="0">
+    <binding type="amp" level="sample" sampleTags="mic1" parameter="TUNING" />
+</control>
+```
+
+Because both samples sit in the same group, a `level="group"` binding would have moved both of them.
+`sampleTags` reaches just the one.
+
+Oscillators work the same way, using `level="oscillator"` and `oscillatorTags`:
+
+```xml
+<group>
+  <oscillator shape="saw" tags="osc1" />
+  <oscillator shape="square" tags="osc2" />
+</group>
+```
+
+```xml
+<control x="346" y="115" parameterName="OSC 2 TUNE" type="float" minValue="-12" maxValue="12" value="0">
+    <binding type="amp" level="oscillator" oscillatorTags="osc2" parameter="TUNING" />
+</control>
+```
+
+If you leave the typed attribute off and just write `tags="mic1"`, it will still work: at
+`level="sample"` a plain `tags` list is treated as `sampleTags`, and at `level="oscillator"` as
+`oscillatorTags`. Prefer the typed attributes in new presets, since they say what they mean.
