@@ -56,7 +56,17 @@ Algorithm 32 is a special case: all six operators are carriers, each producing a
 
 ### Feedback
 
-Each algorithm designates exactly one operator as the feedback source. In the DX7 this is always Op 6 (the `fmOp6Feedback` attribute), so `fmOp6Feedback` is the feedback parameter that works in all 32 algorithms. Setting feedback on other operators has no audible effect unless the active algorithm routes them as the feedback source.
+Each algorithm designates exactly one operator as the feedback source, and it is not always Op 6. It is Op 6 in 19 of the 32 algorithms; the other 13 use Op 2, Op 3, Op 4 or Op 5:
+
+| Feedback operator | Algorithms |
+| --- | --- |
+| Op 2 | 2, 9, 12, 15, 17 |
+| Op 3 | 10, 18, 20, 21, 27 |
+| Op 4 | 8 |
+| Op 5 | 28, 30 |
+| Op 6 | all the others |
+
+Use the `fmOpNFeedback` attribute matching the algorithm you have chosen — `fmOp2Feedback` for algorithm 9, for instance, or `fmOp6Feedback` for algorithm 1. Setting feedback on any other operator has no audible effect.
 
 Small feedback values (0.0–0.15) add subtle harmonics and warmth. Larger values (0.3–0.6) create bright sawtooth-like waves. Very high values (0.7–1.0) produce noise and distortion.
 
