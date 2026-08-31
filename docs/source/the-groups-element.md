@@ -159,6 +159,24 @@ The `<oscillator>` element allows you to add synthesized waveforms to your instr
 
 Oscillators live inside `<group>` elements, just like `<sample>` elements. Each group can contain samples, an oscillator, or both, allowing you to layer oscillators with samples within the same group or create multi-oscillator patches by using multiple groups.
 
+#### Polyphony and glide
+
+An oscillator takes a `polyphony` attribute: how many voices it may sound at once, `-1` (the
+default) meaning no limit. Like the rest of an oscillator's attributes it can be set on the
+`<oscillator>`, the `<group>` or `<groups>`, and the innermost one wins.
+
+Set it to `1` to make the oscillator monophonic. This is what you want alongside `glideMode`: on a
+classic synth, portamento assumes one voice sliding from note to note, whereas without a limit
+every voice glides independently, which is rarely what a portamento control is expected to do.
+
+```xml
+<oscillator waveform="saw" polyphony="1" glideMode="legato" glideTime="0.4" />
+```
+
+This is a different thing from the `polyphony` on a `<tag>`. A tag's limit is cross-cutting and
+spans groups, which is what tags are for; this one is a property of the sound itself. If both
+apply, each is enforced independently, so the stricter of the two is what you hear.
+
 **Basic Usage:**
 
 The simplest oscillator configuration requires only a waveform type:
