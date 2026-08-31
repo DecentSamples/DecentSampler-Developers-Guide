@@ -56,15 +56,22 @@ Algorithm 32 is a special case: all six operators are carriers, each producing a
 
 ### Feedback
 
-Each algorithm designates exactly one operator as the feedback source, and it is not always Op 6. It is Op 6 in 19 of the 32 algorithms; the other 13 use Op 2, Op 3, Op 4 or Op 5:
+Each algorithm designates exactly one operator as the feedback source, and it is not always Op 6. It is Op 6 in 18 of the 32 algorithms; the other 14 use Op 2, Op 3, Op 4 or Op 5:
 
 | Feedback operator | Algorithms |
 | --- | --- |
 | Op 2 | 2, 9, 12, 15, 17 |
 | Op 3 | 10, 18, 20, 21, 27 |
 | Op 4 | 8 |
-| Op 5 | 28, 30 |
+| Op 5 | 6, 28, 30 |
 | Op 6 | all the others |
+
+```{note}
+Algorithm 6 is the one place where DecentSampler differs from a real DX7, which feeds back on Op 6
+there. DecentSampler puts it on Op 5, the carrier, because that is what matches the reference
+implementation's rendered output - moving it to Op 6 makes the algorithm's even harmonics disappear
+entirely. Set `fmOp5Feedback` for algorithm 6; `fmOp6Feedback` has no effect on it.
+```
 
 Use the `fmOpNFeedback` attribute matching the algorithm you have chosen — `fmOp2Feedback` for algorithm 9, for instance, or `fmOp6Feedback` for algorithm 1. Setting feedback on any other operator has no audible effect.
 
