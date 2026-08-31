@@ -159,24 +159,6 @@ The `<oscillator>` element allows you to add synthesized waveforms to your instr
 
 Oscillators live inside `<group>` elements, just like `<sample>` elements. Each group can contain samples, an oscillator, or both, allowing you to layer oscillators with samples within the same group or create multi-oscillator patches by using multiple groups.
 
-#### Polyphony and glide
-
-An oscillator takes a `polyphony` attribute: how many voices it may sound at once, `-1` (the
-default) meaning no limit. Like the rest of an oscillator's attributes it can be set on the
-`<oscillator>`, the `<group>` or `<groups>`, and the innermost one wins.
-
-Set it to `1` to make the oscillator monophonic. This is what you want alongside `glideMode`: on a
-classic synth, portamento assumes one voice sliding from note to note, whereas without a limit
-every voice glides independently, which is rarely what a portamento control is expected to do.
-
-```xml
-<oscillator waveform="saw" polyphony="1" glideMode="legato" glideTime="0.4" />
-```
-
-This is a different thing from the `polyphony` on a `<tag>`. A tag's limit is cross-cutting and
-spans groups, which is what tags are for; this one is a property of the sound itself. If both
-apply, each is enforced independently, so the stricter of the two is what you hear.
-
 **Basic Usage:**
 
 The simplest oscillator configuration requires only a waveform type:
@@ -195,7 +177,8 @@ The `<oscillator>` element itself has only one attribute:
 
 | Attribute | Required/Optional | Description | Default |
 |-----------|-------------------|-------------|---------|
-| **`waveform`** | (optional) | The waveform shape. Valid values: `sine`, `saw`, `square`, `triangle`, `noise` (or `white_noise`), `pluck1`, `wavetable`, `harmonic`, `fm6op`. | `sine` |
+| **`waveform`** | (optional) | The waveform shape. Valid values: `sine`, `saw`, `square`, `triangle`, `noise` (or `white_noise`), `pluck1`, `wavetable`, `harmonic`, `formant`, `fm6op`. | `sine` |
+| **`polyphony`** | (optional) | How many voices this oscillator may sound at once. `-1` means no limit. Set it to `1` to make the oscillator monophonic, which is what makes `glideMode` behave like portamento on a classic synth. See [Polyphony and glide](#polyphony-and-glide) below. | `-1` |
 | **`damping`** | (optional) | **Only for `pluck1` waveform.** Controls the decay time of the plucked string. Range: 0.0 to 1.0. Lower values (closer to 0.0) create heavily damped, shorter sounds. Higher values (closer to 1.0) create minimal damping with longer, more resonant decay. This simulates the natural damping characteristics of string materials and playing techniques. | `0.5` |
 | **`pluckType`** | (optional) | **Only for `pluck1` waveform.** Blends between different excitation signals to control the timbral character. Range: 0.0 to 1.0. At 0.0, the oscillator uses a smooth triangle wave excitation producing a softer, mellower tone. At 1.0, it uses a noise burst excitation producing a brighter, more aggressive attack with richer harmonics. Intermediate values blend between the two extremes. | `0.5` |
 | **`wavetableFile`** | (optional) | **Only for `wavetable` waveform.** Path to the multi-frame wavetable `.wav` file, relative to the `.dspreset` file. The file should contain all wavetable frames concatenated in a single audio file. If the file contains a `clm ` RIFF chunk (Serum-compatible format), the frame size is detected automatically. | (none) |
@@ -254,6 +237,24 @@ When using `waveform="fm6op"`, set the FM parameters on the parent `<group>` ele
 | **`fmOp2EgType`** … **`fmOp6EgType`** | Envelope types for operators 2–6. Same as `fmOp1EgType`. | `adsr` |
 | **`fmOp2EgRate1`** … **`fmOp6EgRate4`** | Envelope rates R1–R4 for operators 2–6 (DX7 mode only). Same semantics as `fmOp1EgRate1`–`fmOp1EgRate4`. | `99, 99, 0, 99` |
 | **`fmOp2EgLevel1`** … **`fmOp6EgLevel4`** | Envelope levels L1–L4 for operators 2–6 (DX7 mode only). Same semantics as `fmOp1EgLevel1`–`fmOp1EgLevel4`. | `99, 99, 99, 0` |
+
+#### Polyphony and glide
+
+An oscillator takes a `polyphony` attribute: how many voices it may sound at once, `-1` (the
+default) meaning no limit. Like the rest of an oscillator's attributes it can be set on the
+`<oscillator>`, the `<group>` or `<groups>`, and the innermost one wins.
+
+Set it to `1` to make the oscillator monophonic. This is what you want alongside `glideMode`: on a
+classic synth, portamento assumes one voice sliding from note to note, whereas without a limit
+every voice glides independently, which is rarely what a portamento control is expected to do.
+
+```xml
+<oscillator waveform="saw" polyphony="1" glideMode="legato" glideTime="0.4" />
+```
+
+This is a different thing from the `polyphony` on a `<tag>`. A tag's limit is cross-cutting and
+spans groups, which is what tags are for; this one is a property of the sound itself. If both
+apply, each is enforced independently, so the stricter of the two is what you hear.
 
 The DX7 rate/level envelope uses the same integer parameter conventions as classic 6-operator DX7 synthesizers: rates and levels are both in the range 0–99, and the values are directly compatible with patch data from vintage hardware and standard DX7 patch banks. See [How to Use FM Synthesis](topic-how-to-use-fm-synthesis.md) for worked examples.
 
