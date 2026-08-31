@@ -178,7 +178,7 @@ The `<oscillator>` element itself has only one attribute:
 | Attribute | Required/Optional | Description | Default |
 |-----------|-------------------|-------------|---------|
 | **`waveform`** | (optional) | The waveform shape. Valid values: `sine`, `saw`, `square`, `triangle`, `noise` (or `white_noise`), `pluck1`, `wavetable`, `harmonic`, `formant`, `fm6op`. | `sine` |
-| **`polyphony`** | (optional) | How many voices this oscillator may sound at once. `-1` means no limit. Set it to `1` to make the oscillator monophonic, which is what makes `glideMode` behave like portamento on a classic synth. See [Polyphony and glide](#polyphony-and-glide) below. | `-1` |
+| **`polyphony`** | (optional) | How many voices this oscillator may sound at once. Omit for no limit. Set it to `1` to make the oscillator monophonic, which is what makes `glideMode` behave like portamento on a classic synth. See [Polyphony and glide](#polyphony-and-glide) below. | (no limit) |
 | **`damping`** | (optional) | **Only for `pluck1` waveform.** Controls the decay time of the plucked string. Range: 0.0 to 1.0. Lower values (closer to 0.0) create heavily damped, shorter sounds. Higher values (closer to 1.0) create minimal damping with longer, more resonant decay. This simulates the natural damping characteristics of string materials and playing techniques. | `0.5` |
 | **`pluckType`** | (optional) | **Only for `pluck1` waveform.** Blends between different excitation signals to control the timbral character. Range: 0.0 to 1.0. At 0.0, the oscillator uses a smooth triangle wave excitation producing a softer, mellower tone. At 1.0, it uses a noise burst excitation producing a brighter, more aggressive attack with richer harmonics. Intermediate values blend between the two extremes. | `0.5` |
 | **`wavetableFile`** | (optional) | **Only for `wavetable` waveform.** Path to the multi-frame wavetable `.wav` file, relative to the `.dspreset` file. The file should contain all wavetable frames concatenated in a single audio file. If the file contains a `clm ` RIFF chunk (Serum-compatible format), the frame size is detected automatically. | (none) |
@@ -240,9 +240,9 @@ When using `waveform="fm6op"`, set the FM parameters on the parent `<group>` ele
 
 #### Polyphony and glide
 
-An oscillator takes a `polyphony` attribute: how many voices it may sound at once, `-1` (the
-default) meaning no limit. Like the rest of an oscillator's attributes it can be set on the
-`<oscillator>`, the `<group>` or `<groups>`, and the innermost one wins.
+An oscillator takes a `polyphony` attribute: how many voices it may sound at once. Leave it off for
+no limit - the same way a `<tag>` expresses it. Like the rest of an oscillator's attributes it can be
+set on the `<oscillator>`, the `<group>` or `<groups>`, and the innermost one wins.
 
 Set it to `1` to make the oscillator monophonic. This is what you want alongside `glideMode`: on a
 classic synth, portamento assumes one voice sliding from note to note, whereas without a limit
