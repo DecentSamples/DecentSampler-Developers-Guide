@@ -247,6 +247,41 @@ Example:
 </tab>
 ```
 
+## The &lt;drawbars&gt; element
+
+A row of vertical drawbars, dragged to shape a set of levels the way a drawbar organ does. It is
+meant for the harmonic oscillator's partials.
+
+Unlike every other control, a single `<binding>` covers all of the bars. Which partial a movement
+applies to comes from the bar itself, so you do not write one binding per partial:
+
+```xml
+<tab name="main">
+    <drawbars x="10" y="10" width="300" height="120" numBars="9">
+        <binding type="general" level="group" tags="organ"
+                 parameter="OSCILLATOR_HARMONIC_PARTIAL_LEVEL" />
+    </drawbars>
+</tab>
+```
+
+| Attribute | Required? | Description |
+| --- | --- | --- |
+| **`x`**, **`y`** | (required) | Position of the control's top-left corner, in pixels. |
+| **`width`**, **`height`** | (required) | Size of the control, in pixels. |
+| **`numBars`** | (optional) | How many bars are shown. Nine matches a drawbar organ; the harmonic oscillator supports up to 64 partials. Default: `9`. |
+| **`enabled`** | (optional) | Whether the control responds to the mouse. Default: `true`. |
+| **`visible`** | (optional) | Whether the control is shown. Default: `true`. |
+
+Each bar's position is stored on the element as `level1`, `level2` and so on, from 0.0 to 1.0. You
+do not normally write these by hand - the control saves them as they are dragged - but they are how
+a preset remembers where its drawbars were left.
+
+```{note}
+A level written to a `<group>` is shadowed by the same attribute set directly on an `<oscillator>`,
+following the usual inheritance order. So do not set `harmonicPartialNLevel` on the oscillator you
+want the drawbars to control, or the control will appear to do nothing.
+```
+
 ## The &lt;labeled-knob&gt; and &lt;control&gt; elements
 
 The `<labeled-knob>` and `<control>` elements live underneath the `<tab>` element. These tags correspond to user controls (usually round radial dials) that can be used as part of a UI. These two element types are the same except that `<labeled-knob>` elements contain built-in labels, where as `<control>` elements do not.  Every tab can have many `<control>` or `<labeled-knob>` elements underneath it. 
