@@ -47,7 +47,7 @@ This element has the following attributes:
 - **`modAmount`**: This value between 0 and 1 controls how much the  modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
 - **`delayTime`**: The time in seconds to wait before the LFO starts outputting signal. During this delay period, the LFO outputs zero. Default value: 0.0 (no delay).
 - **`scope`**: Whether or not this LFO exists for all notes or whether each keypress gets its own LFO. Possible values are `global` (default for LFOs) and `voice`. If `voice` is chosen, a new LFO is started each time a new note is pressed.
-- **`modBehavior`**: This attribute controls how the LFO affects the parameter it is targeting. Possible values are `add`, `modulate`, `multiply`, and `set`. If `add` is chosen, the LFO will add its translated value directly to the target parameter (legacy behavior). If `modulate` is chosen, the LFO adds a zero-centered modulation delta around the target parameter's current/base value, so a neutral LFO value contributes no offset. If `multiply` is chosen, the LFO will multiply its value by the parameter it is targeting. If `set` is chosen, the LFO will set the parameter it is targeting to its value. Default value: `set`. 
+- **`modBehavior`**: This attribute controls how the LFO affects the parameter it is targeting. Possible values are `add`, `modulate`, `multiply`, and `set`. If `add` is chosen, the LFO will add its translated value directly to the target parameter (legacy behavior). If `modulate` is chosen, the LFO adds a zero-centered modulation delta around the target parameter's current/base value, so a neutral LFO value contributes no offset. If `multiply` is chosen, the LFO will multiply its value by the parameter it is targeting. If `set` is chosen, the LFO will set the parameter it is targeting to its value. Default value: `set`. For amplitude in particular, see [choosing between multiply and modulate](#choosing-between-multiply-and-modulate-for-amplitude) below.
 
 ## The &lt;envelope&gt; element
 
@@ -350,6 +350,62 @@ You can bind to modulator parameters themselves to control them in real-time fro
   </modulators>
 </DecentSampler>
 ```
+
+#### Choosing between `multiply` and `modulate` for amplitude
+
+Amplitude is where the choice of `modBehavior` matters most, and it is not obvious which of
+the two sensible options to reach for.
+
+If the volume being modulated never changes, they are interchangeable. Both produce the same
+tremolo, with the trough sitting at `(1 - modAmount) / (1 + modAmount)` of the peak: silence at
+`modAmount="1.0"`, a third of the peak at `modAmount="0.5"`.
+
+The difference shows up as soon as the underlying volume moves, which it will if you have given
+the player a volume knob.
+
+`multiply` scales the modulation in proportion to the value it is applied to, so the tremolo
+keeps its shape wherever the volume is set. Halving the volume halves the peaks and the troughs
+together, and the trough stays at the same fraction of the peak.
+
+`modulate` applies a fixed swing either side of the current value, so the shape changes as the
+volume moves. With `modAmount="0.5"` and an output range of `-0.5` to `0.5`, the trough sits at
+about 60% of the peak when the group volume is `1.0`, but at 33% when the group volume is `0.5`.
+Take the volume low enough and the swing will carry the level down to silence and then past it.
+
+So for a tremolo whose depth should feel the same at any volume, use `multiply`:
+
+```xml
+<groups>
+  <group volume="1.0">
+    <sample path="Samples/note.wav" rootNote="60" loNote="0" hiNote="127" />
+  </group>
+</groups>
+<modulators>
+  <lfo shape="sine" frequency="4" modAmount="0.5">
+    <binding type="amp" level="group" position="0" parameter="AMP_VOLUME"
+             modBehavior="multiply" translation="linear"
+             translationOutputMin="0" translationOutputMax="1" />
+  </lfo>
+</modulators>
+```
+
+And for a fixed amount of movement around whatever the value currently happens to be, use
+`modulate`. Note that its output range describes how far the parameter moves in each direction
+rather than the values it should take, so the range is centred on zero:
+
+```xml
+<modulators>
+  <lfo shape="sine" frequency="4" modAmount="0.5">
+    <binding type="amp" level="group" position="0" parameter="AMP_VOLUME"
+             modBehavior="modulate" translation="linear"
+             translationOutputMin="-0.5" translationOutputMax="0.5" />
+  </lfo>
+</modulators>
+```
+
+`modulate` is usually the better fit for parameters like filter cutoff, where you want a
+consistent amount of sweep around wherever the player has left the knob. For volume, `multiply`
+is normally what you want. `modulate` requires version 1.23.3 or later.
 
 You can also control modulator parameters via MIDI CC:
 
