@@ -36,6 +36,7 @@ Samples and oscillators live in groups. There can be many group elements under t
 | **`pitchKeyTrack`** | A number from 0.0 to 1.0. 0 means that the pitch will stay the same regardless of what note is played. 1 means that the pitch will increase by one semitone when the note increases by one semitone (normal key pitch tracking). Applies to all samples and oscillators in the group. Default: 1 | (optional) |
 | **`glideTime`** | The glide/portamento time in seconds for samples and oscillators in this group. A value of 0.0 means no portamento. Can be overridden at the \`<sample>\` level. Inherits from \`<groups>\` level if not specified. Default: 0.0 | (optional) |
 | **`glideMode`** | Controls the glide/portamento behavior for samples and oscillators in this group. Possible values: \`always\` (glide is always performed), \`legato\` (glide only when transitioning from one note to another), \`off\` (no glide). Inherits from \`<groups>\` level if not specified. Default: \`legato\` | (optional) |
+| **`ampEnvEnabled`** | Turns the outer amplitude envelope on and off for everything in this group. Setting it to `false` makes the group's samples play as one-shots, running to the end of the file regardless of when the key is released. Can also be set per sample. Possible values: true, false. Default: true | (optional) |
 
 ### The &lt;sample&gt; element
 
@@ -85,7 +86,7 @@ Each sample has its own ADSR amplitude envelope.
 
 | Attribute         |            | Description       |
 |-------------------|------------| ------------------|
-| **`ampEnvEnabled`**      | (optional) | Turns the outer amplitude envelope (the `attack`/`decay`/`sustain`/`release` attributes) on and off. Set it to `false` to let the sound's own envelopes govern instead. On an oscillator this is only honoured for `waveform="fm6op"` with DX7 operator envelopes, which can end the note by themselves; other waveforms have no internal envelope, so the request is ignored rather than leaving the note sounding forever. Valid values are: `false` and `true` (default).  |
+| **`ampEnvEnabled`**      | (optional) | Turns the outer amplitude envelope (the `attack`/`decay`/`sustain`/`release` attributes) on and off. Setting it to `false` makes a sample play as a one-shot: it runs to the end of the file and is unaffected by when you release the key, which is usually what you want for drums, percussion and sound effects. Without it, the usual way people approximate this is a very long decay or release with a logarithmic curve, which is fiddly and never quite right. On an oscillator this is only honoured for `waveform="fm6op"` with DX7 operator envelopes, which can end the note by themselves; other waveforms have no internal envelope, so the request is ignored rather than leaving the note sounding forever. Valid values are: `false` and `true` (default).  |
 | **`attack`**      | (optional) | The attack time in seconds of the amplitude envelope of this zone. This can also be set at the `<group>` or `<groups>` levels.  |
 | **`decay`**       | (optional) | The decay time in seconds of the amplitude envelope of this zone.  This can also be set at the `<group>` or `<groups>` levels.  |
 | **`sustain`**     | (optional) | The sustain level (0.0 - 1.0) of the amplitude envelope of this zone.  This can also be set at the `<group>` or `<groups>` levels. |
