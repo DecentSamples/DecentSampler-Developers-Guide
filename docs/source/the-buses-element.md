@@ -43,12 +43,12 @@ Here is an example of a `<bus>` element with an effect applied to it:
 ```xml
 <bus busVolume="0.5" output1Target="MAIN_OUTPUT" output2Target="AUX_STEREO_OUTPUT_1" output1Volume="0.8" output2Volume="0.5">
     <effects>
-        <effect type="Reverb" wetDryMix="0.5" roomSize="0.5" damping="0.5"/>
+        <effect type="reverb" wetLevel="0.5" roomSize="0.5" damping="0.5"/>
     </effects>
 </bus>
 ```
 
-In this example, a reverb effect is applied to the bus with a wet/dry mix of 0.5, room size of 0.5, and damping of 0.5.
+In this example, a reverb effect is applied to the bus with a wet level of 0.5, room size of 0.5, and damping of 0.5. Note that effect type names are case-sensitive and must be lowercase: `reverb` works, `Reverb` is silently ignored and no effect is created.
 
 ## Using buses in the sample library
 
