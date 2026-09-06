@@ -294,11 +294,11 @@ Attributes:
 - **`y`** (required): The `y` position of your control where (0,0) is the top-left corner
 - **`width`** (required): The width in pixels of the knob + label.
 - **`height`** (required): The height in pixels of the knob + label.
-- **`parameterName`** (required): In a situation where the sampler does not have enough room to display the full UI, a shrunken down version of the UI will be used. In such situations, this control will be labeled using the `parameterName`. It is good practice to always include a `parameterName`. If not `parameterName` is specified and a value `label` is specified, then that will be used instead. 
+- **`parameterName`** (optional): The name this control is given in your DAW's list of automatable parameters. It is also used as the on-screen label if you haven't set `label`, and as the name shown when assigning MIDI CCs. It is good practice to always include one, since without it the DAW will simply show "Parameter 1", "Parameter 2" and so on.
 - **`style`** (optional): The specific kind of control that is created. The following values are supported: `linear_bar`, `linear_bar_vertical`, `linear_horizontal`, `linear_vertical`, `rotary`, `rotary_horizontal_drag`, `rotary_horizontal_vertical_drag`, `rotary_vertical_drag`, `custom_skin_vertical_drag`, `custom_skin_horizontal_drag`, `custom_skin_horizontal_vertical_drag`. Default: `rotary_vertical_drag`.
 - **`showLabel`** (optional): A true/false value dictating whether or not a built-in label should be displayed. Default: true for `<labeled-knob>` and false for `<control>` elements
 - **`label`** (optional): If `showLabel` is true, the actual text that should be displayed above the control.
-- **`parameterName`** (required): In a situation where the sampler does not have enough room to display the full UI, a shrunken down version of the UI will be used. In such situations, this control will be labeled using the `parameterName`. It is good practice to always include a `parameterName`.
+- **`parameterName`** (optional): The name this control is given in your DAW's list of automatable parameters. It is also used as the on-screen label if you haven't set `label`, and as the name shown when assigning MIDI CCs. It is good practice to always include one, since without it the DAW will simply show "Parameter 1", "Parameter 2" and so on.
 - **`minValue`** (optional): The minimum value of your control. Default: 0
 - **`maxValue`** (optional): The maximum value of your control. Default: 1
 - **`value`** (optional): The initial value of your control. Default: 0
