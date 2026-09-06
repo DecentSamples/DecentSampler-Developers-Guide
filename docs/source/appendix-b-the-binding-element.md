@@ -297,6 +297,24 @@ This is a list of parameters that can be used in conjunction with the `<binding>
 | Arpeggiator Override BPM                             | `arpeggiator`          | `instrument`            | `ARP_OVERRIDE_BPM`              | 1 - 1000                                                      | No          | Only used when `ARP_FOLLOW_GLOBAL_TEMPO` is `false`.                                                                                                                                                                                     |
 | All Notes Off                                        | `general`              | `instrument`            | `ALL_NOTES_OFF`                 | true                                                          |             |                                                                                                                                                               |
 
+
+```{warning}
+**An envelope binding at `instrument` level is overridden by a group that sets the same attribute.**
+
+The envelope values a sample uses are resolved by looking at the `<sample>` first, then its
+`<group>`, then `<groups>`. A binding with `level="instrument"` writes to `<groups>`, so any group
+that declares `attack`, `decay`, `sustain`, `release`, `attackCurve`, `decayCurve` or
+`releaseCurve` itself wins, and the control appears to do nothing at all.
+
+This catches people out most often with the curve knobs, because curves are commonly set on the
+group. If you want a knob to drive the envelope, leave that attribute off the groups you want it to
+affect, or bind at `level="group"` and target each group in turn.
+
+Note that moving such a control *while a note is already sounding* does have an effect, because
+modulation is applied per audio block rather than through this lookup. A knob that seems to work
+only once a note is playing is this same issue.
+```
+
 ### UI Parameters
 
 NOTE: The table below scrolls to the right.

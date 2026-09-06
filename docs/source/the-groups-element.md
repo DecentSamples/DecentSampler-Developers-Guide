@@ -100,7 +100,7 @@ The curve shapes of the attack, decay, and release zones can be changed as well.
 
 | Attribute          |            | Description                                                                                                                           | Default Value      |
 |--------------------|------------| --------------------------------------------------------------------------------------------------------------------------------------|--------------------|
-| **`attackCurve`**  | (optional) | A value from -100 to 100 that determines the shape of the attack curve. This can also be set at the `<group>` or `<groups>` levels.   | -100 (logarithmic) |
+| **`attackCurve`**  | (optional) | A value from -100 to 100 that determines the shape of the attack curve. This can also be set at the `<group>` or `<groups>` levels. Note that setting this on a group stops an instrument-level `ENV_ATTACK_CURVE` binding from having any effect on that group; see Appendix B.   | -100 (logarithmic) |
 | **`decayCurve`**   | (optional) | A value from -100 to 100 that determines the shape of the decay curve. This can also be set at the `<group>` or `<groups>` levels.    |  100 (exponential) |
 | **`releaseCurve`** | (optional) | A value from -100 to 100 that determines the shape of the release curves. This can also be set at the `<group>` or `<groups>` levels. |  100 (exponential) |
 
