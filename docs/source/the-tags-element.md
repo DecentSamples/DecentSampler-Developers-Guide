@@ -8,6 +8,7 @@ Underneath the `<tags>` element, you can have any number of `<tag>` elements. Th
 
 | Attribute       |            | Description                                                                       |
 |:----------------|:-----------|:----------------------------------------------------------------------------------|
+| **`name`**      | (required) | The name of the tag, as used in the `tags` attribute of your samples, groups and bindings.        |
 | **`enabled`**   | (optional) | Whether or not this tag is enabled. Possible values: true, false. Default: true   |
 | **`volume`**    | (optional) | A number for 0.0 to 1.0 that specifies the initial volume for a tag. Default: 1.0 |
 | **`polyphony`** | (optional) | A whole number that specifies the number of voices allowed for this tag. Default: -1 (unlimited). Set to 1 for monophonic behavior. |
@@ -18,7 +19,7 @@ This example shows a tag configuration with polyphony control:
 
 ```xml
 <tags>
-  <tag name="voice1" volume="1" pan="0" polyphony="12"/>
+  <tag name="voice1" volume="1" polyphony="12"/>
 </tags>
 ```
 
