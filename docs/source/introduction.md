@@ -22,6 +22,21 @@ At the top level of every **dspreset** file is a `<DecentSampler>` element. Ever
 
   `brickwall` keeps only the ceiling, with no compression and no makeup. Chords and dynamics come through at full size. In exchange everything is 3.75 dB quieter than it would be under `default`, so you should expect to set your instrument's levels a little higher, and material normalised right up to full scale will touch the ceiling more often. Choose it when the dynamics of your instrument matter more than matching the loudness of everything else.
 
+### How loud your samples come out
+
+It is worth knowing that a sample does not come out of DecentSampler at the level it went in at, so if your instrument sounds quieter than you expected, this is why rather than anything being wrong with your samples.
+
+A voice that is not panned anywhere passes through a constant-power pan law, which costs it 3 dB in the centre position, and then through the output stage, which adds some level back under the default `limiterStyle` and none at all under `brickwall`. The result, measured on a centred sample with no other processing:
+
+| `limiterStyle` | A centred sample comes out |
+| -------------- | -------------------------- |
+| `default`      | 5.3 dB below its own level |
+| `brickwall`    | 9.0 dB below its own level |
+
+You do not need to do anything about this. Most people simply set their instrument's `volume` until it sounds right next to whatever else they are using, which is exactly the right approach. But if you want your samples to come out at the level they were recorded at, `volume="1.837"` gets you there under the default style and `volume="2.828"` under `brickwall`.
+
+Two things worth keeping in mind. Those numbers are the gain of the whole voice, so a group volume and a sample volume multiply on top of them. And if you are pushing levels up, remember that `default` also compresses anything above -10 dBFS, so a louder instrument gives that compressor more to do.
+
 Example:
 
 ```xml
