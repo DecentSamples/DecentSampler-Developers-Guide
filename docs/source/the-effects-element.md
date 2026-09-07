@@ -532,29 +532,29 @@ Example with knobs for threshold and ratio:
 </DecentSampler>
 ```
 
-### Gate effect
+### Stutter effect
 
 A randomized gate. Roughly every 50 milliseconds it flips a coin, weighted by `amount`, on whether to let the signal through or cut it to silence, crossfading smoothly between the two states so the transitions don't click. Useful for stutter/dropout-style effects.
 
 ```xml
-<effect type="gate" amount="0.5" mix="1.0"/>
+<effect type="stutter" amount="0.5" mix="1.0"/>
 ```
 
 Attributes:
 
 | Attribute | | Type | Valid Range | Default |
 |:----------|:---------|:-----------------------------------------------------------------------|:------------------------------------------|:--------|
-| `type`    | Required | Must be `gate`                                                         | `gate`                                     |         |
+| `type`    | Required | Must be `stutter`                                                      | `stutter`                                  |         |
 | `amount`  | Optional | The probability that any given decision window gates to silence        | 0–1.0, where 0 never gates and 1.0 gates constantly | 0.5     |
 | `mix`     | Optional | The wet/dry mix which controls how much of the gated signal we hear    | 0–1.0, where 1.0 is fully gated and 0.0 is the original dry signal | 1.0     |
 
 Both `amount` and `mix` are bindable.
 
-Binding parameters for the gate effect:
+Binding parameters for the stutter effect:
 
 | Binding `parameter` value | Description                                  |
 |:---------------------------|:----------------------------------------------|
-| `FX_GATE_AMOUNT`            | Controls the probability of gating (0–1)      |
+| `FX_STUTTER_AMOUNT`         | Controls the probability of gating (0–1)      |
 | `FX_MIX`                    | Controls the wet/dry mix (0–1)                |
 
 Example with knobs for both parameters:
@@ -566,7 +566,7 @@ Example with knobs for both parameters:
       <labeled-knob x="80" y="40" label="Amount" type="float"
                     minValue="0" maxValue="1" value="0.5" textColor="FF000000">
         <binding type="effect" level="instrument" effectIndex="0"
-                 parameter="FX_GATE_AMOUNT" translation="linear"
+                 parameter="FX_STUTTER_AMOUNT" translation="linear"
                  translationOutputMin="0" translationOutputMax="1"/>
       </labeled-knob>
       <labeled-knob x="185" y="40" label="Mix" type="float"
@@ -583,7 +583,7 @@ Example with knobs for both parameters:
     </group>
   </groups>
   <effects>
-    <effect type="gate" amount="0.5" mix="1.0"/>
+    <effect type="stutter" amount="0.5" mix="1.0"/>
   </effects>
 </DecentSampler>
 ```
