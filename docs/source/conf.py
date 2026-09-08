@@ -6,8 +6,8 @@ project = 'DecentSampler'
 copyright = '2026, David Hilowitz'
 author = 'David Hilowitz'
 
-release = '1.29.0'
-version = '1.29.0'
+release = '1.31.0'
+version = '1.31.0'
 
 # -- General configuration
 
@@ -30,7 +30,7 @@ templates_path = ['_templates']
 
 # Auto-generate anchors for Markdown headings (e.g. #order-modes) up to h3,
 # so in-page links like [Order Modes](#order-modes) resolve.
-myst_heading_anchors = 3
+myst_heading_anchors = 4
 
 # -- Options for HTML output
 

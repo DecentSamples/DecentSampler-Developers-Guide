@@ -26,7 +26,7 @@ Every **dspreset** file should have one and only one `<groups>` element. This is
 | **`glideTime`** | (optional) | The glide/portamento time in seconds. A value of 0.0 would mean no portamento. This value can also be set at the `<group>` and `<sample>` levels, although most people will want to set it globally at the `<groups>` level. Default: 0.0 |
 | **`glideMode`** | (optional) | Controls the glide/portamento behavior. Possible values are: `always` (glide is always performed), `legato` (glide is performed only when transitioning from one note to another),  and `off`. This value can also be set at the `<group>` and `<sample>` levels, although most people will want to set it globally at the `<groups>` level. Default: `legato` |
 
-### A note about volume and pan
+## A note about volume and pan
 
 There is a `volume` attribute on `<groups>`, another on `<group>`, and a third on `<sample>`. Unlike most attributes in a preset, these do not inherit downwards. They are three separate settings that get multiplied together, so a preset with `<groups volume="0.5">` and `<sample volume="0.5">` plays at 0.25.
 
