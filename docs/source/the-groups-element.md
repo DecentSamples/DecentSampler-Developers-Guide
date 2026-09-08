@@ -21,15 +21,20 @@ Every **dspreset** file should have one and only one `<groups>` element. This is
 |--------------------|------------| ------------------|
 | **`volume`**       | (optional) | The volume of the instrument as a whole. This will be reflected in the UI in the top-right corner. Value can be in linear 0.0-1.0 or in decibels. If it's in decibels you must append dB after the value (example: "3dB"). Default: 1.0 (no volume change)  |
 | **`globalVolume`** | (optional) | A clearer name for `volume` at this level. It does exactly the same thing. If you set both on the same element, `globalVolume` is the one that applies. |
+| **`globalPan`**    | (optional) | A pan position for the instrument as a whole, from -100 (hard left) to 100 (hard right). This is separate from `pan`, and is added to it rather than replacing it. Default: 0 |
 | **`globalTuning`** | (optional) | Global pitch adjustment for changing note pitch. In semitones. For example 1.0 would be a half-step up. Default: 0 |
 | **`glideTime`** | (optional) | The glide/portamento time in seconds. A value of 0.0 would mean no portamento. This value can also be set at the `<group>` and `<sample>` levels, although most people will want to set it globally at the `<groups>` level. Default: 0.0 |
 | **`glideMode`** | (optional) | Controls the glide/portamento behavior. Possible values are: `always` (glide is always performed), `legato` (glide is performed only when transitioning from one note to another),  and `off`. This value can also be set at the `<group>` and `<sample>` levels, although most people will want to set it globally at the `<groups>` level. Default: `legato` |
 
-### A note about the three volumes
+### A note about volume and pan
 
 There is a `volume` attribute on `<groups>`, another on `<group>`, and a third on `<sample>`. Unlike most attributes in a preset, these do not inherit downwards. They are three separate settings that get multiplied together, so a preset with `<groups volume="0.5">` and `<sample volume="0.5">` plays at 0.25.
 
 Because one name is doing three different jobs, this is easy to misread. `globalVolume` and `groupVolume` are available as clearer names for the first two. They are aliases and nothing more, so `volume` keeps working exactly as it always has and existing presets need no changes. Use whichever spelling you find easier to read.
+
+Pan works differently, and it is worth knowing which of the two patterns you are dealing with. `pan` is inherited in the ordinary way. Setting it on `<groups>`, on `<group>` or on a `<sample>` all set the same single pan position for that sample, and the most specific one wins, so `<groups pan="-100">` with `<sample pan="0">` plays in the centre.
+
+Alongside it there are `globalPan` on `<groups>` and `groupPan` on `<group>`. These are separate pan offsets belonging to the instrument and to the group. They are added to the sample's pan position rather than replacing it, and the total is clamped to the -100 to 100 range. So `<groups globalPan="-50">` together with `<group groupPan="-50">` plays hard left.
 
 ## The &lt;group&gt; element
 Samples and oscillators live in groups. There can be many group elements under the `<groups>` element. It can be useful to sort your samples into groups in order to apply similar settings to them or to control them with a knob. Each group can contain `<sample>` elements, an `<oscillator>` element, or both together. The order of groups in a file matters insofar as bindings will often reference groups by using an index. The first group in a file is group 0, the second is group 1, etc.
@@ -39,6 +44,7 @@ Samples and oscillators live in groups. There can be many group elements under t
 | **`enabled`**     | Whether or not this group is enabled. Possible values: true, false. Default: true                                                                                                                                                                                                                                                                  | (optional) |
 | **`volume`**      | The volume of the group. Value can be in linear 0.0-1.0 or in decibels. If it's in decibels you must append dB after the value (example: "3dB"). Default: 1.0                                                                                                                                                                                      | (optional) |
 | **`groupVolume`** | A clearer name for `volume` at this level. It does exactly the same thing. If you set both on the same element, `groupVolume` is the one that applies. | (optional) |
+| **`groupPan`**    | A pan position for this group, from -100 (hard left) to 100 (hard right). This is separate from `pan`, and is added to it rather than replacing it. Default: 0 | (optional) |
 | **`ampVelTrack`** | The degree to which the velocity of the incoming notes affects the volume of the samples in this group. 0 = not at all. 1 = volume is completely determined by incoming velocity. When the value is 1, a velocity of 127 (max velocity) yields a gain 1.0 (full volume), a velocity of 63 (half velocity) yields a gain of 0.5 (half volume), etc. | (optional) |
 | **`groupTuning`** | Group-level pitch adjustment for changing note pitch. In semitones. For example 1.0 would be a half-step up and -1 would a half-step down. Default: 0                                                                                                                                                                                              | (optional) |
 | **`pitchKeyTrack`** | A number from 0.0 to 1.0. 0 means that the pitch will stay the same regardless of what note is played. 1 means that the pitch will increase by one semitone when the note increases by one semitone (normal key pitch tracking). Applies to all samples and oscillators in the group. Default: 1 | (optional) |
