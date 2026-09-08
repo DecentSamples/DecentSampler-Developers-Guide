@@ -388,6 +388,7 @@ Attributes:
 | **vAlign**     | (optional) | The vertical alignment of the menu text. Valid values are "top", "center", "bottom".                                                                               | "center" |
 | **hAlign**     | (optional) | The horizontal alignment of the menu text. Valid values are "left", "center", "right".                                                                             | "left"   |
 | **tooltip**    | (optional) | A tool tip to display when the user hovers over this control.                                                                                                           |        |
+| **placeholderText** | (optional) | The text shown while no option is selected, which is how the menu starts unless you set `value`. Once the user chooses an option this is replaced by that option's name. |        |
 
 Example:
 ```xml
@@ -408,7 +409,7 @@ Attributes:
 That's right. The `<option>` element has only one attribute. In order to have your `<option>` elements actually do something useful, you need to attach bindings to them. Here's an example:
 
 ```xml
-<menu x="10" y="40"  width="120" height="30" requireSelection="true" placeholderText="Choose..." value="2">
+<menu x="10" y="40"  width="120" height="30" placeholderText="Choose...">
     <option name="Menu Option 1">
         <!-- Set the text of a label element -->
         <binding type="control" level="ui" position="2" parameter="TEXT" translation="fixed_value" translationValue="You chose the first option." />
