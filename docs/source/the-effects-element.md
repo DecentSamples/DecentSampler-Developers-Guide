@@ -27,6 +27,29 @@ A binding can then reference this effect using `tags="main-filter"` instead of `
          translation="linear" translationOutputMin="100" translationOutputMax="8000" />
 ```
 
+All `<effect>` elements also support an **`enabled`** attribute. When it is `false`, the effect is bypassed: audio passes through it untouched, as though it weren't in the chain at all. This applies to every effect type, in both the global `<effects>` chain and group-level effects. Default value: `true`.
+
+```xml
+<effects>
+  <effect type="reverb" wetLevel="0.4" enabled="false" />
+</effects>
+```
+
+The most common reason to set it explicitly is to start an effect off and give the user a control to switch it on. Every effect's enabled state can be bound to a UI control using the `ENABLED` parameter, so a button that toggles the reverb above looks like this:
+
+```xml
+<button x="20" y="60" width="80" height="30" style="text" value="0">
+  <state name="Reverb Off">
+    <binding type="effect" level="instrument" effectIndex="0" parameter="ENABLED" translation="fixed_value" translationValue="false" />
+  </state>
+  <state name="Reverb On">
+    <binding type="effect" level="instrument" effectIndex="0" parameter="ENABLED" translation="fixed_value" translationValue="true" />
+  </state>
+</button>
+```
+
+See [Appendix B](appendix-b-the-binding-element.md) for the full list of effect parameters that can be bound.
+
 ### Low-pass, Band pass, and Hi-pass filter
 
 A 2-pole resonant filter that can be either a lowpass, bandpass, or highpass filter
