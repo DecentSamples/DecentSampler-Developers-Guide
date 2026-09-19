@@ -143,6 +143,8 @@ The `<label>` element allows you to place a static block of text into yoru user 
 - **`text`** (required): The actual text that should be displayed as part of the label.
 - **`textColor`** (optional): An 8 digit hex value indicating the text color to be used for the label. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
 - **`textSize`** (optional): A font size for the text label. Default: 12
+- **`outlineColor`** (optional): An 8 digit hex color for an outline drawn around the letters, which keeps text readable over a detailed background image. On its own it gives a 1 pixel outline. Requires version 1.33.0 or later.
+- **`outlineWidth`** (optional): How far, in pixels, the outline extends outside the letters. On its own the outline is black. Requires version 1.33.0 or later.
 - **`width`** (required): The width in pixels of the label.
 - **`height`** (required): The height in pixels of the label.
 - **`vAlign`** (optional): The vertical alignment of the text within the box described by the width and height attributes. Valid values: `top`,`bottom`, `center`. Default is `center`.
