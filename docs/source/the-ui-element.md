@@ -388,6 +388,7 @@ Attributes:
 | **vAlign**     | (optional) | The vertical alignment of the menu text. Valid values are "top", "center", "bottom".                                                                               | "center" |
 | **hAlign**     | (optional) | The horizontal alignment of the menu text. Valid values are "left", "center", "right".                                                                             | "left"   |
 | **tooltip**    | (optional) | A tool tip to display when the user hovers over this control.                                                                                                           |        |
+| **textSize**   | (optional) | The height of the menu's text, for both the box and its list. Without it the text is sized from the menu's height, and never larger than 16. Requires version 1.33.0 or later. |        |
 | **placeholderText** | (optional) | The text shown while no option is selected, which is how the menu starts unless you set `value`. Once the user chooses an option this is replaced by that option's name. |        |
 
 Example:
