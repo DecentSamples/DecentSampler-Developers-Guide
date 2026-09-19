@@ -326,6 +326,7 @@ It is also possible to use custom control graphics using the following attribute
 - **`customSkinNumFrames`** (optional): The number of animation frames contained in the KnobMan image pointed to by `customSkinImage`.
 - **`customSkinImageOrientation`** (optional): The orientation of the frames within the KnobMan image pointed to by `customSkinImage`. Valid values: `horizontal`, `vertical`. Default: vertical.
 - **`mouseDragSensitivity`** (optional): An integer number describing how sensitive the control should be to mouse drags. The higher the number, the less sensitive the control will be to mouse movements.
+- **`fillFrom`** (optional): Where a linear slider's filled part of the track starts. `min` fills from the minimum end, `center` fills from the middle, which reads correctly for pan and other bipolar controls, and `none` shows only the thumb. Requires version 1.33.0 or later. Default: `min`.
 - **`reversed`** (optional): Runs the control the other way round: the minimum sits at the top of a vertical slider (or the right of a horizontal one), so dragging down raises the value, the way a drawbar works. The thumb, the filled part of the track and the drag direction all follow. Requires version 1.33.0 or later. Default: false.
 
 If you are using custom knobs, it's important that you specify a `style=` value of `custom_skin_vertical_drag`, `custom_skin_horizontal_drag`, or `custom_skin_horizontal_vertical_drag`. 
