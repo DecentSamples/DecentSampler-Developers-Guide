@@ -124,7 +124,50 @@ Attributes:
 | `type`      | Required | The type of filter       | Must be `peak`                                                              |         |
 | `frequency` | Required | The filter frequency     | 60 - 22000.0                                                                |     10000 |
 | `Q`         | Optional | Q is the ratio of center frequency to bandwidth | 0.01 - 18.0                                          |     0.7 |
-| `gain`      | Required | Values greater than 1.0 will boost the high frequencies, values less than 1.0 will attenuate them.     | 0 - 1.0                        |     1.0 |
+| `gain`      | Optional | A linear multiplier for the frequencies around `frequency`: 1.0 leaves them unchanged, values above 1.0 boost them and values below 1.0 cut them. Before 1.34.0, leaving it out cut the band very deeply, so set it explicitly if a preset has to support older versions. | 0.0001 - 10.0 (or -80 - 20 with `gainUnit="decibels"`) | 1.0 (0 dB) |
+| `gainUnit`  | Optional | The unit `gain` is written in. `linear` (the default) treats it as a multiplier; `decibels` treats it as a boost or cut in dB, so `gain="6"` is a 6 dB boost and `gain="-3"` a 3 dB cut. It also sets the unit for `FX_FILTER_GAIN` bindings and modulation on this effect. It can appear anywhere among the attributes. Requires Decent Sampler 1.34.0. | `linear`, `decibels` | `linear` |
+
+### Low Shelf and High Shelf EQ Filters
+
+A shelf boosts or cuts everything on one side of a frequency by the same amount: a `low_shelf` changes everything below `frequency`, and a `high_shelf` changes everything above it. This makes them the gentler way to warm up or brighten a sound, rather than carving out a band as `peak` and `notch` do. Requires Decent Sampler 1.34.0.
+
+Example:
+```xml
+<DecentSampler>
+  <effects>
+    <effect type="low_shelf" frequency="200" gain="1.5" />
+    <effect type="high_shelf" frequency="5000" q="0.7" gain="2.0" />
+  </effects>
+</DecentSampler>
+```
+
+Attributes:
+
+|  Attribute  |          |           Type           |                                 Valid Range                                 | Default |
+| ----------- | -------- | ------------------------ | --------------------------------------------------------------------------- | ------- |
+| `type`      | Required | The type of filter       | `low_shelf` or `high_shelf`                                                 |         |
+| `frequency` | Optional | The corner frequency of the shelf | 60 - 22000.0                                                       | 200 for `low_shelf`, 5000 for `high_shelf` |
+| `q`         | Optional | How sharply the shelf turns the corner. Higher values give a steeper slope with a small bump near the corner. | 0.01 - 18.0 | 0.7 |
+| `gain`      | Optional | A linear multiplier for the shelved frequencies: 1.0 leaves them unchanged, 2.0 boosts them by about 6 dB and 0.5 cuts them by about 6 dB. | 0.0001 - 10.0 (or -80 - 20 with `gainUnit="decibels"`) | 1.0 (0 dB) |
+| `gainUnit`  | Optional | The unit `gain` is written in. `linear` (the default) treats it as a multiplier; `decibels` treats it as a boost or cut in dB, so `gain="6"` is a 6 dB boost and `gain="-3"` a 3 dB cut. It also sets the unit for `FX_FILTER_GAIN` bindings and modulation on this effect. It can appear anywhere among the attributes. Requires Decent Sampler 1.34.0. | `linear`, `decibels` | `linear` |
+
+The frequency, `q` and gain can all be bound to controls and modulators with `FX_FILTER_FREQUENCY`, `FX_FILTER_Q` and `FX_FILTER_GAIN`, and switched on and off with `ENABLED`, the same as the peak filter. For example, this maps a knob to the high shelf's gain, from a 6 dB cut to a 6 dB boost:
+
+```xml
+<control x="10" y="10" label="Brightness" valueType="float" minValue="0.5" maxValue="2" value="1">
+  <binding type="effect" level="instrument" effectIndex="1" parameter="FX_FILTER_GAIN" translation="linear" />
+</control>
+```
+
+With `gainUnit="decibels"` on the effect, the same knob can be written in dB, which spreads the change more evenly across the knob's travel:
+
+```xml
+<effect type="high_shelf" frequency="5000" gain="0" gainUnit="decibels" />
+
+<control x="10" y="10" label="Brightness" valueType="float" minValue="-6" maxValue="6" value="0">
+  <binding type="effect" level="instrument" effectIndex="1" parameter="FX_FILTER_GAIN" translation="linear" />
+</control>
+```
 
 ### Gain effect
 
