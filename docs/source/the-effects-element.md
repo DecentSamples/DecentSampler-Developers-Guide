@@ -126,6 +126,37 @@ Attributes:
 | `Q`         | Optional | Q is the ratio of center frequency to bandwidth | 0.01 - 18.0                                          |     0.7 |
 | `gain`      | Required | Values greater than 1.0 will boost the high frequencies, values less than 1.0 will attenuate them.     | 0 - 1.0                        |     1.0 |
 
+### Low Shelf and High Shelf EQ Filters
+
+A shelf boosts or cuts everything on one side of a frequency by the same amount: a `low_shelf` changes everything below `frequency`, and a `high_shelf` changes everything above it. This makes them the gentler way to warm up or brighten a sound, rather than carving out a band as `peak` and `notch` do. Requires Decent Sampler 1.34.0.
+
+Example:
+```xml
+<DecentSampler>
+  <effects>
+    <effect type="low_shelf" frequency="200" gain="1.5" />
+    <effect type="high_shelf" frequency="5000" q="0.7" gain="2.0" />
+  </effects>
+</DecentSampler>
+```
+
+Attributes:
+
+|  Attribute  |          |           Type           |                                 Valid Range                                 | Default |
+| ----------- | -------- | ------------------------ | --------------------------------------------------------------------------- | ------- |
+| `type`      | Required | The type of filter       | `low_shelf` or `high_shelf`                                                 |         |
+| `frequency` | Optional | The corner frequency of the shelf | 60 - 22000.0                                                       | 200 for `low_shelf`, 5000 for `high_shelf` |
+| `q`         | Optional | How sharply the shelf turns the corner. Higher values give a steeper slope with a small bump near the corner. | 0.01 - 18.0 | 0.7 |
+| `gain`      | Optional | A linear multiplier for the shelved frequencies: 1.0 leaves them unchanged, 2.0 boosts them by about 6 dB and 0.5 cuts them by about 6 dB. | 0.0001 - 10.0 | 1.0 |
+
+The frequency, `q` and gain can all be bound to controls and modulators with `FX_FILTER_FREQUENCY`, `FX_FILTER_Q` and `FX_FILTER_GAIN`, and switched on and off with `ENABLED`, the same as the peak filter. For example, this maps a knob to the high shelf's gain, from a 6 dB cut to a 6 dB boost:
+
+```xml
+<control x="10" y="10" label="Brightness" valueType="float" minValue="0.5" maxValue="2" value="1">
+  <binding type="effect" level="instrument" effectIndex="1" parameter="FX_FILTER_GAIN" translation="linear" />
+</control>
+```
+
 ### Gain effect
 
 Applies a volume boost or cut to the output signal.
