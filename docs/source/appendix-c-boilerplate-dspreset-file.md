@@ -8,29 +8,29 @@
     <tab name="main">
       <labeled-knob x="445" y="75" width="90" textSize="16" textColor="AA000000" 
                     trackForegroundColor="CC000000" trackBackgroundColor="66999999" 
-                    label="Attack" type="float" minValue="0.0" maxValue="4.0" value="0.01" >
+                    label="Attack" valueType="float" minValue="0.0" maxValue="4.0" value="0.01" >
         <binding type="amp" level="instrument" position="0" parameter="ENV_ATTACK" />
       </labeled-knob>
       <labeled-knob x="515" y="75" width="90" textSize="16" textColor="AA000000" 
                     trackForegroundColor="CC000000" trackBackgroundColor="66999999" 
-                    label="Release" type="float" minValue="0.0" maxValue="20.0" value="1" >
+                    label="Release" valueType="float" minValue="0.0" maxValue="20.0" value="1" >
         <binding type="amp" level="instrument" position="0" parameter="ENV_RELEASE" />
       </labeled-knob>
       <labeled-knob x="585" y="75" width="90" textSize="16" textColor="AA000000" 
                     trackForegroundColor="CC000000" trackBackgroundColor="66999999" 
-                    label="Chorus" type="float" minValue="0.0" maxValue="1" value="0" >
+                    label="Chorus" valueType="float" minValue="0.0" maxValue="1" value="0" >
         <binding type="effect" level="instrument" position="1" parameter="FX_MIX" />
       </labeled-knob>
       <labeled-knob x="655" y="75" width="90" textSize="16" textColor="FF000000"
                     trackForegroundColor="CC000000" trackBackgroundColor="66999999"
-                    label="Tone" type="float" minValue="0" maxValue="1" value="1">
+                    label="Tone" valueType="float" minValue="0" maxValue="1" value="1">
         <binding type="effect" level="instrument" position="0" parameter="FX_FILTER_FREQUENCY"
                  translation="table" 
                  translationTable="0,33;0.3,150;0.4,450;0.5,1100;0.7,4100;0.9,11000;1.0001,22000"/>
       </labeled-knob>
       <labeled-knob x="725" y="75" width="90" textSize="16" textColor="AA000000" 
                     trackForegroundColor="CC000000" trackBackgroundColor="66999999" 
-                    label="Reverb" type="percent" minValue="0" maxValue="100" 
+                    label="Reverb" valueType="float" minValue="0" maxValue="100" 
                     textColor="FF000000" value="50">
         <binding type="effect" level="instrument" position="2" 
                  parameter="FX_REVERB_WET_LEVEL" translation="linear" 

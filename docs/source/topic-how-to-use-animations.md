@@ -43,7 +43,7 @@ Here is an example of an animation that is controlled by a knob:
   <ui bgColor="FFADD8E6">
     <tab>
       <multiFrameImage x="450" y="80" width="64" height="64" path="Images/AnimationDemo128.png" numFrames="31" sourceFormat="vertical_image_strip"frameRate="24" playbackMode="stopped"/>
-      <labeled-knob x="280" y="50" label="Frame" type="integer" minValue="0" maxValue="31" value="0" textColor="FF000000" value="0">
+      <labeled-knob x="280" y="50" label="Frame" valueType="integer" minValue="0" maxValue="31" value="0" textColor="FF000000" value="0">
         <binding type="control" level="ui" position="0" parameter="CURRENT_FRAME" translation="linear" translationOutputMin="0" translationOutputMax="31"  />
       </labeled-knob>
     </tab>
@@ -65,7 +65,7 @@ Here is an example of an animation that is controlled by a slider:
   <ui bgColor="FFADD8E6">
     <tab>
       <multiFrameImage x="450" y="80" width="64" height="64" path="Images/AnimationDemo128.png" numFrames="31" sourceFormat="vertical_image_strip"frameRate="24" playbackMode="forward_loop"/>
-      <labeled-knob x="280" y="50" label="Frame Rate" type="integer" minValue="1" maxValue="60" value="24" textColor="FF000000" value="24">
+      <labeled-knob x="280" y="50" label="Frame Rate" valueType="integer" minValue="1" maxValue="60" value="24" textColor="FF000000" value="24">
         <binding type="control" level="ui" position="0" parameter="FRAME_RATE" translation="linear" translationOutputMin="1" translationOutputMax="24"  />
       </labeled-knob>
     </tab>

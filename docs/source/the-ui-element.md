@@ -15,12 +15,12 @@ Example:
 <DecentSampler>
   <ui width="812" height="375">
     <tab name="main">
-      <labeled-knob x="560" y="0" label="Tone" type="float" minValue="60" maxValue="22000"
+      <labeled-knob x="560" y="0" label="Tone" valueType="float" minValue="60" maxValue="22000"
                     textColor="FF000000" value="22000.0" uid="y8AA4uuURh3">
         <binding type="effect" level="instrument" position="0" parameter="FX_FILTER_FREQUENCY"/>
       </labeled-knob>
       <label x="360" y="0" width="50" height="30" text="Reverb"/>
-      <control x="360" y="30" parameterName="Reverb" type="float" minValue="0" maxValue="1" textColor="FF000000" value="0.5">
+      <control x="360" y="30" parameterName="Reverb" valueType="float" minValue="0" maxValue="1" textColor="FF000000" value="0.5">
       <!-- Your <binding /> elements should go here -->
       </control>
     </tab>
@@ -305,7 +305,7 @@ Attributes:
 - **`maxValue`** (optional): The maximum value of your control. Default: 1
 - **`value`** (optional): The initial value of your control. Default: 0
 - **`defaultValue`** (optional): If a user double-clicks on the control, the control's value will be set to this default value. If no default value is specified, then nothing will happen on double-click.
-- **`valueType`** (optional): There are several possible values for this: `float` which yields numbers with two decimal points, `integer` which yields whole numbers, `multi_state`, which allows the user to choose between multiple states, and `musical_time` which yields musical time increments in beats and measures. In order to use the `multi_state` option, you must also specify several `<state name="something">` type elements. Default: float
+- **`valueType`** (optional): There are several possible values for this: `float` which yields numbers with two decimal points, `integer` which yields whole numbers, `multi_state`, which allows the user to choose between multiple states, and `musical_time` which yields musical time increments in beats and measures. In order to use the `multi_state` option, you must also specify several `<state name="something">` type elements. Default: float. Older presets sometimes spell this attribute `type`; that still works, but `valueType` is the correct name.
 - **`textColor`** (optional): An 8 digit hex value indicating the text color to be used for the label. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
 - **`textSize`** (optional): A font size for the text label. Default: 12
 - **`trackForegroundColor`** (optional): An 8 digit hex value indicating the foreground color to use for the knob track. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
@@ -337,11 +337,11 @@ Example:
 <DecentSampler>
   <ui>
     <tab>
-      <labeled-knob x="560" y="0" label="Tone" type="float" minValue="60" maxValue="22000" textColor="FF000000" value="22000.0">
+      <labeled-knob x="560" y="0" label="Tone" valueType="float" minValue="60" maxValue="22000" textColor="FF000000" value="22000.0">
       <!-- Your <binding /> elements should go here -->
       </labeled-knob>
       <label x="360" y="0" width="50" height="30" text="Reverb"/>
-      <control x="360" y="30" parameterName="Reverb" type="float" minValue="0" maxValue="1" textColor="FF000000" value="0.5" style="custom_skin_vertical_drag" customSkinImage="Samples/ENIGMA-nolight.png" customSkinHoverImage="Samples/ENIGMA-nolight-hover.png" customSkinNumFrames="31" customSkinImageOrientation="horizontal" mouseDragSensitivity="100">
+      <control x="360" y="30" parameterName="Reverb" valueType="float" minValue="0" maxValue="1" textColor="FF000000" value="0.5" style="custom_skin_vertical_drag" customSkinImage="Samples/ENIGMA-nolight.png" customSkinHoverImage="Samples/ENIGMA-nolight-hover.png" customSkinNumFrames="31" customSkinImageOrientation="horizontal" mouseDragSensitivity="100">
       <!-- Your <binding /> elements should go here -->
       </control>
     </tab>

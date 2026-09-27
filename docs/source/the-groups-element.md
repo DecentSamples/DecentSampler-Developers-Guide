@@ -384,19 +384,19 @@ Here's a complete example of a Moog-style monophonic lead synthesizer with porta
 <DecentSampler minVersion="1.15.0">
   <ui width="812" height="375">
     <tab name="main">
-      <labeled-knob x="10" y="20" width="90" label="Attack" type="float" 
+      <labeled-knob x="10" y="20" width="90" label="Attack" valueType="float" 
                     minValue="0.0" maxValue="2.0" value="0.01">
         <binding type="amp" level="instrument" position="0" parameter="ENV_ATTACK"/>
       </labeled-knob>
-      <labeled-knob x="110" y="20" width="90" label="Glide Time" type="float" 
+      <labeled-knob x="110" y="20" width="90" label="Glide Time" valueType="float" 
                     minValue="0.0" maxValue="2.0" value="0.3">
         <binding type="general" level="instrument" position="0" parameter="GLIDE_TIME"/>
       </labeled-knob>
-      <labeled-knob x="210" y="20" width="90" label="Cutoff" type="float" 
+      <labeled-knob x="210" y="20" width="90" label="Cutoff" valueType="float" 
                     minValue="0" maxValue="22000" value="2000.0">
         <binding type="effect" level="instrument" position="0" parameter="FX_FILTER_FREQUENCY"/>
       </labeled-knob>
-      <labeled-knob x="10" y="130" width="90" label="Detune" type="float" 
+      <labeled-knob x="10" y="130" width="90" label="Detune" valueType="float" 
                     minValue="-1" maxValue="1" value="0.1">
         <binding type="amp" level="group" position="1" parameter="GROUP_TUNING"/>
       </labeled-knob>
@@ -487,12 +487,12 @@ The \`pluck1\` waveform uses digital waveguide synthesis to simulate plucked str
 <DecentSampler minVersion="1.15.0">
     <ui width="812" height="375">
         <tab name="main">
-            <labeled-knob x="10" y="20" width="90" label="Damping" type="float" 
+            <labeled-knob x="10" y="20" width="90" label="Damping" valueType="float" 
                           minValue="0.0" maxValue="1.0" value="0.5">
                 <binding type="general" level="group" position="0" 
                          parameter="OSCILLATOR_DAMPING"/>
             </labeled-knob>
-            <labeled-knob x="110" y="20" width="90" label="Pluck Type" type="float" 
+            <labeled-knob x="110" y="20" width="90" label="Pluck Type" valueType="float" 
                           minValue="0.0" maxValue="1.0" value="0.5">
                 <binding type="general" level="group" position="0" 
                          parameter="OSCILLATOR_PLUCK_TYPE"/>
@@ -534,7 +534,7 @@ The `wavetable` waveform lets you load any multi-frame `.wav` file as a wavetabl
 <DecentSampler minVersion="1.15.0">
     <ui width="812" height="375">
         <tab name="main">
-            <labeled-knob x="10" y="20" width="90" label="Position" type="float"
+            <labeled-knob x="10" y="20" width="90" label="Position" valueType="float"
                           minValue="0.0" maxValue="1.0" value="0.0">
                 <binding type="general" level="group" position="0"
                          parameter="OSCILLATOR_WAVETABLE_POSITION"
@@ -560,12 +560,12 @@ The `wavetable` waveform lets you load any multi-frame `.wav` file as a wavetabl
 <DecentSampler minVersion="1.15.0">
     <ui width="812" height="375">
         <tab name="main">
-            <labeled-knob x="10" y="20" width="90" label="LFO Rate" type="float"
+            <labeled-knob x="10" y="20" width="90" label="LFO Rate" valueType="float"
                           minValue="0.1" maxValue="10.0" value="1.0">
                 <binding type="modulator" level="instrument" modulatorIndex="0"
                          parameter="FREQUENCY"/>
             </labeled-knob>
-            <labeled-knob x="110" y="20" width="90" label="LFO Depth" type="float"
+            <labeled-knob x="110" y="20" width="90" label="LFO Depth" valueType="float"
                           minValue="0.0" maxValue="1.0" value="0.5">
                 <binding type="modulator" level="instrument" modulatorIndex="0"
                          parameter="MOD_AMOUNT"/>

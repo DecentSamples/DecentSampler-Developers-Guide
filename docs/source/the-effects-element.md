@@ -313,10 +313,10 @@ Because wave folding tends to sound better when applied on a per-voice basis, it
 <DecentSampler pluginVersion="1">
   <ui>
     <tab>
-      <labeled-knob x="180" y="40" label="Drive" type="float" minValue="1" maxValue="100" textColor="FF000000" value="1">
+      <labeled-knob x="180" y="40" label="Drive" valueType="float" minValue="1" maxValue="100" textColor="FF000000" value="1">
         <binding type="effect" level="group" groupIndex="0" effectIndex="0" parameter="FX_DRIVE" translation="linear" />
       </labeled-knob>
-      <labeled-knob x="280" y="40" label="Threshold" type="float" minValue="0" maxValue="1" value="1" textColor="FF000000">
+      <labeled-knob x="280" y="40" label="Threshold" valueType="float" minValue="0" maxValue="1" value="1" textColor="FF000000">
         <binding type="effect" level="group" groupIndex="0" effectIndex="0" parameter="FX_THRESHOLD" translation="linear" />
       </labeled-knob>
     </tab>
@@ -350,13 +350,13 @@ Because wave shaping tends to sound better when applied on a per-voice basis, it
 <DecentSampler pluginVersion="1">
   <ui>
     <tab>
-      <labeled-knob x="180" y="40" label="Drive" type="float" minValue="1" maxValue="40" textColor="FF000000" value="0.5473124980926514">
+      <labeled-knob x="180" y="40" label="Drive" valueType="float" minValue="1" maxValue="40" textColor="FF000000" value="0.5473124980926514">
         <binding type="effect" level="group" groupIndex="0" effectIndex="0" parameter="FX_DRIVE" translation="linear"/>
       </labeled-knob>
-      <labeled-knob x="280" y="40" label="Drive Boost" type="float" minValue="0" maxValue="1" value="0.328312486410141" textColor="FF000000">
+      <labeled-knob x="280" y="40" label="Drive Boost" valueType="float" minValue="0" maxValue="1" value="0.328312486410141" textColor="FF000000">
         <binding type="effect" level="group" groupIndex="0" effectIndex="0" parameter="FX_DRIVE_BOOST" translation="linear"/>
       </labeled-knob>
-      <labeled-knob x="380" y="40" label="Output Lvl" type="float" minValue="0" maxValue="1" value="0.328312486410141" textColor="FF000000">
+      <labeled-knob x="380" y="40" label="Output Lvl" valueType="float" minValue="0" maxValue="1" value="0.328312486410141" textColor="FF000000">
         <binding type="effect" level="group" groupIndex="0" effectIndex="0" parameter="FX_OUTPUT_LEVEL" translation="linear"/>
       </labeled-knob>
     </tab>
@@ -409,7 +409,7 @@ All parameters except `algorithm` are bindable. Example with a width knob:
 <DecentSampler pluginVersion="1">
   <ui>
     <tab>
-      <labeled-knob x="100" y="40" label="Width" type="float" minValue="0" maxValue="1" value="0.5" textColor="FF000000">
+      <labeled-knob x="100" y="40" label="Width" valueType="float" minValue="0" maxValue="1" value="0.5" textColor="FF000000">
         <binding type="effect" level="instrument" effectIndex="0" parameter="FX_WIDTH" translation="linear" translationOutputMin="0" translationOutputMax="1"/>
       </labeled-knob>
     </tab>
@@ -457,19 +457,19 @@ Example with knobs for all three parameters:
 <DecentSampler pluginVersion="1">
   <ui>
     <tab>
-      <labeled-knob x="80"  y="40" label="Bit Depth" type="float"
+      <labeled-knob x="80"  y="40" label="Bit Depth" valueType="float"
                     minValue="1" maxValue="24" value="24" textColor="FF000000">
         <binding type="effect" level="instrument" effectIndex="0"
                  parameter="FX_BIT_DEPTH" translation="linear"
                  translationOutputMin="1" translationOutputMax="24"/>
       </labeled-knob>
-      <labeled-knob x="185" y="40" label="Rate Reduction" type="float"
+      <labeled-knob x="185" y="40" label="Rate Reduction" valueType="float"
                     minValue="1" maxValue="32" value="1" textColor="FF000000">
         <binding type="effect" level="instrument" effectIndex="0"
                  parameter="FX_SAMPLE_RATE_REDUCTION" translation="linear"
                  translationOutputMin="1" translationOutputMax="32"/>
       </labeled-knob>
-      <labeled-knob x="290" y="40" label="Mix" type="float"
+      <labeled-knob x="290" y="40" label="Mix" valueType="float"
                     minValue="0" maxValue="1" value="1" textColor="FF000000">
         <binding type="effect" level="instrument" effectIndex="0"
                  parameter="FX_MIX" translation="linear"
@@ -530,13 +530,13 @@ Example with knobs for threshold and ratio:
 <DecentSampler pluginVersion="1">
   <ui>
     <tab>
-      <labeled-knob x="80" y="40" label="Threshold" type="float"
+      <labeled-knob x="80" y="40" label="Threshold" valueType="float"
                     minValue="-60" maxValue="0" value="-12" textColor="FF000000">
         <binding type="effect" level="instrument" effectIndex="0"
                  parameter="FX_THRESHOLD" translation="linear"
                  translationOutputMin="-60" translationOutputMax="0"/>
       </labeled-knob>
-      <labeled-knob x="185" y="40" label="Ratio" type="float"
+      <labeled-knob x="185" y="40" label="Ratio" valueType="float"
                     minValue="1" maxValue="20" value="4" textColor="FF000000">
         <binding type="effect" level="instrument" effectIndex="0"
                  parameter="FX_RATIO" translation="linear"
@@ -586,13 +586,13 @@ Example with knobs for both parameters:
 <DecentSampler pluginVersion="1">
   <ui>
     <tab>
-      <labeled-knob x="80" y="40" label="Amount" type="float"
+      <labeled-knob x="80" y="40" label="Amount" valueType="float"
                     minValue="0" maxValue="1" value="0.5" textColor="FF000000">
         <binding type="effect" level="instrument" effectIndex="0"
                  parameter="FX_STUTTER_AMOUNT" translation="linear"
                  translationOutputMin="0" translationOutputMax="1"/>
       </labeled-knob>
-      <labeled-knob x="185" y="40" label="Mix" type="float"
+      <labeled-knob x="185" y="40" label="Mix" valueType="float"
                     minValue="0" maxValue="1" value="1" textColor="FF000000">
         <binding type="effect" level="instrument" effectIndex="0"
                  parameter="FX_MIX" translation="linear"

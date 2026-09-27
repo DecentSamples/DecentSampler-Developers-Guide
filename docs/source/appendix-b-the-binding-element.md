@@ -10,7 +10,7 @@ In this example, a labeled knob is controlling the volume of the first group of 
 <DecentSampler>
   <ui>
     <tab>
-      <labeled-knob x="420" y="100" label="RT" type="float" minValue="0" maxValue="1" value="0.3" textSize="20">
+      <labeled-knob x="420" y="100" label="RT" valueType="float" minValue="0" maxValue="1" value="0.3" textSize="20">
         <binding type="amp" level="group" position="0" parameter="AMP_VOLUME" translation="linear" translationOutputMin="0" translationOutputMax="1.0"  />
       </labeled-knob>
     </tab>

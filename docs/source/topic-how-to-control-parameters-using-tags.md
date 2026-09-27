@@ -25,11 +25,11 @@ You can also assign tags at the group level. You can also mix and match, and the
 Then you can make controls with bindings that reference those tags:
 
 ```xml
-<control x="246" y="115" parameterName="MIC 1" style="linear_bar_vertical" type="float" minValue="0" maxValue="100" value="60" width="20" height="70" trackForegroundColor="FFFFFFFF" trackBackgroundColor="FF888888">
+<control x="246" y="115" parameterName="MIC 1" style="linear_bar_vertical" valueType="float" minValue="0" maxValue="100" value="60" width="20" height="70" trackForegroundColor="FFFFFFFF" trackBackgroundColor="FF888888">
     <binding type="amp" level="tag" identifier="mic1" parameter="AMP_VOLUME" />
 </control>
 
-<control x="346" y="115" parameterName="MIC 2" style="linear_bar_vertical" type="float" minValue="0" maxValue="100" value="60" width="20" height="70" trackForegroundColor="FFFFFFFF" trackBackgroundColor="FF888888">
+<control x="346" y="115" parameterName="MIC 2" style="linear_bar_vertical" valueType="float" minValue="0" maxValue="100" value="60" width="20" height="70" trackForegroundColor="FFFFFFFF" trackBackgroundColor="FF888888">
     <binding type="amp" level="tag" identifier="mic2" parameter="AMP_VOLUME" />
 </control>
 ```
@@ -48,7 +48,7 @@ of those tags, in any group, instead of the whole group the sample happens to li
 ```
 
 ```xml
-<control x="246" y="115" parameterName="MIC 1 TUNE" type="float" minValue="-12" maxValue="12" value="0">
+<control x="246" y="115" parameterName="MIC 1 TUNE" valueType="float" minValue="-12" maxValue="12" value="0">
     <binding type="amp" level="sample" sampleTags="mic1" parameter="TUNING" />
 </control>
 ```
@@ -66,7 +66,7 @@ Oscillators work the same way, using `level="oscillator"` and `oscillatorTags`:
 ```
 
 ```xml
-<control x="346" y="115" parameterName="OSC 2 TUNE" type="float" minValue="-12" maxValue="12" value="0">
+<control x="346" y="115" parameterName="OSC 2 TUNE" valueType="float" minValue="-12" maxValue="12" value="0">
     <binding type="amp" level="oscillator" oscillatorTags="osc2" parameter="TUNING" />
 </control>
 ```
