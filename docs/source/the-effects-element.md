@@ -124,7 +124,7 @@ Attributes:
 | `type`      | Required | The type of filter       | Must be `peak`                                                              |         |
 | `frequency` | Required | The filter frequency     | 60 - 22000.0                                                                |     10000 |
 | `Q`         | Optional | Q is the ratio of center frequency to bandwidth | 0.01 - 18.0                                          |     0.7 |
-| `gain`      | Required | A linear multiplier for the frequencies around `frequency`: 1.0 leaves them unchanged, values above 1.0 boost them and values below 1.0 cut them. Always set it, since leaving it out cuts the band very deeply. | 0.0001 - 10.0 (or -80 - 20 with `gainUnit="decibels"`) |         |
+| `gain`      | Optional | A linear multiplier for the frequencies around `frequency`: 1.0 leaves them unchanged, values above 1.0 boost them and values below 1.0 cut them. Before 1.34.0, leaving it out cut the band very deeply, so set it explicitly if a preset has to support older versions. | 0.0001 - 10.0 (or -80 - 20 with `gainUnit="decibels"`) | 1.0 (0 dB) |
 | `gainUnit`  | Optional | The unit `gain` is written in. `linear` (the default) treats it as a multiplier; `decibels` treats it as a boost or cut in dB, so `gain="6"` is a 6 dB boost and `gain="-3"` a 3 dB cut. It also sets the unit for `FX_FILTER_GAIN` bindings and modulation on this effect. It can appear anywhere among the attributes. Requires Decent Sampler 1.34.0. | `linear`, `decibels` | `linear` |
 
 ### Low Shelf and High Shelf EQ Filters
