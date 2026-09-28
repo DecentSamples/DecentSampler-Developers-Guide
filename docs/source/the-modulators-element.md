@@ -258,6 +258,23 @@ In order to actually have your LFOs and envelopes do anything, you need to have 
 
 You can bind to modulator parameters themselves to control them in real-time from UI controls, MIDI CC, or other sources. The binding uses `type="modulator"` and `level="instrument"`, with a `modulatorIndex` attribute pointing to the modulator (0-based) and a `parameter` attribute specifying which property to change.
 
+#### Switching a modulator on and off
+
+Every modulator (`<lfo>`, `<envelope>`, `<midiCC>`, `<midiVelocity>`, `<mpeTimbre>`, `<mpePressure>` and `<random>`) accepts `enabled="false"`, and a binding with `parameter="ENABLED"` switches it from a control, the same way effects are switched. While a modulator is off, everything it modulates goes back to its unmodulated value. It keeps running in the background, so an LFO switched back on carries on in time rather than restarting. Requires Decent Sampler 1.34.0.
+
+For example, a vibrato on/off button:
+
+```xml
+<button x="10" y="10" width="100" height="30" style="text" value="0">
+  <state name="Vibrato Off">
+    <binding type="modulator" level="instrument" modulatorIndex="0" parameter="ENABLED" translation="fixed_value" translationValue="false" />
+  </state>
+  <state name="Vibrato On">
+    <binding type="modulator" level="instrument" modulatorIndex="0" parameter="ENABLED" translation="fixed_value" translationValue="true" />
+  </state>
+</button>
+```
+
 #### Bindable parameters by modulator type
 
 **`<lfo>`**
