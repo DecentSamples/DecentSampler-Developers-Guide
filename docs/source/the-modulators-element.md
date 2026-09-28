@@ -61,7 +61,7 @@ This element has the following attributes:
 - **`sustain`**: The height of the sustain portion of the ADSR envelope. This is expressed as a value between 0 and 1. 
 - **`release`**: The length in seconds of the release portion of the ADSR envelope
 - **`modAmount`**: This value between 0 and 1 controls how much the  modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
-- **`scope`**: Whether or not this LFO exists for all notes or whether each keypress gets its own LFO. Possible values are `global` and `voice` (default for envelopes). If `voice` is chosen, a new LFO is started each time a new note is pressed.
+- **`scope`**: Whether or not this envelope exists for all notes or whether each keypress gets its own envelope. Possible values are `global` (the default) and `voice`. Most envelopes should be per note, so set `scope="voice"` explicitly. If `voice` is chosen, a new envelope is started each time a new note is pressed.
 - **`modBehavior`**: This attribute controls how the envelope affects the parameter it is targeting. Possible values are `add`, `modulate`, `multiply`, and `set`. If `add` is chosen, the envelope will add its translated value directly to the target parameter (legacy behavior). If `modulate` is chosen, the envelope adds a zero-centered modulation delta around the target parameter's current/base value, so a neutral envelope value contributes no offset. If `multiply` is chosen, the envelope will multiply its value by the parameter it is targeting. If `set` is chosen, the envelope will set the parameter it is targeting to its value. Default value: `set`.
 - **`attackCurve`**: A numeric value from -100 to 100 that determines the shape of the attack portion of the ADSR envelope. Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential). Default value: `-100` (logarithmic).
 - **`decayCurve`**: A numeric value from -100 to 100 that determines the shape of the decay portion of the ADSR envelope. Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential). Default value: `100` (exponential).
@@ -137,7 +137,7 @@ The `<midiVelocity>` element allows you to use note-on velocity as a modulation 
 This element has the following attributes:
 
 - **`modAmount`**: This value between 0 and 1 controls how much the modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
-- **`scope`**: Whether or not this modulator exists for all notes or whether each keypress gets its own modulator. Possible values are `global` and `voice` (default for midiVelocity). If `voice` is chosen, each note retains its own velocity value for modulation.
+- **`scope`**: Whether or not this modulator exists for all notes or whether each keypress gets its own modulator. Possible values are `global` (the default) and `voice`. For per-note velocity, set `scope="voice"` explicitly. If `voice` is chosen, each note retains its own velocity value for modulation.
 
 Here's a practical example that uses velocity to control the brightness of a sound:
 
@@ -172,7 +172,7 @@ Another example showing velocity controlling reverb amount:
 ## The &lt;mpeTimbre&gt; element
 
 The `<mpeTimbre>` element allows users to control the timbre of an instrument in response to MPE messages. NOTE: In order for this to work, the plugin must be in MPE mode. This can be turned on by going into the **File > MIDI Input Settings..** dialog box. The `<mpeTimbre>` element has the following attributes:
-- **`scope`**: Whether or not this MPE timbre exists for all notes or whether each keypress gets its own MPE timbre. Possible values are `global` and `voice` (default for MPE timbre). If `voice` is chosen, a new MPE timbre is started each time a new note is pressed.
+- **`scope`**: Whether or not this MPE timbre exists for all notes or whether each keypress gets its own MPE timbre. Possible values are `global` (the default) and `voice`. MPE timbre is per note, so set `scope="voice"` explicitly. If `voice` is chosen, a new MPE timbre is started each time a new note is pressed.
 - **`risingSmoothingTime`**: The time in milliseconds it takes for the MPE timbre to rise to its target value. Default value: 0 milliseconds.
 - **`fallingSmoothingTime`**: The time in milliseconds it takes for the MPE timbre to fall to its target value. Default value: 0 milliseconds.
 
@@ -196,7 +196,7 @@ This example shows an MPE timbre modulator that modifies the frequency of a low-
 
 The `<mpePressure>` element allows users to control an instrument in response to MPE Pressure messages. NOTE: In order for this to work, the plugin must be in MPE mode. This can be turned on by going into the **File > MIDI Input Settings..** dialog box. The `<mpePressure>` element has the following attributes:
 
-- **`scope`**: Whether or not this MPE pressure exists for all notes or whether each keypress gets its own MPE pressure. Possible values are `global` and `voice` (default for MPE pressure). If `voice` is chosen, a new MPE pressure is started each time a new note is pressed.
+- **`scope`**: Whether or not this MPE pressure exists for all notes or whether each keypress gets its own MPE pressure. Possible values are `global` (the default) and `voice`. MPE pressure is per note, so set `scope="voice"` explicitly. If `voice` is chosen, a new MPE pressure is started each time a new note is pressed.
 - **`risingSmoothingTime`**: The time in milliseconds it takes for the MPE pressure to rise to its target value. Default value: 0 milliseconds.
 - **`fallingSmoothingTime`**: The time in milliseconds it takes for the MPE pressure to fall to its target value. Default value: 0 milliseconds.
 
