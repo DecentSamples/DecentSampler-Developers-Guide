@@ -27,7 +27,7 @@ Within the `<midi>` element, you can have any number of `<note>` elements. These
 Here are the attributes of the `<note />` element:
 
 - **note** (required): This attribute specifies the MIDI note number (from 0 to 127) you would like to listen on. You can also specify ranges of notes by using a dash. For example `note="24-35"` would be used to specify bindings for the range of notes 24 thorugh 35. 
-- **eventType** (optional): This attribute specifies the type of event to listen for. The default is `note_on`, but you can also specify `note_off` or `any`. The default is `any` if this attribute is not specified.
+- **eventType** (optional): This attribute specifies the type of event to listen for: `note_on`, `note_off`, `any` (the default, both), or, from Decent Sampler 1.34.0, `first_note_on` and `last_note_off` (see below).
 - **enabled** (optional): A true/false value that specifies whether this note listener is turned on.
 - **swallowNotes** (optional): The bindings that live below this note listener are called before any notes are played. By default, swallowNotes is false, which means that the keypress will then be received by the sampler. If `swallowNotes` is true, the sampler will not receive the note. This is useful if you wish to prevent certain keys from triggers notes.
 
@@ -49,6 +49,25 @@ Beneath the `<note>` element, you can have any number of bindings. Here is an ex
 ```
 
 In the above keyswitch example, MIDI note 11 turns on group 0 and turns off group 1, whereas MIDI note 12 does the opposite. Note the use of the `fixed_value` translation type.
+
+### Responding to the first and last held note
+
+`note_on` and `note_off` fire for every key. Sometimes you want something to happen once for a whole run of overlapping notes instead: when the first key goes down after a silence, or when the last held key is let go. That's what `first_note_on` and `last_note_off` do. They fire only when the note range goes from no keys held to one, and from one key held to none. Requires Decent Sampler 1.34.0.
+
+For example, this starts an animation when playing begins and stops it when the last key is released, however many notes overlap in between:
+
+```xml
+<midi>
+  <note note="0-127" eventType="first_note_on">
+    <binding type="control" level="ui" position="0" parameter="VALUE" translation="fixed_value" translationValue="1" />
+  </note>
+  <note note="0-127" eventType="last_note_off">
+    <binding type="control" level="ui" position="0" parameter="VALUE" translation="fixed_value" translationValue="0" />
+  </note>
+</midi>
+```
+
+These events count keys, not sounding notes, so holding the sustain pedal doesn't keep a run going: `last_note_off` fires when the last key comes up, even if notes are still ringing. An All Notes Off message (for instance when the host stops playback) also ends the run. `swallowNotes` works with `first_note_on` the same way it does with `note_on`.
 
 ## The &lt;velocity&gt; element
 Within the `<midi>` element, you can also have a `<velocity>` element. This element allows you to control an instrument in response to MIDI velocity messages. This is useful for creating dynamic responses based on how hard a note is played.
