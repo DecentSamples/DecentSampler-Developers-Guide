@@ -385,7 +385,7 @@ Here's a practical example showing how to layer multiple oscillators to create a
 Here's a complete example of a Moog-style monophonic lead synthesizer with portamento:
 
 ```xml
-<DecentSampler minVersion="1.15.0">
+<DecentSampler minVersion="1.30.0">
   <ui width="812" height="375">
     <tab name="main">
       <labeled-knob x="10" y="20" width="90" label="Attack" valueType="float" 
@@ -394,58 +394,77 @@ Here's a complete example of a Moog-style monophonic lead synthesizer with porta
       </labeled-knob>
       <labeled-knob x="110" y="20" width="90" label="Glide Time" valueType="float" 
                     minValue="0.0" maxValue="2.0" value="0.3">
-        <binding type="general" level="instrument" position="0" parameter="GLIDE_TIME"/>
+        <binding type="amp" level="instrument" position="0" parameter="GLIDE_TIME"/>
       </labeled-knob>
       <labeled-knob x="210" y="20" width="90" label="Cutoff" valueType="float" 
-                    minValue="0" maxValue="22000" value="2000.0">
+                    minValue="20" maxValue="22000" value="800">
         <binding type="effect" level="instrument" position="0" parameter="FX_FILTER_FREQUENCY"/>
+      </labeled-knob>
+      <labeled-knob x="310" y="20" width="90" label="Resonance" valueType="float" 
+                    minValue="0.1" maxValue="5.0" value="2.0">
+        <binding type="effect" level="instrument" position="0" parameter="FX_FILTER_RESONANCE"/>
+      </labeled-knob>
+      <!-- Depth of the filter envelope (modulator 1) -->
+      <labeled-knob x="410" y="20" width="90" label="Env Amount" valueType="float" 
+                    minValue="0.0" maxValue="1.0" value="0.5">
+        <binding type="modulator" level="instrument" modulatorIndex="1" parameter="MOD_AMOUNT"/>
       </labeled-knob>
       <labeled-knob x="10" y="130" width="90" label="Detune" valueType="float" 
                     minValue="-1" maxValue="1" value="0.1">
         <binding type="amp" level="group" position="1" parameter="GROUP_TUNING"/>
       </labeled-knob>
+      <!-- Rate and depth of the vibrato LFO (modulator 0) -->
+      <labeled-knob x="110" y="130" width="90" label="LFO Rate" valueType="float" 
+                    minValue="0.1" maxValue="10.0" value="5.0">
+        <binding type="modulator" level="instrument" modulatorIndex="0" parameter="FREQUENCY"/>
+      </labeled-knob>
+      <labeled-knob x="210" y="130" width="90" label="Vibrato" valueType="float" 
+                    minValue="0.0" maxValue="1.0" value="0.15">
+        <binding type="modulator" level="instrument" modulatorIndex="0" parameter="MOD_AMOUNT"/>
+      </labeled-knob>
     </tab>
   </ui>
   
-  <!-- glideTime and glideMode set at groups level apply to all oscillators -->
-  <groups glideTime="0.3" glideMode="legato" attack="0.01" decay="0.3" 
+  <!-- glideTime and glideMode set at groups level apply to all oscillators.
+       polyphony="1" makes each oscillator monophonic, so overlapping notes glide. -->
+  <groups glideTime="0.3" glideMode="legato" polyphony="1" attack="0.01" decay="0.3" 
           sustain="0.7" release="0.5" volume="0.8">
     <!-- Two detuned saw oscillators for thickness -->
     <group name="Osc1" tags="osc1">
       <oscillator waveform="saw" />
     </group>
-    <group name="Osc2" tags="osc2">
+    <group name="Osc2" tags="osc2" groupTuning="0.1">
       <oscillator waveform="saw" />
     </group>
   </groups>
   
   <effects>
-    <effect type="lowpass" frequency="2000.0" resonance="0.3"/>
+    <effect type="lowpass" frequency="800" resonance="2.0"/>
   </effects>
   
   <modulators>
-    <!-- LFO vibrato -->
+    <!-- Modulator 0: LFO vibrato -->
     <lfo shape="sine" frequency="5.0" modAmount="0.15" scope="global">
       <binding type="amp" level="group" tags="osc1,osc2" parameter="GROUP_TUNING" 
                modBehavior="add" translation="linear" 
                translationOutputMin="-0.5" translationOutputMax="0.5"/>
     </lfo>
+    <!-- Modulator 1: filter envelope, adding up to 6000 Hz to the cutoff -->
+    <envelope attack="0.01" decay="0.4" sustain="0.2" release="0.5" modAmount="0.5" scope="global">
+      <binding type="effect" level="instrument" position="0" parameter="FX_FILTER_FREQUENCY" 
+               modBehavior="add" translation="linear" 
+               translationOutputMin="0" translationOutputMax="6000"/>
+    </envelope>
   </modulators>
-  
-  <!-- Use tag polyphony to enforce monophonic behavior -->
-  <tags>
-    <tag name="osc1" volume="1" pan="0" polyphony="1" />
-    <tag name="osc2" volume="1" pan="0" polyphony="1" />
-  </tags>
 </DecentSampler>
 ```
 
 This preset demonstrates:
 - **Portamento/Glide**: Set via \`glideTime\` (0.3 seconds) and \`glideMode\` (legato - only glides between connected notes)
-- **Monophonic behavior**: Achieved using tag polyphony limits (\`polyphony="1"\`)
+- **Monophonic behavior**: Achieved with oscillator polyphony (\`polyphony="1"\`), which is what makes glide behave like portamento
 - **Detuned oscillators**: Two saw waves with slightly different tuning for a fatter sound
-- **Modulation**: LFO vibrato applied to both oscillators via GROUP_TUNING binding
-- **Filter envelope**: Adds movement to the timbre
+- **Modulation**: LFO vibrato applied to both oscillators via GROUP_TUNING binding, with knobs for its rate and depth
+- **Filter envelope**: An \`<envelope>\` modulator sweeps the lowpass cutoff on each note; the Env Amount knob sets how far
 
 **Combining Oscillators with Samples:**
 
