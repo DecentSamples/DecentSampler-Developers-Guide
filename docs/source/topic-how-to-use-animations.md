@@ -22,7 +22,7 @@ Here is an example of a simple animation that loops continuously:
 <DecentSampler pluginVersion="1">
   <ui bgColor="FFADD8E6">
     <tab>
-      <multiFrameImage x="350" y="80" width="64" height="64"  path="Images/AnimationDemo128.png" numFrames="31" sourceFormat="vertical_image_strip"frameRate="24" playbackMode="forward_loop"/>
+      <multiFrameImage x="350" y="80" width="64" height="64"  path="Images/AnimationDemo128.png" numFrames="31" sourceFormat="vertical_image_strip" frameRate="24" playbackMode="forward_loop"/>
     </tab>
   </ui>
 </DecentSampler>
@@ -42,7 +42,7 @@ Here is an example of an animation that is controlled by a knob:
 <DecentSampler>
   <ui bgColor="FFADD8E6">
     <tab>
-      <multiFrameImage x="450" y="80" width="64" height="64" path="Images/AnimationDemo128.png" numFrames="31" sourceFormat="vertical_image_strip"frameRate="24" playbackMode="stopped"/>
+      <multiFrameImage x="450" y="80" width="64" height="64" path="Images/AnimationDemo128.png" numFrames="31" sourceFormat="vertical_image_strip" frameRate="24" playbackMode="stopped"/>
       <labeled-knob x="280" y="50" label="Frame" valueType="integer" minValue="0" maxValue="31" value="0" textColor="FF000000" value="0">
         <binding type="control" level="ui" position="0" parameter="CURRENT_FRAME" translation="linear" translationOutputMin="0" translationOutputMax="31"  />
       </labeled-knob>
@@ -64,7 +64,7 @@ Here is an example of an animation that is controlled by a slider:
 <DecentSampler>
   <ui bgColor="FFADD8E6">
     <tab>
-      <multiFrameImage x="450" y="80" width="64" height="64" path="Images/AnimationDemo128.png" numFrames="31" sourceFormat="vertical_image_strip"frameRate="24" playbackMode="forward_loop"/>
+      <multiFrameImage x="450" y="80" width="64" height="64" path="Images/AnimationDemo128.png" numFrames="31" sourceFormat="vertical_image_strip" frameRate="24" playbackMode="forward_loop"/>
       <labeled-knob x="280" y="50" label="Frame Rate" valueType="integer" minValue="1" maxValue="60" value="24" textColor="FF000000" value="24">
         <binding type="control" level="ui" position="0" parameter="FRAME_RATE" translation="linear" translationOutputMin="1" translationOutputMax="24"  />
       </labeled-knob>
@@ -87,7 +87,7 @@ Here is an example of an animation that is controlled by a drop-down menu:
 <DecentSampler>
   <ui bgColor="FFADD8E6">
     <tab>
-      <multiFrameImage x="450" y="80" width="64" height="64" path="Images/AnimationDemo128.png" numFrames="31" sourceFormat="vertical_image_strip"frameRate="24" playbackMode="forward_loop"/>
+      <multiFrameImage x="450" y="80" width="64" height="64" path="Images/AnimationDemo128.png" numFrames="31" sourceFormat="vertical_image_strip" frameRate="24" playbackMode="forward_loop"/>
       <label x="275" y="50" height="30" text="Playback Mode" textColor="FF000000" textSize="16" />
       <menu x="280" y="80" width="100" height="30">
         <option name="Forward Loop">

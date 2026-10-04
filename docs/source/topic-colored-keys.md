@@ -34,22 +34,24 @@ It also possible to programmically turn keyboard coloring on and off using bindi
 ```xml
 <DecentSampler>
     <ui>
-        <button name="Strum Enabled" x="464" y="82" width="14" height="14" style="image" value="1" visible="false">
-        <state name="Off" mainImage="Images/StrumsCheckboxUnchecked.png" hoverImage="Images/StrumsCheckboxUnchecked.png" clickImage="Images/StrumsCheckboxUnchecked.png">
-            <binding level="ui" type="keyboard_color" colorIndex="0" parameter="ENABLED" translation="fixed_value" translationValue="false"/>
-            <binding level="ui" type="keyboard_color" colorIndex="1" parameter="ENABLED" translation="fixed_value" translationValue="false"/>
-            <binding level="ui" type="keyboard_color" colorIndex="2" parameter="ENABLED" translation="fixed_value" translationValue="false"/>
-            <binding level="ui" type="keyboard_color" colorIndex="3" parameter="ENABLED" translation="fixed_value" translationValue="false"/>
-            <binding level="ui" type="keyboard_color" colorIndex="4" parameter="ENABLED" translation="fixed_value" translationValue="false"/>
-        </state>
-        <state name="On" mainImage="Images/StrumsCheckboxChecked.png" hoverImage="Images/StrumsCheckboxChecked.png" clickImage="Images/StrumsCheckboxChecked.png">
-            <binding level="ui" type="keyboard_color" colorIndex="0" parameter="ENABLED" translation="fixed_value" translationValue="true"/>
-            <binding level="ui" type="keyboard_color" colorIndex="1" parameter="ENABLED" translation="fixed_value" translationValue="true"/>
-            <binding level="ui" type="keyboard_color" colorIndex="2" parameter="ENABLED" translation="fixed_value" translationValue="true"/>
-            <binding level="ui" type="keyboard_color" colorIndex="3" parameter="ENABLED" translation="fixed_value" translationValue="true"/>
-            <binding level="ui" type="keyboard_color" colorIndex="4" parameter="ENABLED" translation="fixed_value" translationValue="true"/>
-        </state>
-      </button>
+        <tab>
+            <button name="Strum Enabled" x="464" y="82" width="14" height="14" style="image" value="1" visible="false">
+                <state name="Off" mainImage="Images/StrumsCheckboxUnchecked.png" hoverImage="Images/StrumsCheckboxUnchecked.png" clickImage="Images/StrumsCheckboxUnchecked.png">
+                    <binding level="ui" type="keyboard_color" colorIndex="0" parameter="ENABLED" translation="fixed_value" translationValue="false"/>
+                    <binding level="ui" type="keyboard_color" colorIndex="1" parameter="ENABLED" translation="fixed_value" translationValue="false"/>
+                    <binding level="ui" type="keyboard_color" colorIndex="2" parameter="ENABLED" translation="fixed_value" translationValue="false"/>
+                    <binding level="ui" type="keyboard_color" colorIndex="3" parameter="ENABLED" translation="fixed_value" translationValue="false"/>
+                    <binding level="ui" type="keyboard_color" colorIndex="4" parameter="ENABLED" translation="fixed_value" translationValue="false"/>
+                </state>
+                <state name="On" mainImage="Images/StrumsCheckboxChecked.png" hoverImage="Images/StrumsCheckboxChecked.png" clickImage="Images/StrumsCheckboxChecked.png">
+                    <binding level="ui" type="keyboard_color" colorIndex="0" parameter="ENABLED" translation="fixed_value" translationValue="true"/>
+                    <binding level="ui" type="keyboard_color" colorIndex="1" parameter="ENABLED" translation="fixed_value" translationValue="true"/>
+                    <binding level="ui" type="keyboard_color" colorIndex="2" parameter="ENABLED" translation="fixed_value" translationValue="true"/>
+                    <binding level="ui" type="keyboard_color" colorIndex="3" parameter="ENABLED" translation="fixed_value" translationValue="true"/>
+                    <binding level="ui" type="keyboard_color" colorIndex="4" parameter="ENABLED" translation="fixed_value" translationValue="true"/>
+                </state>
+            </button>
+        </tab>
         <keyboard>
             <color loNote="36" hiNote="50" color="FF2C365E" />
             <color loNote="51" hiNote="57" color="FF6D9DC5" />

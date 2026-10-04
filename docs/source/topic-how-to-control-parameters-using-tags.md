@@ -49,7 +49,7 @@ of those tags, in any group, instead of the whole group the sample happens to li
 
 ```xml
 <control x="246" y="115" parameterName="MIC 1 TUNE" valueType="float" minValue="-12" maxValue="12" value="0">
-    <binding type="amp" level="sample" sampleTags="mic1" parameter="TUNING" />
+    <binding type="amp" level="sample" sampleTags="mic1" parameter="GROUP_TUNING" />
 </control>
 ```
 
@@ -60,14 +60,14 @@ Oscillators work the same way, using `level="oscillator"` and `oscillatorTags`:
 
 ```xml
 <group>
-  <oscillator shape="saw" tags="osc1" />
-  <oscillator shape="square" tags="osc2" />
+  <oscillator waveform="saw" tags="osc1" />
+  <oscillator waveform="square" tags="osc2" />
 </group>
 ```
 
 ```xml
 <control x="346" y="115" parameterName="OSC 2 TUNE" valueType="float" minValue="-12" maxValue="12" value="0">
-    <binding type="amp" level="oscillator" oscillatorTags="osc2" parameter="TUNING" />
+    <binding type="amp" level="oscillator" oscillatorTags="osc2" parameter="GROUP_TUNING" />
 </control>
 ```
 
