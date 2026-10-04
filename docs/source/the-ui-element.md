@@ -132,7 +132,7 @@ The `<multiFrameImage>` element allows you to play a sequence of images as an an
 Example:
 
 ```xml
-<multiFrameImage x="10" y="10" width="64" height="64" path="Images/Animation.png" numFrames="31" imageStripOrientaton="vertical" frameRate="24" playbackMode="forward"/>
+<multiFrameImage x="10" y="10" width="64" height="64" path="Images/Animation.png" numFrames="31" sourceFormat="vertical_image_strip" frameRate="24" playbackMode="forward_loop"/>
 ```
 
 ## The &lt;label&gt; element
@@ -462,7 +462,7 @@ Below the `<xyPad>` element, you can specify `<x>` and `<y>` elements. These ele
 
 Example:
 ```xml
-<xyPad x="10" y="10" width="300" height="100" parameterName="Pad" xValue="0.5" yValue="0.5" bgColor="77FFCC00" markerFillColor="FFFFFFFF" outlineColor="77FFFFFFF">
+<xyPad x="10" y="10" width="300" height="100" parameterName="Pad" xValue="0.5" yValue="0.5" bgColor="77FFCC00" markerFillColor="FFFFFFFF" outlineColor="77FFFFFF">
   <x>
     <binding type="amp" level="group" groupIndex="0" parameter="AMP_VOLUME" translation="linear" translationOutputMin="0" translationOutputMax="1" />
     <binding type="amp" level="group" groupIndex="1" parameter="AMP_VOLUME" translation="linear" translationOutputMin="1" translationOutputMax="0" />

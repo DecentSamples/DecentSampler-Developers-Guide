@@ -420,9 +420,7 @@ Here's a complete example of a Moog-style monophonic lead synthesizer with porta
   </groups>
   
   <effects>
-    <effect type="lowpass" frequency="2000.0" resonance="0.3" 
-            envelope_amount="3000.0" envelope_attack="0.01" 
-            envelope_decay="0.3" envelope_sustain="0.0" envelope_release="0.5"/>
+    <effect type="lowpass" frequency="2000.0" resonance="0.3"/>
   </effects>
   
   <modulators>

@@ -340,23 +340,23 @@ For example, a vibrato on/off button:
   <ui>
     <tab>
       <!-- Controls LFO depth -->
-      <labeled_knob x="10" y="30" width="90" textSize="16" textColor="AA000000"
+      <labeled-knob x="10" y="30" width="90" textSize="16" textColor="AA000000"
                     parameterName="Depth" minValue="0" maxValue="1" value="1">
         <binding type="modulator" level="instrument" parameter="MOD_AMOUNT"
                  modulatorIndex="0" translation="linear" />
-      </labeled_knob>
+      </labeled-knob>
       <!-- Controls LFO rate -->
-      <labeled_knob x="110" y="30" width="90" textSize="16" textColor="AA000000"
+      <labeled-knob x="110" y="30" width="90" textSize="16" textColor="AA000000"
                     parameterName="Rate" minValue="0.1" maxValue="20" value="2">
         <binding type="modulator" level="instrument" parameter="FREQUENCY"
                  modulatorIndex="0" translation="linear" />
-      </labeled_knob>
+      </labeled-knob>
       <!-- Controls LFO delay time -->
-      <labeled_knob x="210" y="30" width="90" textSize="16" textColor="AA000000"
+      <labeled-knob x="210" y="30" width="90" textSize="16" textColor="AA000000"
                     parameterName="Delay" minValue="0" maxValue="2" value="0.5">
         <binding type="modulator" level="instrument" parameter="MOD_DELAY_TIME"
                  modulatorIndex="0" translation="linear" />
-      </labeled_knob>
+      </labeled-knob>
     </tab>
   </ui>
   <modulators>

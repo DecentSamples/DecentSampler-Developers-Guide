@@ -409,7 +409,7 @@ Because wave shaping tends to sound better when applied on a per-voice basis, it
     <group>
         <!-- Samples go here. -->
       <effects>
-        <effect type="wave_shaper" drive="0.5473124980926514" shape="0.328312486410141" outputLevel="0.1"/>
+        <effect type="wave_shaper" drive="0.5473124980926514" outputLevel="0.1"/>
       </effects>
     </group>
   </groups>
