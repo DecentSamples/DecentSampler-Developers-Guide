@@ -81,6 +81,7 @@ Underneath the `<group>` elements are `<sample>` elements. Each sample correspon
 | **`tags`**                  | (optional) | A command-separated list of tags. Example: tags="rt,mic1". These are useful when controlling volumes using tags. See Appendix D. |  
 | **`onLoCCN`** **`onHiCCN`** | (optional) | If you want a sample to be triggered when a MIDI CC controller message comes in, for example for piano pedal down and pedal up samples, you use these attributes to specify the range of values that should trigger the sample. If you use `onLoCCN`, you must also use a corresponding `onHiCCN` for the same MIDI CC number. Example: `onLoCC64="90"` and `onHiCC64="127"` would mean that values of CC64 (Sustain Pedal) between 90 and 127 will trigger the given sample. This can also be set at the `<group>` level. Default:-1 (off) |
 | **`playbackMode`**          | (optional) | By default, the choice of playback engine is left up to the discretion of the user–they can set this in the Preferences screen. However, a sample creator can override this setting by setting the playbackMode for a specific sample, a group, or the entire instrument. Possible values are `memory`, `disk_streaming`, and `auto` (default). |
+| **`sampleMode`**            | (optional) | How the sample is played. `normal` (the default) plays it as usual. `slice_stretch` plays it as a loop that keeps in time with the host's tempo; see **Slice Stretch** below. This can also be set at the `<group>` or `<groups>` level. Requires Decent Sampler 1.37.0. |
 | **`delay`**                 | (optional) | A delay time before the sample starts playing. The value is a decimal number (integer or float) that specifies the delay amount. The unit of measurement is controlled by the `delayUnit` attribute. Default: 0 |
 | **`delayUnit`**             | (optional) | Specifies the unit of measurement for the `delay` attribute. Valid values are: `seconds` (time-based delay), `beats` (tempo-based delay), and `samples` (sample-accurate delay). Default: `seconds` |
 | **`retriggerEnabled`**      | (optional) | Enables pattern retriggering for creating repeating sample sequences. When enabled, after the initial delay sequence completes, all samples in the group will retrigger according to the retriggerInterval. This allows creating looping drum patterns and rhythmic sequences from delayed samples. This can also be set at the `<group>` or `<groups>` levels. Default: `false` |
@@ -97,6 +98,41 @@ Underneath the `<group>` elements are `<sample>` elements. Each sample correspon
 | **`loopCrossfadeMode`**  | (optional) | This parameter is used to specify the curve used for crossfading when loop crossfades are turned on. This can also be set at the `<group>` level. Value values: `linear`,  `equal_power`. Default: `equal_power`. |
 | **`loopEnabled`**        | (optional) | A boolean value indicating whether or not the loop should be used. Valid values: true, false |
 | **`loopDuringRelease`**  | (optional) | Whether the loop keeps playing after the note is released. Set this to `false` for samples that have a recorded ending after the loop, such as a sustained note followed by its natural decay: when the note is released, the sample leaves the loop and plays on through the audio after the loop end. If the note is released partway through the loop's crossfade, the loop goes round once more before it lets go, so the change is always smooth. The release envelope still applies, so make the `release` time long enough for the ending to be heard. This can also be set at the `<group>` or `<groups>` level. Valid values: true, false. Default: true. Requires Decent Sampler 1.36.1. |
+
+**Slice Stretch (loops that follow the tempo)**
+
+Setting `sampleMode="slice_stretch"` turns a sample into a loop that plays in time with the host's tempo, like the Beats warp mode in Ableton Live. Drum loops are the obvious use. The loop is cut into slices, and each slice starts on its own beat at the current tempo, so the groove speeds up and slows down with the song while its pitch stays the same.
+
+The note you play sets the pitch of every slice. Playing the `rootNote` plays the loop as recorded. Playing an octave higher plays each slice an octave up and twice as fast, but the slices still land on the same beats, so the rhythm doesn't change.
+
+Pressing a key plays the loop from the beginning, and it repeats for as long as the key is held. When the key is released, the release envelope fades it out as usual. `start` and `end` set the part of the file that makes up the loop. Slice-stretch samples always play from memory, whatever `playbackMode` says. Requires Decent Sampler 1.37.0.
+
+Decent Sampler needs to know two things: how long the loop is, and where the slices are.
+
+- **How long the loop is.** Set `beats` to the loop's length in beats, or `originalTempo` to the tempo it was recorded at. If you set neither, Decent Sampler guesses, assuming the loop is 1, 2, 4, 8, 16... beats long and picking the length that puts its tempo closest to 120 BPM. Setting one of them is more reliable.
+- **Where the slices are.** Decent Sampler uses the `slices` attribute if there is one. Otherwise it uses the cue points (markers) saved in the WAV file, which many audio editors and hardware samplers can write. Otherwise it cuts the loop into equal slices on a grid, every 16th note by default (`sliceGrid`).
+
+When the host tempo is slower than the loop's own tempo, or a note above the `rootNote` makes each slice play faster, a slice runs out before the next one is due. `sliceLoopMode` decides what fills that gap, and `sliceEnvelope` shapes each slice. The Preset Editor (**File > Developer Tools > Preset Editor...**) can set all of this up for you: choose **Slice Stretch** as the sample's mode, and then drag, add and remove slice markers on the waveform, or slice the loop at its transients.
+
+| Attribute            |            | Description       |
+|----------------------|------------| ------------------|
+| **`beats`**          | (optional) | The length of the loop in beats (quarter notes). A two-bar loop in 4/4 is `beats="8"`. Takes priority over `originalTempo`. This can also be set at the `<group>` or `<groups>` level. |
+| **`originalTempo`**  | (optional) | The tempo, in BPM, the loop was recorded at. Used to work out the loop's length when `beats` isn't set. This can also be set at the `<group>` or `<groups>` level. |
+| **`slices`**         | (optional) | Where each slice starts, as a list of frame/sample positions in the file, separated by spaces (commas also work). Example: `slices="0 11025 22050 33075"`. The start of the loop is always the start of the first slice, so it doesn't need to be listed. Points outside `start` and `end` are ignored. This can also be set at the `<group>` or `<groups>` level. |
+| **`sliceGrid`**      | (optional) | The note length used to slice the loop when it has neither a `slices` attribute nor cue points, written as a fraction of a bar: `1/4`, `1/8`, `1/16`, `1/32` and so on. Coarser slices keep more of each hit intact; finer ones follow the tempo more closely. This can also be set at the `<group>` or `<groups>` level. Default: `1/16` |
+| **`sliceLoopMode`**  | (optional) | What fills the gap when a slice ends before the next one is due. `off` leaves silence. `forward` loops the second half of the slice until the next one starts. `back_and_forth` plays that part forwards and backwards in turn. This can also be set at the `<group>` or `<groups>` level. Default: `forward` |
+| **`sliceEnvelope`**  | (optional) | A fade applied to every slice, from 0 to 100. At 100 the slices play at full level until the next one starts. Lower values make each slice die away sooner, for a tighter, choppier sound; at slow tempos this also hides the gaps. This can also be set at the `<group>` or `<groups>` level. Default: 100 |
+
+```xml
+<groups attack="0" decay="0" sustain="1" release="0.1">
+  <!-- A two-bar drum loop. Play note 60 to hear it as recorded, at any tempo. -->
+  <group sampleMode="slice_stretch" beats="8" sliceGrid="1/16" sliceLoopMode="forward">
+    <sample path="Samples/Drum Loop.wav" rootNote="60" loNote="48" hiNote="72"/>
+  </group>
+</groups>
+```
+
+`sliceEnvelope`, `sliceLoopMode` and `sliceGrid` can be controlled from the user interface through bindings, and `sliceEnvelope` can be modulated by LFOs and envelopes. See `SLICE_ENVELOPE`, `SLICE_LOOP_MODE` and `SLICE_GRID` in [Appendix B](appendix-b-the-binding-element).
 
 **Amplitude Envelope**
 
@@ -290,7 +326,7 @@ The DX7 rate/level envelope uses the same integer parameter conventions as class
 
 The DX7 rate/level envelope uses the same integer parameter conventions as classic 6-operator DX7 synthesizers: rates and levels are both in the range 0–99, and the values are directly compatible with patch data from vintage hardware and standard DX7 patch banks. See [How to Use FM Synthesis](topic-how-to-use-fm-synthesis.md) for worked examples.
 
-All FM operator parameters can be modulated in real time using bindings with the parameter names `OSCILLATOR_FM_ALGORITHM`, `OSCILLATOR_FM_OP1_LEVEL` … `OSCILLATOR_FM_OP6_LEVEL`, `OSCILLATOR_FM_OP1_RATIO` … `OSCILLATOR_FM_OP6_RATIO`, and `OSCILLATOR_FM_OP1_FEEDBACK` … `OSCILLATOR_FM_OP6_FEEDBACK`. See [Appendix B](appendix-b-the-binding-element.md) fo independent per-operator ADSR envelope, and an optional DX7-compatible 4-stage rate/level
+All FM operator parameters can be modulated in real time using bindings with the parameter names `OSCILLATOR_FM_ALGORITHM`, `OSCILLATOR_FM_OP1_LEVEL` … `OSCILLATOR_FM_OP6_LEVEL`, `OSCILLATOR_FM_OP1_RATIO` … `OSCILLATOR_FM_OP6_RATIO`, and `OSCILLATOR_FM_OP1_FEEDBACK` … `OSCILLATOR_FM_OP6_FEEDBACK`. See [Appendix B](appendix-b-the-binding-element) fo independent per-operator ADSR envelope, and an optional DX7-compatible 4-stage rate/level
 
 All other oscillator parameters are inherited from the parent `<group>` element.
 
@@ -303,7 +339,7 @@ All other oscillator parameters are inherited from the parent `<group>` element.
 - **\`noise\`** (or **\`white_noise\`**): White noise generator. Perfect for percussion textures, hi-hats, snares, wind sounds, and adding grit to other sounds.
 - **`pluck1`**: A physical modeling oscillator based on digital waveguide synthesis that simulates plucked string behavior. Unlike traditional waveforms that cycle continuously, pluck1 generates a single excitation (like plucking a string) that decays naturally over time. Ideal for synthesizing plucked string instruments like guitar, bass, harp, koto, gayageum, and other stringed instruments. This oscillator includes two parameters for controlling the sound character: `damping` and `pluckType`.
 - **`wavetable`**: A user-defined wavetable oscillator that reads frames from a multi-frame `.wav` file. The playback position (which frame is played) is controlled by the `wavetablePosition` attribute and can be scanned in real time using the `OSCILLATOR_WAVETABLE_POSITION` binding parameter—allowing LFOs, envelopes, MIDI CCs, or UI knobs to sweep through timbres. Supports Serum-compatible wavetable files with automatic frame size detection via the `clm ` RIFF chunk.
-- **`harmonic`**: An additive oscillator that sums harmonic partials. Use `numPartials` to control how many partials are active (1–64), and `harmonicPartial1Level` … `harmonicPartial64Level` (0.0–1.0) to set each partial's level. Use `harmonicTilt` for brightness shaping, `harmonicOddEvenBalance` to bias odd/even harmonics, and `harmonicNormalization` for loudness compensation. These parameters are bindable and modulatable via oscillator harmonic binding parameters in [Appendix B](appendix-b-the-binding-element.md).
+- **`harmonic`**: An additive oscillator that sums harmonic partials. Use `numPartials` to control how many partials are active (1–64), and `harmonicPartial1Level` … `harmonicPartial64Level` (0.0–1.0) to set each partial's level. Use `harmonicTilt` for brightness shaping, `harmonicOddEvenBalance` to bias odd/even harmonics, and `harmonicNormalization` for loudness compensation. These parameters are bindable and modulatable via oscillator harmonic binding parameters in [Appendix B](appendix-b-the-binding-element).
 - **`fm6op`**: A 6-operator FM synthesizer implementing the 32 classic Yamaha DX7 algorithm topologies. Each algorithm defines which operators are carriers (they produce the final audio output) and which are modulators (they phase-modulate another operator to add harmonics). Every operator has its own frequency ratio, output level, feedback amount, an independent per-operator ADSR envelope, and an optional DX7-compatible 4-stage rate/level envelope. Set `fmAlgorithm` plus the `fmOp1`–`fmOp6` family of attributes on the parent `<group>` element. See [How to Use FM Synthesis](topic-how-to-use-fm-synthesis.md) for a full guide.
 **Group-Level Parameters:**
 
