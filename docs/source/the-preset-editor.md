@@ -9,7 +9,7 @@ The Preset Editor was redesigned in Decent Sampler 1.37.0. This chapter describe
 
 ## Opening the editor
 
-Load the preset you want to work on (or nothing, to start a new one), then choose **File > Developer Tools > Preset Editor (beta)...** in Decent Sampler, or press **F12**. Press F12 again, or click the back arrow at the top left, to go back to the player.
+Load the preset you want to work on (or nothing, to start a new one), then choose **File > Developer Tools > Preset Editor** in Decent Sampler, or press **F12**. Press F12 again, or click the back arrow at the top left, to go back to the player.
 
 The Preset Editor isn't available on iOS, or for copy-protected libraries.
 
@@ -139,7 +139,7 @@ The **Process** menu works on the selected samples:
 
 - **Balance Volumes To -12dB** sets each sample's volume so they all peak at the same level. It doesn't change the audio files.
 - **Set Start To First Transient** and **Trim Silence** move each sample's start and end points past silence. They don't change the audio files either.
-- **Create Truncated Copies...** and **Apply Fade In/Out...** write new WAV files next to the originals (ending in `_trimmed` or `_faded`) and switch the samples to use them. The originals are left alone.
+- **Create Truncated Copies...** and **Apply Fade In/Out** write new WAV files next to the originals (ending in `_trimmed` or `_faded`) and switch the samples to use them. The originals are left alone.
 - **Experimental > Generate In-Between Notes...** and **Experimental > Extend Range Upward...** create new pitch-shifted samples to fill gaps in the mapping or extend it upwards. They write new WAV files into a `Samples` folder.
 
 ## Saving, undo and checking your work
