@@ -15,6 +15,7 @@ Contents
 .. toctree::
 
    introduction
+   the-preset-editor
    the-ui-element
    the-groups-element
    the-effects-element
