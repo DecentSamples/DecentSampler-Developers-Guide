@@ -3,6 +3,8 @@ The &lt;groups&gt; element (required)
 
 In this section, we'll find elements that pertain to samples and sample-mapping.
 
+You can also set all of this up in [the Preset Editor](the-preset-editor), without writing the XML by hand.
+
 Every **dspreset** file should have one and only one `<groups>` element. This is where you specify the samples that make up your sample library. This element lives right underneath the top-level `<DecentSampler>` element. The basic structure is this:
 
 ```xml    
