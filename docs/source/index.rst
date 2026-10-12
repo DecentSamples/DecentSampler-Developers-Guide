@@ -5,6 +5,8 @@ Welcome to the DecentSampler Developer Guide
 
 If you have no familiarity with the DecentSamples format, `this video <https://www.youtube.com/watch?v=UxPRmD_RNCY>`_ is a great place to start. After that, you'll want to start at the :doc:`introduction` to learn a bit more about how to create sample libraries.
 
+If you'd rather not map your samples by hand, the built-in Preset Editor can do it for you; see :doc:`the-preset-editor`.
+
 .. note::
 
    This project is under active development.
@@ -25,6 +27,7 @@ Contents
    the-tags-element
    the-buses-element
    the-dslibraryinfo-file
+   the-preset-editor
    appendix-a-the-color-format
    appendix-b-the-binding-element
    appendix-c-boilerplate-dspreset-file
