@@ -5,7 +5,7 @@ Decent Sampler has a built-in Preset Editor for building the sample mapping of a
 
 The Preset Editor was redesigned in Decent Sampler 1.37.0. This chapter describes that version.
 
-<!-- SCREENSHOT: the whole Preset Editor window, dark theme, with a multi-sampled instrument loaded and one zone selected -->
+![The Preset Editor, with a group of velocity-layered samples on the map and one zone selected in the inspector](_static/images/preset-editor-window.png)
 
 ## Opening the editor
 
@@ -52,6 +52,11 @@ The **Map** menu does most of the work for a whole set of samples at once:
 Most settings can be made on a sample, on its `<group>`, or on the top-level `<groups>` element. A sample uses its own value if it has one, then its group's, then the value set for all groups, and otherwise the default. (Volume is the exception: the sample, group and all-groups volumes multiply together.)
 
 The inspector shows where each value comes from:
+
+```{image} _static/images/preset-editor-inherited-values.png
+:alt: Inspector fields. Tuning and Loop Mode are tagged "group", and Pitch tracking, Pan and Seq position are tagged "default", each in a dashed outline. Start, End, Length and Volume are set on the zone itself, in solid boxes.
+:width: 300px
+```
 
 - A value set on the zone itself is shown in a solid box.
 - A value it inherits is shown in a dashed outline, with a small tag saying where it comes from: **group**, **all groups** or **default**.
@@ -105,6 +110,11 @@ Round robins play a different recording of the same note each time it is hit, wh
 
 1. Put the alternate recordings in the same group, mapped to the same notes.
 2. On the **Group** tab, set the **Round robin** **Mode** to Round robin, Random or True random, and set its **Length** to the number of alternate recordings.
+
+   ```{image} _static/images/preset-editor-round-robin.png
+   :alt: The Round robin section of the Group tab, with Mode set to Round robin and Length set to 3
+   :width: 300px
+   ```
 3. Give each sample its **Seq position** on the Zone tab: 1 for the first recording, 2 for the second, and so on.
 
 If the round robin number is in the file names, **Map > Map From Filename...** can set all of this for you. See **Round Robins** under [The &lt;sample&gt; element](the-groups-element.md#the-sample-element) for how the modes behave.
@@ -131,6 +141,9 @@ A drum loop can be set to play in time with the host's tempo by cutting it into 
 2. Enter the loop's length in **Beats**, or its **Original tempo**.
 3. Choose where the slices go. Out of the box, the loop is cut on the **Grid** (every 16th note), or at the cue points saved in the file if it has any. To slice it at each hit instead, open the **Slices** menu and choose **Slice at Transients...**: adjust the sensitivity and minimum gap while watching the markers on the waveform, then click **Apply**. **Divide Into** cuts it into equal slices.
 4. Adjust the slices on the waveform. Drag a marker to move it, double-click to add one, and drag a marker up off the waveform to remove it. Click a slice to hear it.
+
+   ![A drum loop in Slice Stretch mode, with a numbered marker at the start of each slice](_static/images/preset-editor-slices.png)
+
 5. Set **Slice loop** and **Slice envelope** to decide what fills the gap when a slice finishes before the next one is due.
 
 ## Processing samples
