@@ -304,7 +304,7 @@ Attributes:
 - **`minValue`** (optional): The minimum value of your control. Default: 0
 - **`maxValue`** (optional): The maximum value of your control. Default: 1
 - **`value`** (optional): The initial value of your control. Default: 0
-- **`defaultValue`** (optional): If a user double-clicks on the control, the control's value will be set to this default value. If no default value is specified, then nothing will happen on double-click.
+- **`defaultValue`** (optional): The value the control returns to when the user double-clicks it, or Cmd-clicks it (Ctrl-click on Windows and Linux). Without a default value, double-clicking a `float` or `integer` control opens a box for typing in a value. Users can always type in a value with Shift-double-click, or by right-clicking the control and choosing **Edit Value...**.
 - **`valueType`** (optional): There are several possible values for this: `float` which yields numbers with two decimal points, `integer` which yields whole numbers, `multi_state`, which allows the user to choose between multiple states, and `musical_time` which yields musical time increments in beats and measures. In order to use the `multi_state` option, you must also specify several `<state name="something">` type elements. Default: float. Older presets sometimes spell this attribute `type`; that still works, but `valueType` is the correct name.
 - **`textColor`** (optional): An 8 digit hex value indicating the text color to be used for the label. See [Appendix A](#appendix-a-the-color-format) for an explanation on these hex values.
 - **`textSize`** (optional): A font size for the text label. Default: 12
