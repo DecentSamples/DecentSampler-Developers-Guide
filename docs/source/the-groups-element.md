@@ -62,7 +62,7 @@ Underneath the `<group>` elements are `<sample>` elements. Each sample correspon
 
 | Attribute                   |            | Description       |
 |-----------------------------|------------| ------------------|
-| **`path`**                  | (required) | The relative path of the sample file to play for this zone. Supported audio formats are WAV (`.wav`), AIFF (`.aif`, `.aiff`), and FLAC (`.flac`).  |
+| **`path`**                  | (required) | The relative path of the sample file to play for this zone. Supported audio formats are WAV (`.wav`), AIFF (`.aif`, `.aiff`), and FLAC (`.flac`). Decent Sampler 1.39.0 and later also play ReCycle loops: REX2 (`.rx2`), the older REX (`.rex`) and ReCycle documents (`.rcy`); see **REX loops** under Slice Stretch below.  |
 | **`rootNote`**              | (required) | The MIDI note number (from 1 to 127) of the note. |
 | **`loNote`**                | (optional) | The MIDI note number (from 1 to 127) of the lowest note for which the zone should be triggered. Default: 0. |
 | **`hiNote`**                | (optional) | The MIDI note number (from 1 to 127) of the highest note for which the zone should be triggered. Default: 127. |
@@ -114,6 +114,14 @@ Decent Sampler needs to know two things: how long the loop is, and where the sli
 - **How long the loop is.** Set `beats` to the loop's length in beats, or `originalTempo` to the tempo it was recorded at. If you set neither, Decent Sampler guesses, assuming the loop is 1, 2, 4, 8, 16... beats long and picking the length that puts its tempo closest to 120 BPM. Setting one of them is more reliable.
 - **Where the slices are.** Decent Sampler uses the `slices` attribute if there is one. Otherwise it uses the cue points (markers) saved in the WAV file, which many audio editors and hardware samplers can write. Otherwise it cuts the loop into equal slices on a grid, every 16th note by default (`sliceGrid`).
 
+**REX loops.** A loop saved by ReCycle (`.rx2`, `.rex` or `.rcy`) already knows its length, its loop points and where its slices are, so with `sampleMode="slice_stretch"` it needs nothing else: Decent Sampler takes `beats`, `start`/`end` and the slices from the file. Anything the preset sets itself (`beats`, `originalTempo`, `start`, `end`, `slices`) still takes priority. REX loops also default to `sliceLoopMode="off"`, because ReCycle stores the silence after each hit and the loop sounds as it did in ReCycle that way. A REX file can also be used with `sampleMode="normal"`, like any other sample. Requires Decent Sampler 1.39.0.
+
+```xml
+<group sampleMode="slice_stretch">
+  <sample path="Samples/Funky Break.rx2" rootNote="60" loNote="48" hiNote="72"/>
+</group>
+```
+
 When the host tempo is slower than the loop's own tempo, or a note above the `rootNote` makes each slice play faster, a slice runs out before the next one is due. `sliceLoopMode` decides what fills that gap, and `sliceEnvelope` shapes each slice. The Preset Editor (**File > Developer Tools > Preset Editor...**) can set all of this up for you: choose **Slice Stretch** as the sample's mode, and then drag, add and remove slice markers on the waveform, or slice the loop at its transients.
 
 | Attribute            |            | Description       |
@@ -122,7 +130,7 @@ When the host tempo is slower than the loop's own tempo, or a note above the `ro
 | **`originalTempo`**  | (optional) | The tempo, in BPM, the loop was recorded at. Used to work out the loop's length when `beats` isn't set. This can also be set at the `<group>` or `<groups>` level. |
 | **`slices`**         | (optional) | Where each slice starts, as a list of frame/sample positions in the file, separated by spaces (commas also work). Example: `slices="0 11025 22050 33075"`. The start of the loop is always the start of the first slice, so it doesn't need to be listed. Points outside `start` and `end` are ignored. This can also be set at the `<group>` or `<groups>` level. |
 | **`sliceGrid`**      | (optional) | The note length used to slice the loop when it has neither a `slices` attribute nor cue points, written as a fraction of a bar: `1/4`, `1/8`, `1/16`, `1/32` and so on. Coarser slices keep more of each hit intact; finer ones follow the tempo more closely. This can also be set at the `<group>` or `<groups>` level. Default: `1/16` |
-| **`sliceLoopMode`**  | (optional) | What fills the gap when a slice ends before the next one is due. `off` leaves silence. `forward` loops the second half of the slice until the next one starts. `back_and_forth` plays that part forwards and backwards in turn. This can also be set at the `<group>` or `<groups>` level. Default: `forward` |
+| **`sliceLoopMode`**  | (optional) | What fills the gap when a slice ends before the next one is due. `off` leaves silence. `forward` loops the second half of the slice until the next one starts. `back_and_forth` plays that part forwards and backwards in turn. This can also be set at the `<group>` or `<groups>` level. Default: `forward`, or `off` for REX loops |
 | **`sliceEnvelope`**  | (optional) | A fade applied to every slice, from 0 to 100. At 100 the slices play at full level until the next one starts. Lower values make each slice die away sooner, for a tighter, choppier sound; at slow tempos this also hides the gaps. This can also be set at the `<group>` or `<groups>` level. Default: 100 |
 
 ```xml

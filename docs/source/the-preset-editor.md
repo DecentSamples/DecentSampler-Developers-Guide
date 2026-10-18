@@ -25,7 +25,7 @@ Keyboard shortcuts in this chapter are for the Mac. On Windows and Linux, use Ct
 
 ## Adding samples
 
-Drag WAV or AIFF files from your computer onto the map or list. They are added to the selected group, or to a new group if there isn't one. Several files at once are spread side by side across the keyboard, ready to be mapped properly.
+Drag WAV, AIFF or REX (`.rx2`, `.rex`, `.rcy`) files from your computer onto the map or list. They are added to the selected group, or to a new group if there isn't one. Several files at once are spread side by side across the keyboard, ready to be mapped properly.
 
 When you drop files onto a completely empty preset, the editor offers to walk you through setting them up. It asks whether the file names already contain note or velocity information, whether the samples should loop or play once, and whether they are velocity layers of the same sound. You can turn this off with "Don't ask me again", or in the preferences.
 
@@ -139,7 +139,7 @@ A drum loop can be set to play in time with the host's tempo by cutting it into 
 
 1. Select the loop and set its **Mode** to **Slice Stretch** in the inspector. The Loop section becomes a **Slices** section, and the waveform shows the slices.
 2. Enter the loop's length in **Beats**, or its **Original tempo**.
-3. Choose where the slices go. Out of the box, the loop is cut on the **Grid** (every 16th note), or at the cue points saved in the file if it has any. To slice it at each hit instead, open the **Slices** menu and choose **Slice at Transients...**: adjust the sensitivity and minimum gap while watching the markers on the waveform, then click **Apply**. **Divide Into** cuts it into equal slices.
+3. Choose where the slices go. Out of the box, the loop is cut on the **Grid** (every 16th note), or at the cue points saved in the file if it has any. A REX loop comes with its slices, length and loop points already set. To slice it at each hit instead, open the **Slices** menu and choose **Slice at Transients...**: adjust the sensitivity and minimum gap while watching the markers on the waveform, then click **Apply**. **Divide Into** cuts it into equal slices.
 4. Adjust the slices on the waveform. Drag a marker to move it, double-click to add one, and drag a marker up off the waveform to remove it. Click a slice to hear it.
 
    ![A drum loop in Slice Stretch mode, with a numbered marker at the start of each slice](_static/images/preset-editor-slices.png)
