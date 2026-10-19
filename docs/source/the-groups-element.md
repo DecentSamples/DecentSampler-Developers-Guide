@@ -83,7 +83,7 @@ Underneath the `<group>` elements are `<sample>` elements. Each sample correspon
 | **`tags`**                  | (optional) | A command-separated list of tags. Example: tags="rt,mic1". These are useful when controlling volumes using tags. See Appendix D. |  
 | **`onLoCCN`** **`onHiCCN`** | (optional) | If you want a sample to be triggered when a MIDI CC controller message comes in, for example for piano pedal down and pedal up samples, you use these attributes to specify the range of values that should trigger the sample. If you use `onLoCCN`, you must also use a corresponding `onHiCCN` for the same MIDI CC number. Example: `onLoCC64="90"` and `onHiCC64="127"` would mean that values of CC64 (Sustain Pedal) between 90 and 127 will trigger the given sample. This can also be set at the `<group>` level. Default:-1 (off) |
 | **`playbackMode`**          | (optional) | By default, the choice of playback engine is left up to the discretion of the user–they can set this in the Preferences screen. However, a sample creator can override this setting by setting the playbackMode for a specific sample, a group, or the entire instrument. Possible values are `memory`, `disk_streaming`, and `auto` (default). |
-| **`sampleMode`**            | (optional) | How the sample is played. `normal` (the default) plays it as usual. `slice_stretch` plays it as a loop that keeps in time with the host's tempo; see **Slice Stretch** below. This can also be set at the `<group>` or `<groups>` level. Requires Decent Sampler 1.37.0. |
+| **`sampleMode`**            | (optional) | How the sample is played. `normal` (the default) plays it as usual. `slice_stretch` plays it as a loop that keeps in time with the host's tempo; see **Slice Stretch** below. `slice_keys` plays one slice of it on each key; see **Slice Keys** below. This can also be set at the `<group>` or `<groups>` level. Requires Decent Sampler 1.37.0 (`slice_keys`: 1.39.0). |
 | **`delay`**                 | (optional) | A delay time before the sample starts playing. The value is a decimal number (integer or float) that specifies the delay amount. The unit of measurement is controlled by the `delayUnit` attribute. Default: 0 |
 | **`delayUnit`**             | (optional) | Specifies the unit of measurement for the `delay` attribute. Valid values are: `seconds` (time-based delay), `beats` (tempo-based delay), and `samples` (sample-accurate delay). Default: `seconds` |
 | **`retriggerEnabled`**      | (optional) | Enables pattern retriggering for creating repeating sample sequences. When enabled, after the initial delay sequence completes, all samples in the group will retrigger according to the retriggerInterval. This allows creating looping drum patterns and rhythmic sequences from delayed samples. This can also be set at the `<group>` or `<groups>` levels. Default: `false` |
@@ -143,6 +143,23 @@ When the host tempo is slower than the loop's own tempo, or a note above the `ro
 ```
 
 `sliceEnvelope`, `sliceLoopMode` and `sliceGrid` can be controlled from the user interface through bindings, and `sliceEnvelope` can be modulated by LFOs and envelopes. See `SLICE_ENVELOPE`, `SLICE_LOOP_MODE` and `SLICE_GRID` in [Appendix B](appendix-b-the-binding-element).
+
+**Slice Keys (one slice per key)**
+
+Setting `sampleMode="slice_keys"` spreads a sliced loop across the keyboard, the way REX players and many hardware samplers do: the zone's `loNote` plays the first slice, the next key up plays the second, and so on. Each slice plays at its original pitch, whichever key plays it, so the hits can be played and re-sequenced individually. Keys past the last slice are silent. Requires Decent Sampler 1.39.0.
+
+The slices come from the same places as in Slice Stretch: the `slices` attribute, then the cue points in a WAV file or the slices in a REX file, then a grid (`sliceGrid`, which needs the loop's length from `beats` or `originalTempo`). A slice plays to its own end, or until the key is released, when the release envelope fades it out. `sliceEnvelope` shortens every slice, as it does in Slice Stretch; `sliceLoopMode` doesn't apply. Pitch bend, `tuning` and pitch modulation still change the pitch. Slice-keys samples always play from memory.
+
+Set `hiNote` to cover as many keys as there are slices. In the Preset Editor, choosing **Slice Keys** as the sample's mode does this for you.
+
+```xml
+<groups attack="0" decay="0" sustain="1" release="0.05">
+  <!-- A REX loop with 8 slices: C1 to G1 play them in order. -->
+  <group sampleMode="slice_keys">
+    <sample path="Samples/Funky Break.rx2" rootNote="60" loNote="36" hiNote="43"/>
+  </group>
+</groups>
+```
 
 **Amplitude Envelope**
 

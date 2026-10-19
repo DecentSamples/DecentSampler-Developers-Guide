@@ -146,6 +146,8 @@ A drum loop can be set to play in time with the host's tempo by cutting it into 
 
 5. Set **Slice loop** and **Slice envelope** to decide what fills the gap when a slice finishes before the next one is due.
 
+To play the slices one per key instead, choose **Slice Keys** as the mode. The zone is stretched to cover one key per slice, starting at its low note, and the same slice tools work. Slice Keys has no **Slice loop**, since each slice plays once.
+
 ## Processing samples
 
 The **Process** menu works on the selected samples:
