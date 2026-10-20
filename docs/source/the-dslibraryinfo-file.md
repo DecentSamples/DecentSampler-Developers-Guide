@@ -53,11 +53,13 @@ Attributes:
 
 | Attribute | Required/Optional | Description | Default |
 |:----------|:-------------------|:-------------|:---------|
-| **`file`** | required | Path to a `.dspreset` file, relative to the library's top-level folder (the same folder `DSLibraryInfo.xml` itself lives in). | *(none)* |
+| **`file`** | required | Path to a `.dspreset` file, relative to the library's top-level folder (the same folder `DSLibraryInfo.xml` itself lives in). From DecentSampler 1.39.0 it can also be a `.dssnapshot` file; see [How to ship snapshots with your library](topic-snapshots.md). | *(none)* |
 
 ### How unmapped presets are handled
 
 You don't have to list every preset in your library inside `<presetMenu>`, only the ones you want organized into a specific category. Any `.dspreset` (or `.dsproduct`) file under your library's top-level folder that isn't referenced anywhere in `<presetMenu>` still shows up automatically, at the top level of the browsing hierarchy, right alongside your named categories.
+
+Snapshots (`.dssnapshot` files, DecentSampler 1.39.0 and later) that `<presetMenu>` doesn't mention appear right after the preset they belong to, wherever that preset is in the hierarchy.
 
 ### Fallback and error-tolerance rules
 
