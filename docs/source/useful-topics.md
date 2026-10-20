@@ -10,6 +10,11 @@ How to add Buttons to your user interfaces<https://www.decentsamples.com/2022/11
 Example: How to control two groups with knobs<https://www.decentsamples.com/decent-sampler-developer-resources/how-to-control-two-groups-with-knobs/?swcfpc=1>
 topic-how-to-use-animations
 ```
+## Presets and Snapshots
+```{toctree}
+:maxdepth: 1
+topic-snapshots
+```
 ## Sample Mapping and Effects
 ```{toctree}
 :maxdepth: 1
