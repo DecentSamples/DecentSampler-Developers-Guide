@@ -9,7 +9,7 @@ Users can make their own snapshots too, with **File > Save Snapshot...**. This p
 
 1. Load the preset in DecentSampler and set its controls the way you want them.
 2. Choose **File > Save Snapshot...** and give it a name.
-3. Open the preset menu at the top of the plug-in and choose **Manage Snapshots > Show in Finder** (or **Show in Explorer**). That opens the folder the snapshot was saved in.
+3. Open the preset menu at the top of the plug-in and choose **Manage Snapshots > Show in Finder** (**Show in Explorer** on Windows, **Show Folder** on Linux). That opens the folder the snapshot was saved in.
 4. Copy the `.dssnapshot` file into your library, usually right next to its preset, and rename the file if you like.
 
 That's all. DecentSampler finds snapshots anywhere inside your library's folder.
