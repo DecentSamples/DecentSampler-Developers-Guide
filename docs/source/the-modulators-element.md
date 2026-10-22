@@ -56,7 +56,9 @@ In addition to LFOs, you can also have additional ADSR envelopes. These can be u
 To create an envelope, use an `<envelope>` element:
 
 This element has the following attributes:
+- **`delay`**: The length in seconds of the envelope's delay stage: after a note starts, the envelope stays at zero for this long before its attack begins. Default: 0
 - **`attack`**: The length in seconds of the attack portion of the ADSR envelope
+- **`hold`**: The length in seconds of the envelope's hold stage: after the attack, the envelope stays at its peak for this long before its decay begins. Default: 0
 - **`decay`**: The length in seconds of the decay portion of the ADSR envelope
 - **`sustain`**: The height of the sustain portion of the ADSR envelope. This is expressed as a value between 0 and 1. 
 - **`release`**: The length in seconds of the release portion of the ADSR envelope
@@ -296,6 +298,8 @@ For example, a vibrato on/off button:
 | `ENV_ATTACK_CURVE` | Attack curve shape |
 | `ENV_DECAY` | Decay time (seconds) |
 | `ENV_DECAY_CURVE` | Decay curve shape |
+| `ENV_DELAY` | Delay stage (seconds) |
+| `ENV_HOLD` | Hold stage (seconds) |
 | `ENV_SUSTAIN` | Sustain level (0.0–1.0) |
 | `ENV_RELEASE` | Release time (seconds) |
 | `ENV_RELEASE_CURVE` | Release curve shape |
