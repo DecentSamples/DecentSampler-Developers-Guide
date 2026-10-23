@@ -303,7 +303,7 @@ For example, a vibrato on/off button:
 | `ENV_SUSTAIN` | Sustain level (0.0–1.0) |
 | `ENV_RELEASE` | Release time (seconds) |
 | `ENV_RELEASE_CURVE` | Release curve shape |
-| `MOD_DELAY_TIME` | Delay before the envelope begins (seconds) |
+| `MOD_DELAY_TIME` | Delay before the envelope begins (seconds). The same as `ENV_DELAY` |
 
 **`<random>`**
 
