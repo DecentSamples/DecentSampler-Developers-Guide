@@ -172,6 +172,7 @@ The **TOOLS...** menu has:
 - **Sequence Manager...** imports MIDI files as note sequences (see [How to use note sequences](topic-how-to-use-note-sequences)).
 - **Manage Preset Menu...** edits the list of presets in the library's `DSLibraryInfo.xml` (see [The DSLibraryInfo file](the-dslibraryinfo-file)).
 - **Templates** applies a saved set of controls and effects to the current preset, or saves the current preset as a template.
+- **Auto Sampler...** records an external instrument note by note and adds the recordings to the preset (Mac and Windows app only; see [The Auto Sampler](the-auto-sampler)).
 - **Preset Editor Preferences...** (see below).
 - **Reset Window Size**.
 

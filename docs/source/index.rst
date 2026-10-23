@@ -28,6 +28,7 @@ Contents
    the-buses-element
    the-dslibraryinfo-file
    the-preset-editor
+   the-auto-sampler
    appendix-a-the-color-format
    appendix-b-the-binding-element
    appendix-c-boilerplate-dspreset-file
