@@ -63,6 +63,7 @@ A few things worth knowing:
 - **Generated notes are transposed too.** Notes from the arpeggiator and from note sequences are played through the transpose like notes from the keyboard.
 - **Changing it while keys are held is safe.** Notes already sounding keep playing what they started with and stop when their key comes up. Release samples (`trigger="release"`) come from the samples the key reached when it was pressed. Only notes played after the change use the new value.
 - **Notes shifted past either end of the keyboard are dropped.** A note that would land below 0 or above 127 plays nothing.
+- **Players can change it.** The instrument-level value is also the **Transpose** setting in **File > MIDI Input Settings...**, which players can change for themselves, and it is saved with the DAW project and in snapshots, like Tuning. Changing it there doesn't move a knob bound to `GLOBAL_TRANSPOSE`, and turning the knob updates the setting the next time that window opens.
 - **It can be controlled from the interface.** Bind a knob or menu to `GLOBAL_TRANSPOSE` (level `instrument`) or `GROUP_TRANSPOSE` (level `group`); see Appendix B. Values are rounded to whole semitones. These bindings respond to knobs, menus, buttons and MIDI CCs; LFOs and envelopes can't drive a transpose.
 
 ## The &lt;group&gt; element
