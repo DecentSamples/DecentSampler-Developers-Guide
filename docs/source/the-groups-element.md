@@ -70,8 +70,16 @@ How the return behaves:
   had pressed it while the released note was still down: `trigger="legato"` sounds are chosen rather
   than `trigger="first"` ones, `previousNote` and `legatoInterval` compare against the released note,
   and if `glideMode` lets the note glide, it glides back from the released note's pitch over
-  `glideTime`. With glide off, the note simply starts again.
-- **It plays at its original velocity**, the velocity the key was first pressed with.
+  `glideTime`.
+- **With glide, nothing restarts.** The sound that was playing simply slides back to the held
+  note: there is no new attack, and its amp envelope, voice-level envelopes and LFOs carry on
+  where they were. With glide off (or `glideTime="0"`), the held note starts again as a fresh
+  note, with its own attack.
+- **When it starts again, it plays at its original velocity**, the velocity the key was first
+  pressed with. A sound that glides back keeps the level it already had.
+- **Only the same sound glides back.** If the held key plays a different sample from the one
+  that was sounding (a different zone, or a `trigger="legato"` transition sample), that sample
+  starts as usual.
 - **Only keys that are physically held count.** A key that is held only by the sustain pedal is
   not returned to. If the released note was itself being held by the pedal, the return happens when
   the pedal comes up and that note actually stops.

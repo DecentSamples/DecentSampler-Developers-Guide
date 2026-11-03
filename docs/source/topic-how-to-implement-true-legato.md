@@ -81,7 +81,7 @@ In legato instruments, it is sometimes useful to limit polyphony for a specific 
 
 **Step 5 (optional): Returning to a held note**
 
-By default, releasing the note that is sounding leaves the instrument silent even if an earlier key is still held. Add `returnToHeldNote="true"` (usually on `<groups>`) and the most recently pressed key that is still held plays again, as a legato transition from the note you released: your `trigger="legato"` samples and `previousNote` rules apply to the way back, too. See [Monophonic instruments: returning to a held note](the-groups-element.md#monophonic-instruments-returning-to-a-held-note).
+By default, releasing the note that is sounding leaves the instrument silent even if an earlier key is still held. Add `returnToHeldNote="true"` (usually on `<groups>`) and the most recently pressed key that is still held plays again, as a legato transition from the note you released: your `trigger="legato"` samples and `previousNote` rules apply to the way back, too. With glide on, a sample that also covers the held key doesn't restart at all: it slides back with no new attack, and its envelopes and LFOs carry on. See [Monophonic instruments: returning to a held note](the-groups-element.md#monophonic-instruments-returning-to-a-held-note).
 
 **Putting it all together**
 
