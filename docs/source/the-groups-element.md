@@ -29,6 +29,7 @@ Every **dspreset** file should have one and only one `<groups>` element. This is
 | **`glideTime`** | (optional) | The glide/portamento time in seconds. A value of 0.0 would mean no portamento. This value can also be set at the `<group>` and `<sample>` levels, although most people will want to set it globally at the `<groups>` level. Default: 0.0 |
 | **`glideMode`** | (optional) | Controls the glide/portamento behavior. Possible values are: `always` (glide is always performed), `legato` (glide is performed only when transitioning from one note to another),  and `off`. This value can also be set at the `<group>` and `<sample>` levels, although most people will want to set it globally at the `<groups>` level. Default: `legato` |
 | **`returnToHeldNote`** | (optional) | For monophonic instruments: when the note that is sounding is released while other keys are still held, play the most recently pressed of those keys again, the way a mono synth does. See [Monophonic instruments: returning to a held note](#monophonic-instruments-returning-to-a-held-note). Can also be set on `<group>`, `<sample>` and `<oscillator>`. Default: `false` |
+| **`glideRetrigger`** | (optional) | For monophonic instruments with glide: set to `false` and a legato glide to a newly pressed key carries on the note that is already sounding instead of starting it again. The pitch glides, and the amp envelope, voice-level envelopes and LFOs keep running, with no new attack. See [Monophonic instruments: legato glides without retriggering](#monophonic-instruments-legato-glides-without-retriggering). Can also be set on `<group>`, `<sample>` and `<oscillator>`. Default: `true`. Requires Decent Sampler 1.41.0. |
 
 ## A note about volume and pan
 
@@ -99,6 +100,49 @@ How the return behaves:
 `returnToHeldNote` can be set on `<groups>`, `<group>`, `<sample>` and `<oscillator>`; the innermost
 setting wins. It has no effect on a polyphonic group, since nothing there was silenced.
 
+## Monophonic instruments: legato glides without retriggering
+
+*Requires Decent Sampler 1.41.0.*
+
+In a monophonic instrument with glide, pressing a new key while another is held glides up (or down)
+to it, but by default the new note still starts from the beginning: its sample starts again, its amp
+envelope goes back to the attack, and voice-level envelopes and LFOs start over. Set
+`glideRetrigger="false"` to make it behave like the legato mode of a mono synth instead: the note
+that is sounding simply glides to the new key and keeps going.
+
+```xml
+<groups glideMode="legato" glideTime="0.15" glideRetrigger="false" returnToHeldNote="true">
+  <group tags="lead" silencingMode="normal">
+    <sample path="Samples/Lead_C3.wav" rootNote="C3" loNote="0" hiNote="127" loopEnabled="true"/>
+  </group>
+</groups>
+<tags>
+  <tag name="lead" polyphony="1"/>
+</tags>
+```
+
+How it behaves:
+
+- **Only for legato glides in a monophonic setup.** It applies when a key is pressed while another
+  is sounding, in a group that is monophonic through a tag with `polyphony="1"`, an oscillator with
+  `polyphony="1"`, or `silencedByTags`, and when `glideMode` is `legato` or `always` with a
+  `glideTime` above 0. A polyphonic group, a first note, or glide turned off play exactly as before.
+- **Nothing restarts.** The sample keeps its playback position, and the amp envelope, voice-level
+  envelopes and LFOs carry on where they were. The note keeps the velocity it started with.
+- **Only the same sample carries on.** The sound continues only if the new key plays the same
+  `<sample>` (or oscillator) that is sounding. If the new key reaches a different zone, a
+  different velocity layer, or a `trigger="legato"` transition sample, that sample starts with its
+  own attack, as before. So this suits instruments where one zone covers the range you play legato
+  in, such as a looped synth or wind sample, or an oscillator.
+- **Transpose** is applied as usual: the note glides to the transposed pitch of the new key.
+- **Release samples** are unchanged: each key's `trigger="release"` sounds play when that key comes
+  up.
+- **Together with `returnToHeldNote`**, the whole line is one continuous note: hold C, play E and
+  the sound glides up to E; release E and it glides back to C.
+
+`glideRetrigger` can be set on `<groups>`, `<group>`, `<sample>` and `<oscillator>`; the innermost
+setting wins. It can also be changed with a binding (`GLIDE_RETRIGGER`).
+
 ## The &lt;group&gt; element
 Samples and oscillators live in groups. There can be many group elements under the `<groups>` element. It can be useful to sort your samples into groups in order to apply similar settings to them or to control them with a knob. Each group can contain `<sample>` elements, an `<oscillator>` element, or both together. The order of groups in a file matters insofar as bindings will often reference groups by using an index. The first group in a file is group 0, the second is group 1, etc.
 
@@ -115,6 +159,7 @@ Samples and oscillators live in groups. There can be many group elements under t
 | **`glideTime`** | The glide/portamento time in seconds for samples and oscillators in this group. A value of 0.0 means no portamento. Can be overridden at the \`<sample>\` level. Inherits from \`<groups>\` level if not specified. Default: 0.0 | (optional) |
 | **`glideMode`** | Controls the glide/portamento behavior for samples and oscillators in this group. Possible values: \`always\` (glide is always performed), \`legato\` (glide only when transitioning from one note to another), \`off\` (no glide). Inherits from \`<groups>\` level if not specified. Default: \`legato\` | (optional) |
 | **`returnToHeldNote`** | For monophonic groups: when the sounding note is released while other keys are still held, the most recently pressed of them plays again. See [Monophonic instruments: returning to a held note](#monophonic-instruments-returning-to-a-held-note). Inherits from `<groups>` level if not specified. Default: `false` | (optional) |
+| **`glideRetrigger`** | For monophonic groups with glide: `false` makes a legato glide to a new key carry on the sounding note, with no new attack. See [Monophonic instruments: legato glides without retriggering](#monophonic-instruments-legato-glides-without-retriggering). Inherits from `<groups>` level if not specified. Default: `true`. Requires Decent Sampler 1.41.0. | (optional) |
 | **`ampEnvEnabled`** | Turns the outer amplitude envelope on and off for everything in this group. Setting it to `false` makes the group's samples play as one-shots, running to the end of the file regardless of when the key is released. Can also be set per sample. Possible values: true, false. Default: true | (optional) |
 
 ### The &lt;sample&gt; element
@@ -140,6 +185,7 @@ Underneath the `<group>` elements are `<sample>` elements. Each sample correspon
 | **`glideTime`** | (optional) | The glide/portamento time in seconds for this sample. A value of 0.0 means no portamento. Inherits from \`<group>\` or \`<groups>\` level if not specified. Default: 0.0 |
 | **`glideMode`** | (optional) | Controls the glide/portamento behavior for this sample. Possible values: \`always\`, \`legato\`, or \`off\`. Inherits from \`<group>\` or \`<groups>\` level if not specified. Default: \`legato\` |
 | **`returnToHeldNote`** | (optional) | See [Monophonic instruments: returning to a held note](#monophonic-instruments-returning-to-a-held-note). Inherits from `<group>` or `<groups>` level if not specified. Default: `false` |
+| **`glideRetrigger`** | (optional) | See [Monophonic instruments: legato glides without retriggering](#monophonic-instruments-legato-glides-without-retriggering). Inherits from `<group>` or `<groups>` level if not specified. Default: `true`. Requires Decent Sampler 1.41.0. |
 | **`trigger`**               | (optional) | Valid values: `attack` means a sample is played when the *note on* message is received. `release` means the sample is played when the *note off* message is received (aka a release trigger). `first` means that the sample will only be played if no other notes are playing. `legato` means that the sample will only be played if _some_ other notes are already playing. `continuous` means that the sample will always play. This can also be set at the `<group>` level. Default: `attack`. |  
 | **`releaseTriggerDecay`**   | (optional) | Controls the volume decay rate for release-triggered samples based on how long the note was held. When a release trigger sample plays, its volume decreases based on the time elapsed since the note was initially pressed. The value can be specified in two formats: **Decibel format (recommended):** Append "dB" to specify decay in decibels per second. For example, `"3dB"` means the volume decreases by 3dB for each second the note was held. If you specify a positive dB value, it will be automatically converted to negative (decay direction). **Linear format:** A decimal value between 0.0 and 1.0 specifying the linear gain decay factor per second. For example, `0.3` means the volume decreases by a factor of 0.3 each second. This is useful for piano pedal-up samples and other release triggers where shorter notes should have louder release samples. This can also be set at the `<group>` or `<groups>` levels. Default: 0.0 (no decay). |
 | **`tags`**                  | (optional) | A command-separated list of tags. Example: tags="rt,mic1". These are useful when controlling volumes using tags. See Appendix D. |  
@@ -301,6 +347,7 @@ The `<oscillator>` element itself has only one attribute:
 | **`waveform`** | (optional) | The waveform shape. Valid values: `sine`, `saw`, `square`, `triangle`, `noise` (or `white_noise`), `pluck1`, `wavetable`, `harmonic`, `formant`, `fm6op`. | `sine` |
 | **`polyphony`** | (optional) | How many voices this oscillator may sound at once. Omit for no limit. Set it to `1` to make the oscillator monophonic, which is what makes `glideMode` behave like portamento on a classic synth. See [Polyphony and glide](#polyphony-and-glide) below. | (no limit) |
 | **`returnToHeldNote`** | (optional) | With `polyphony="1"`: releasing the sounding note goes back to the most recently pressed key still held, gliding back if `glideMode` allows it. See [Monophonic instruments: returning to a held note](#monophonic-instruments-returning-to-a-held-note). | `false` |
+| **`glideRetrigger`** | (optional) | With `polyphony="1"` and glide on: `false` makes a legato glide to a new key carry on the sounding note, with no new attack. See [Monophonic instruments: legato glides without retriggering](#monophonic-instruments-legato-glides-without-retriggering). Requires Decent Sampler 1.41.0. | `true` |
 | **`damping`** | (optional) | **Only for `pluck1` waveform.** Controls the decay time of the plucked string. Range: 0.0 to 1.0. Lower values (closer to 0.0) create heavily damped, shorter sounds. Higher values (closer to 1.0) create minimal damping with longer, more resonant decay. This simulates the natural damping characteristics of string materials and playing techniques. | `0.5` |
 | **`pluckType`** | (optional) | **Only for `pluck1` waveform.** Blends between different excitation signals to control the timbral character. Range: 0.0 to 1.0. At 0.0, the oscillator uses a smooth triangle wave excitation producing a softer, mellower tone. At 1.0, it uses a noise burst excitation producing a brighter, more aggressive attack with richer harmonics. Intermediate values blend between the two extremes. | `0.5` |
 | **`wavetableFile`** | (optional) | **Only for `wavetable` waveform.** Path to the multi-frame wavetable `.wav` file, relative to the `.dspreset` file. The file should contain all wavetable frames concatenated in a single audio file. If the file contains a `clm ` RIFF chunk (Serum-compatible format), the frame size is detected automatically. | (none) |
