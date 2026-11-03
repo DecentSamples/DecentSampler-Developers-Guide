@@ -261,6 +261,27 @@ A voice-scope `<random>` modulator bound to `SAMPLE_START` starts each note at a
 
 The start is chosen once, when the note begins. It stays between the sample's `start` and its `loopEnd` (for a looping sample) or its `end`. Any other modulator can drive `SAMPLE_START` the same way; for instance a `<midiVelocity>` modulator can make harder notes start later. Requires Decent Sampler 1.41.0.
 
+### Random delay
+
+A voice-scope `<random>` modulator bound to `SAMPLE_DELAY` makes each note wait a slightly different time before it starts. When several samples play together, such as the players of a drum ensemble, giving each group its own random delay makes them sound less mechanical. Here two groups each get their own delay of up to 30 milliseconds:
+
+```xml
+<modulators>
+    <random mode="note_on" scope="voice">
+        <binding type="general" level="group" groupIndex="0" parameter="SAMPLE_DELAY"
+            modBehavior="add" translation="linear"
+            translationOutputMin="0" translationOutputMax="0.03" />
+    </random>
+    <random mode="note_on" scope="voice">
+        <binding type="general" level="group" groupIndex="1" parameter="SAMPLE_DELAY"
+            modBehavior="add" translation="linear"
+            translationOutputMin="0" translationOutputMax="0.03" />
+    </random>
+</modulators>
+```
+
+The delay is in each sample's `delayUnit` (seconds by default) and is added to its `delay` attribute. It is chosen once, when the note begins, and never goes below 0. Requires Decent Sampler 1.41.0.
+
 ## How to use &lt;binding&gt;s in conjunction with modulators
 
 In order to actually have your LFOs and envelopes do anything, you need to have bindings under them. If you are not familiar with the concept of bindings, you may want to read [this section](https://www.decentsamples.com/wp-content/uploads/2020/06/format-documentation.html#appendix-b-the-binding-element) then return here. Bindings tell the engine which parameters the LFO should be affecting and how. Here is an example:
