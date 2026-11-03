@@ -26,6 +26,8 @@ Every **dspreset** file should have one and only one `<groups>` element. This is
 | **`globalPan`**    | (optional) | A pan position for the instrument as a whole, from -100 (hard left) to 100 (hard right). This is separate from `pan`, and is added to it rather than replacing it. Default: 0 |
 | **`globalTuning`** | (optional) | Global pitch adjustment for changing note pitch. In semitones. For example 1.0 would be a half-step up. Default: 0 |
 | **`tuningIgnoresKeyTrack`** | (optional) | Whether tuning still applies when `pitchKeyTrack` is below 1. Normally tuning is added to the played note before key tracking, so it shrinks along with `pitchKeyTrack` and has no effect at all when `pitchKeyTrack` is 0. Set this to `true` to apply `globalTuning`, `groupTuning` and `tuning` in full whatever `pitchKeyTrack` is set to. Useful for unpitched or fixed-pitch groups that still need tuning. Can be set on `<groups>`, `<group>` or `<sample>`. Default: false. Requires Decent Sampler 1.36.1. |
+| **`loChannel`** | (optional) | The lowest MIDI channel (1 to 16) whose notes trigger this zone. Together with `hiChannel` it restricts a group or sample to particular channels, so that channel 1 can play one group and channel 2 another. Can be set on `<groups>`, `<group>`, `<sample>` or `<oscillator>`, and is inherited like `loNote`. Ignored in MPE mode. See [Restricting groups to MIDI channels](#restricting-groups-to-midi-channels). Default: 1. Requires Decent Sampler 1.41.0. |
+| **`hiChannel`** | (optional) | The highest MIDI channel (1 to 16) whose notes trigger this zone. For a single channel, set `loChannel` and `hiChannel` to the same number. Can be set on `<groups>`, `<group>`, `<sample>` or `<oscillator>`. Ignored in MPE mode. Default: 16. Requires Decent Sampler 1.41.0. |
 | **`glideTime`** | (optional) | The glide/portamento time in seconds. A value of 0.0 would mean no portamento. This value can also be set at the `<group>` and `<sample>` levels, although most people will want to set it globally at the `<groups>` level. Default: 0.0 |
 | **`glideMode`** | (optional) | Controls the glide/portamento behavior. Possible values are: `always` (glide is always performed), `legato` (glide is performed only when transitioning from one note to another),  and `off`. This value can also be set at the `<group>` and `<sample>` levels, although most people will want to set it globally at the `<groups>` level. Default: `legato` |
 
@@ -52,9 +54,38 @@ Samples and oscillators live in groups. There can be many group elements under t
 | **`groupTuning`** | Group-level pitch adjustment for changing note pitch. In semitones. For example 1.0 would be a half-step up and -1 would a half-step down. Default: 0                                                                                                                                                                                              | (optional) |
 | **`pitchKeyTrack`** | A number from 0.0 to 1.0. 0 means that the pitch will stay the same regardless of what note is played. 1 means that the pitch will increase by one semitone when the note increases by one semitone (normal key pitch tracking). Applies to all samples and oscillators in the group. Default: 1 | (optional) |
 | **`tuningIgnoresKeyTrack`** | Whether tuning still applies when `pitchKeyTrack` is below 1. Normally tuning is added to the played note before key tracking, so it shrinks along with `pitchKeyTrack` and has no effect at all when `pitchKeyTrack` is 0. Set this to `true` to apply `globalTuning`, `groupTuning` and `tuning` in full whatever `pitchKeyTrack` is set to. Useful for unpitched or fixed-pitch groups that still need tuning. Can be set on `<groups>`, `<group>` or `<sample>`. Default: false. Requires Decent Sampler 1.36.1. | (optional) |
+| **`loChannel`** | The lowest MIDI channel (1 to 16) whose notes trigger this zone. Together with `hiChannel` it restricts a group or sample to particular channels, so that channel 1 can play one group and channel 2 another. Can be set on `<groups>`, `<group>`, `<sample>` or `<oscillator>`, and is inherited like `loNote`. Ignored in MPE mode. See [Restricting groups to MIDI channels](#restricting-groups-to-midi-channels). Default: 1. Requires Decent Sampler 1.41.0. | (optional) |
+| **`hiChannel`** | The highest MIDI channel (1 to 16) whose notes trigger this zone. For a single channel, set `loChannel` and `hiChannel` to the same number. Can be set on `<groups>`, `<group>`, `<sample>` or `<oscillator>`. Ignored in MPE mode. Default: 16. Requires Decent Sampler 1.41.0. | (optional) |
 | **`glideTime`** | The glide/portamento time in seconds for samples and oscillators in this group. A value of 0.0 means no portamento. Can be overridden at the \`<sample>\` level. Inherits from \`<groups>\` level if not specified. Default: 0.0 | (optional) |
 | **`glideMode`** | Controls the glide/portamento behavior for samples and oscillators in this group. Possible values: \`always\` (glide is always performed), \`legato\` (glide only when transitioning from one note to another), \`off\` (no glide). Inherits from \`<groups>\` level if not specified. Default: \`legato\` | (optional) |
 | **`ampEnvEnabled`** | Turns the outer amplitude envelope on and off for everything in this group. Setting it to `false` makes the group's samples play as one-shots, running to the end of the file regardless of when the key is released. Can also be set per sample. Possible values: true, false. Default: true | (optional) |
+
+#### Restricting groups to MIDI channels
+
+Normally every group plays whatever MIDI channel a note arrives on. `loChannel` and `hiChannel` restrict a group (or a single sample or oscillator) to a range of channels, so that one instrument can play different sounds on different channels. For example, a bass on channel 1 and a lead on channel 2:
+
+```xml
+<groups>
+    <group name="Bass" loChannel="1" hiChannel="1">
+        <sample path="Samples/Bass C2.wav" rootNote="36"/>
+    </group>
+    <group name="Lead" loChannel="2" hiChannel="2">
+        <sample path="Samples/Lead C4.wav" rootNote="60"/>
+    </group>
+</groups>
+```
+
+Things to know:
+
+- **Release triggers** (`trigger="release"`) follow the channel of the note being released, so a channel 2 note-off only plays release samples whose range includes channel 2. **First** and **legato** groups follow the channel of the new note.
+- **Note-off and the sustain pedal** are not affected. A note always stops when its own note-off arrives, and the sustain pedal holds the notes on its own channel, as before.
+- **Round robins and legato** are still counted across the whole instrument, the same way they are for groups in different note ranges. A note on channel 1 moves a round robin on to its next position for channel 2 as well, and a note held on channel 1 counts as "already playing" for a legato group on channel 2.
+- **Samples triggered by MIDI CCs** follow the channel of the CC message.
+- **MPE mode**: the restriction is ignored, and every group plays as if no channels were set. In MPE every note arrives on a channel of its own, chosen by the controller, so restricting a group to a channel would make it play some notes and not others.
+- **The MIDI input channel setting** (in the instrument's settings) is applied first. If it is set to channel 1, notes on other channels never reach the groups at all. Leave it on **All** to use per-group channels.
+- **The arpeggiator and note sequences** play their notes on channel 1, so they only reach groups whose range includes channel 1. The on-screen keyboard also plays on channel 1.
+- MIDI note bindings in the `<midi>` section (keyswitches and the like) respond to every channel, as before.
+- The `LO_CHANNEL` and `HI_CHANNEL` binding parameters change the range from a control (see [Appendix B](appendix-b-the-binding-element)).
 
 ### The &lt;sample&gt; element
 
@@ -68,6 +99,8 @@ Underneath the `<group>` elements are `<sample>` elements. Each sample correspon
 | **`hiNote`**                | (optional) | The MIDI note number (from 1 to 127) of the highest note for which the zone should be triggered. Default: 127. |
 | **`loVel`**                 | (optional) | The lowest velocity for which this zone should be triggered. Default: 0 |
 | **`hiVel`**                 | (optional) | The highest velocity for which this zone should be triggered. Default: 127 |
+| **`loChannel`**             | (optional) | The lowest MIDI channel (1 to 16) whose notes trigger this zone. Inherited from `<group>` or `<groups>`. Ignored in MPE mode. See [Restricting groups to MIDI channels](#restricting-groups-to-midi-channels). Default: 1. Requires Decent Sampler 1.41.0. |
+| **`hiChannel`**             | (optional) | The highest MIDI channel (1 to 16) whose notes trigger this zone. Inherited from `<group>` or `<groups>`. Default: 16. Requires Decent Sampler 1.41.0. |
 | **`loCCN`** **`hiCCN`** | (optional) | Using these parameter, you can use MIDI continuous controllers to filter whether or not a note should be played. This lets you, for example, have one set of samples that get played when the piano sustain pedal is down and another set that get played when it is up. Each time a MIDI CC value comes for a specific CC#, the engine stores that value. When a "note on" signal is received, the engine makes a decision (based on the last received value and the range defined by these attributes) about whether or not this sample should be played. If you use `loCCN`, you must also use a corresponding `hiCCN` for the same MIDI CC number so that you are defining a range of values. Example: `loCC64="90"` and `hiCC64="127"` would mean that a "note on" message will only trigger this sample if the last received value for CC64 (Sustain Pedal) is between 90 and 127. This can also be set at the `<group>` level. Default:-1 (off) |
 | **`start`**                 | (optional) | The frame/sample position of the start of the sample audio. This is useful if the sample starts midway through the audio file. Default: 0 |
 | **`end`**                   | (optional) | The frame/sample position of the end of the sample audio. The is useful is the zone ends before the end of the audio file. Default: the file's length in samples minus 1. |
@@ -350,6 +383,7 @@ All other oscillator parameters are inherited from the parent `<group>` element.
 Oscillators inherit and respect most of the same parameters as samples when set at the `<group>` level, including:
 - \`groupTuning\` - Pitch adjustment in semitones
 - \`loNote\` / \`hiNote\` - Note range triggering
+- `loChannel` / `hiChannel` - MIDI channel range (ignored in MPE mode)
 - \`attack\`, \`decay\`, \`sustain\`, \`release\` - ADSR envelope parameters
 - \`attackCurve\`, \`decayCurve\`, \`releaseCurve\` - Envelope curve shapes
 - \`volume\` - Oscillator group volume

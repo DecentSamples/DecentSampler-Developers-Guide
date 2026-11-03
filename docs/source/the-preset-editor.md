@@ -70,12 +70,13 @@ When several zones are selected and they don't agree on a value, the field shows
 The **Zone** tab edits the selected samples and oscillators:
 
 - **Mapping**: root note, note range and velocity range.
+- **MIDI channel**: the lowest and highest MIDI channel the zone answers to (`loChannel` and `hiChannel`; see [Restricting groups to MIDI channels](the-groups-element.md#restricting-groups-to-midi-channels)).
 - **Sample**: the audio file, and the **Mode**: Normal, or Slice Stretch for loops that follow the tempo (see [Slicing loops](#slicing-loops-that-follow-the-tempo) below).
 - **Pitch**: pitch tracking (`pitchKeyTrack`) and tuning.
 - **Playback**: the start and end points, volume, pan and round-robin position (`seqPosition`).
 - **Loop**: looping on or off, loop start and end, and the crossfade.
 
-Oscillators have their own settings here, including their envelope. A selection that mixes samples and oscillators shows only the mapping fields.
+Oscillators have their own settings here, including their envelope. A selection that mixes samples and oscillators shows only the mapping and MIDI channel fields.
 
 ## Group settings
 
@@ -84,13 +85,14 @@ Select a group in the list on the left and use the **Group** tab to edit setting
 The Group tab has:
 
 - **Group**: the group's name, whether it's enabled, and its volume, pan and tuning offsets.
+- **MIDI channel**: the lowest and highest MIDI channel the group answers to.
 - **Zone defaults**: velocity sensitivity (`ampVelTrack`) and key tracking.
 - **Amp envelope**: attack, decay, sustain and release.
 - **Round robin**: the mode and length (see below).
 - **Trigger & tags**: when the group plays (note on, note off, first note or legato), its tags, and which tags silence it.
 - **Glide**: glide time and mode.
 
-The All groups tab has the instrument's volume, pan and tuning, the zone defaults, the amp envelope and glide.
+The All groups tab has the instrument's volume, pan and tuning, the MIDI channel range, the zone defaults, the amp envelope and glide.
 
 These settings are described in full under [The &lt;group&gt; element](the-groups-element.md#the-group-element).
 
