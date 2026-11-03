@@ -3,8 +3,7 @@
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <DecentSampler minVersion="1.0.0">
-  <ui width="812" height="375" layoutMode="relative"
-      bgMode="top_left">
+  <ui width="812" height="375">
     <tab name="main">
       <labeled-knob x="445" y="75" width="90" textSize="16" textColor="AA000000" 
                     trackForegroundColor="CC000000" trackBackgroundColor="66999999" 
