@@ -83,10 +83,13 @@ How the return behaves:
 - **Only keys that are physically held count.** A key that is held only by the sustain pedal is
   not returned to. If the released note was itself being held by the pedal, the return happens when
   the pedal comes up and that note actually stops.
-- **It stays within the groups the released note was sounding in.** Other groups, such as a
-  polyphonic pad layered underneath, are not retriggered. A held key that has nothing to play there
-  (outside the group's key range, or already sounding, as in a group with `polyphony="2"`) is passed
-  over for the next most recent one.
+- **It stays within the released note's groups**: the groups it was sounding in, and any group
+  tied to them by a tag (the same mono tag, or `silencedByTags`). Other groups, such as a
+  polyphonic pad layered underneath, are not retriggered. Within those groups the held key plays
+  what it normally would, so in groups split by `loChannel`/`hiChannel` it returns into the group
+  for its own MIDI channel. A held key that has nothing to play there (outside the group's key or
+  channel range, or already sounding, as in a group with `polyphony="2"`) is passed over for the
+  next most recent one.
 - **Round robins don't advance.** The returning note uses the same round-robin position as the note
   that was released.
 - **Release samples.** The released note's `trigger="release"` sounds play exactly as they always
