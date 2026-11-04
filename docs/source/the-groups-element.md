@@ -25,6 +25,7 @@ Every **dspreset** file should have one and only one `<groups>` element. This is
 | **`globalVolume`** | (optional) | A clearer name for `volume` at this level. It does exactly the same thing. If you set both on the same element, `globalVolume` is the one that applies. |
 | **`globalPan`**    | (optional) | A pan position for the instrument as a whole, from -100 (hard left) to 100 (hard right). This is separate from `pan`, and is added to it rather than replacing it. Default: 0 |
 | **`globalTuning`** | (optional) | Global pitch adjustment for changing note pitch. In semitones. For example 1.0 would be a half-step up. Default: 0 |
+| **`globalTranspose`** | (optional) | Transposes the whole instrument by a whole number of semitones, from -48 to 48. Unlike `globalTuning`, which plays the same sample faster or slower, a transpose plays whichever sample is mapped to the shifted note, at that sample's own pitch: with `globalTranspose="2"`, pressing C3 plays the sample mapped to D3, exactly as if you had pressed D3. Positive values sound higher. See [Transpose](#transpose) below. Default: 0. Requires Decent Sampler 1.41.0. |
 | **`tuningIgnoresKeyTrack`** | (optional) | Whether tuning still applies when `pitchKeyTrack` is below 1. Normally tuning is added to the played note before key tracking, so it shrinks along with `pitchKeyTrack` and has no effect at all when `pitchKeyTrack` is 0. Set this to `true` to apply `globalTuning`, `groupTuning` and `tuning` in full whatever `pitchKeyTrack` is set to. Useful for unpitched or fixed-pitch groups that still need tuning. Can be set on `<groups>`, `<group>` or `<sample>`. Default: false. Requires Decent Sampler 1.36.1. |
 | **`loChannel`** | (optional) | The lowest MIDI channel (1 to 16) whose notes trigger this zone. Together with `hiChannel` it restricts a group or sample to particular channels, so that channel 1 can play one group and channel 2 another. Can be set on `<groups>`, `<group>`, `<sample>` or `<oscillator>`, and is inherited like `loNote`. Ignored in MPE mode. See [Restricting groups to MIDI channels](#restricting-groups-to-midi-channels). Default: 1. Requires Decent Sampler 1.41.0. |
 | **`hiChannel`** | (optional) | The highest MIDI channel (1 to 16) whose notes trigger this zone. For a single channel, set `loChannel` and `hiChannel` to the same number. Can be set on `<groups>`, `<group>`, `<sample>` or `<oscillator>`. Ignored in MPE mode. Default: 16. Requires Decent Sampler 1.41.0. |
@@ -41,6 +42,32 @@ Pan works differently, and it is worth knowing which of the two patterns you are
 
 Alongside it there are `globalPan` on `<groups>` and `groupPan` on `<group>`. These are separate pan offsets belonging to the instrument and to the group. They are added to the sample's pan position rather than replacing it, and the total is clamped to the -100 to 100 range. So `<groups globalPan="-50">` together with `<group groupPan="-50">` plays hard left.
 
+## Transpose
+
+`globalTranspose` on `<groups>` and `transpose` on `<group>` shift the incoming note before Decent Sampler decides which samples to play. The two are added together, so `<groups globalTranspose="-12">` with `<group transpose="12">` leaves that group where it was.
+
+```xml
+<groups globalTranspose="0">
+  <group name="Strings">
+    <!-- samples mapped across the keyboard -->
+  </group>
+  <group name="Strings, octave up" transpose="12">
+    <!-- the same samples again: each key also plays what is mapped an octave higher -->
+  </group>
+</groups>
+```
+
+A few things worth knowing:
+
+- **It picks samples, it doesn't retune them.** A transposed key plays the sample mapped to the shifted note at the pitch it would have there, following that sample's `rootNote` and `pitchKeyTrack` as usual. On a drum kit, a transpose of 1 makes each key play the drum one key up, at its natural pitch. To change pitch without changing which sample plays, use `globalTuning` or `groupTuning` instead.
+- **The on-screen keyboard follows it.** The highlighted keys show which keys reach each group's samples, so turning a transpose up moves the highlight down. Colours you set yourself with `<keyboard><color>` don't move.
+- **Keyswitches stay put.** `<midi>` note bindings, including keyswitches and keys that start a note sequence, respond to the key that was actually pressed.
+- **Generated notes are transposed too.** Notes from the arpeggiator and from note sequences are played through the transpose like notes from the keyboard.
+- **Changing it while keys are held is safe.** Notes already sounding keep playing what they started with and stop when their key comes up. Release samples (`trigger="release"`) come from the samples the key reached when it was pressed. So does a return to a key that is still held (`returnToHeldNote`), including the note a glide back lands on. Only notes played after the change use the new value.
+- **Notes shifted past either end of the keyboard are dropped.** A note that would land below 0 or above 127 plays nothing.
+- **Players can change it.** The instrument-level value is also the **Transpose** setting in **File > MIDI Input Settings...**, which players can change for themselves, and it is saved with the DAW project and in snapshots, like Tuning. Changing it there doesn't move a knob bound to `GLOBAL_TRANSPOSE`, and turning the knob updates the setting the next time that window opens.
+- **It can be controlled from the interface.** Bind a knob or menu to `GLOBAL_TRANSPOSE` (level `instrument`) or `GROUP_TRANSPOSE` (level `group`); see Appendix B. Values are rounded to whole semitones. These bindings respond to knobs, menus, buttons and MIDI CCs; LFOs and envelopes can't drive a transpose.
+
 ## The &lt;group&gt; element
 Samples and oscillators live in groups. There can be many group elements under the `<groups>` element. It can be useful to sort your samples into groups in order to apply similar settings to them or to control them with a knob. Each group can contain `<sample>` elements, an `<oscillator>` element, or both together. The order of groups in a file matters insofar as bindings will often reference groups by using an index. The first group in a file is group 0, the second is group 1, etc.
 
@@ -52,6 +79,7 @@ Samples and oscillators live in groups. There can be many group elements under t
 | **`groupPan`**    | A pan position for this group, from -100 (hard left) to 100 (hard right). This is separate from `pan`, and is added to it rather than replacing it. Default: 0 | (optional) |
 | **`ampVelTrack`** | The degree to which the velocity of the incoming notes affects the volume of the samples in this group. 0 = not at all. 1 = volume is completely determined by incoming velocity. When the value is 1, a velocity of 127 (max velocity) yields a gain 1.0 (full volume), a velocity of 63 (half velocity) yields a gain of 0.5 (half volume), etc. | (optional) |
 | **`groupTuning`** | Group-level pitch adjustment for changing note pitch. In semitones. For example 1.0 would be a half-step up and -1 would a half-step down. Default: 0                                                                                                                                                                                              | (optional) |
+| **`transpose`** | Transposes this group by a whole number of semitones, from -48 to 48, added to the instrument's `globalTranspose`. The group answers each key with the sample it has mapped that many keys away, so a group with `transpose="12"` layered over an untransposed copy of itself plays octaves. Unlike most group attributes this one is not inherited from `<groups>`; use `globalTranspose` there. See [Transpose](#transpose) below. Default: 0. Requires Decent Sampler 1.41.0. | (optional) |
 | **`pitchKeyTrack`** | A number from 0.0 to 1.0. 0 means that the pitch will stay the same regardless of what note is played. 1 means that the pitch will increase by one semitone when the note increases by one semitone (normal key pitch tracking). Applies to all samples and oscillators in the group. Default: 1 | (optional) |
 | **`tuningIgnoresKeyTrack`** | Whether tuning still applies when `pitchKeyTrack` is below 1. Normally tuning is added to the played note before key tracking, so it shrinks along with `pitchKeyTrack` and has no effect at all when `pitchKeyTrack` is 0. Set this to `true` to apply `globalTuning`, `groupTuning` and `tuning` in full whatever `pitchKeyTrack` is set to. Useful for unpitched or fixed-pitch groups that still need tuning. Can be set on `<groups>`, `<group>` or `<sample>`. Default: false. Requires Decent Sampler 1.36.1. | (optional) |
 | **`loChannel`** | The lowest MIDI channel (1 to 16) whose notes trigger this zone. Together with `hiChannel` it restricts a group or sample to particular channels, so that channel 1 can play one group and channel 2 another. Can be set on `<groups>`, `<group>`, `<sample>` or `<oscillator>`, and is inherited like `loNote`. Ignored in MPE mode. See [Restricting groups to MIDI channels](#restricting-groups-to-midi-channels). Default: 1. Requires Decent Sampler 1.41.0. | (optional) |

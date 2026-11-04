@@ -24,7 +24,7 @@ You can also write the file by hand, or edit the one DecentSampler saved. It's p
     <control index="1" type="knob" label="Tone" value="0.2"/>
     <control index="2" type="menu" label="Character" value="3"/>
   </controls>
-  <settings globalTuning="0.0"/>
+  <settings globalTuning="0.0" globalTranspose="0"/>
 </DecentSamplerSnapshot>
 ```
 
@@ -65,6 +65,7 @@ When a user loads a snapshot that has values for controls the preset no longer h
 ### The `<settings>` element
 
 - **`globalTuning`** (optional): Main Tuning, in semitones.
+- **`globalTranspose`** (optional): the Transpose setting in MIDI Input Settings, in whole semitones from -48 to 48. Requires Decent Sampler 1.41.0.
 
 ### The `<midi>` element
 
