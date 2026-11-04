@@ -21,11 +21,11 @@ Underneath the `<modulators>` section, you can have any number of different LFOs
 </modulators>
 ```
 
-For an LFO with a 500ms delay before starting:
+For an LFO that waits 500ms after each new note before starting (for example, for delayed vibrato):
 
 ```xml
 <modulators>
-  <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="0.500"></lfo>
+  <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="0.500" trigger="attack"></lfo>
 </modulators>
 ```
 
@@ -45,7 +45,8 @@ This element has the following attributes:
 - **`frequency`**: The speed of the LFO. If `frequencyFormat` is `hz`, this is in cycles per second. If `frequencyFormat` is `musical_time`, this is a musical subdivision index.
 - **`frequencyFormat`**: How `frequency` is interpreted. Valid values are `hz` (default) and `musical_time`.
 - **`modAmount`**: This value between 0 and 1 controls how much the  modulation affects the things it is targeting. In conventional terms, this is like the modulation depth. Default value: 1.0.
-- **`delayTime`**: The time in seconds to wait before the LFO starts outputting signal. During this delay period, the LFO outputs zero. Default value: 0.0 (no delay).
+- **`delayTime`**: The time in seconds to wait before the LFO starts outputting signal. During this delay period, the LFO outputs zero. The delay starts again each time the LFO restarts (see `trigger`), so for a global LFO with `trigger="none"` it only happens once, when the preset loads. Default value: 0.0 (no delay).
+- **`trigger`**: Whether a global LFO restarts when a note is played. Possible values are `none` (default) and `attack`. With `none`, a global LFO runs continuously and is not affected by new notes, which is what you want for things like a rotary speaker effect. With `attack`, a global LFO restarts from the beginning of its cycle (and its `delayTime` starts again) every time a new note is played. This attribute has no effect on LFOs whose `scope` is `voice`: those always start fresh with each note. Up to and including version 1.40.1, global LFOs restarted with every new note whatever this was set to.
 - **`scope`**: Whether or not this LFO exists for all notes or whether each keypress gets its own LFO. Possible values are `global` (default for LFOs) and `voice`. If `voice` is chosen, a new LFO is started each time a new note is pressed.
 - **`modBehavior`**: This attribute controls how the LFO affects the parameter it is targeting. Possible values are `add`, `modulate`, `multiply`, and `set`. If `add` is chosen, the LFO will add its translated value directly to the target parameter (legacy behavior). If `modulate` is chosen, the LFO adds a zero-centered modulation delta around the target parameter's current/base value, so a neutral LFO value contributes no offset. If `multiply` is chosen, the LFO will multiply its value by the parameter it is targeting. If `set` is chosen, the LFO will set the parameter it is targeting to its value. Default value: `set`. For amplitude in particular, see [choosing between multiply and modulate](#choosing-between-multiply-and-modulate-for-amplitude) below.
 
@@ -364,7 +365,7 @@ For example, a vibrato on/off button:
     </tab>
   </ui>
   <modulators>
-    <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="0.500">
+    <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="0.500" trigger="attack">
       <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY"
                modBehavior="add" translation="linear" translationOutputMin="0" translationOutputMax="2000.0" />
     </lfo>
@@ -439,7 +440,7 @@ You can also control modulator parameters via MIDI CC:
     </cc>
   </midi>
   <modulators>
-    <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="0.500">
+    <lfo shape="sine" frequency="2" modAmount="1.0" delayTime="0.500" trigger="attack">
       <binding type="effect" level="instrument" effectIndex="0" parameter="FX_FILTER_FREQUENCY"
                modBehavior="add" translation="linear" translationOutputMin="0" translationOutputMax="2000.0" />
     </lfo>
