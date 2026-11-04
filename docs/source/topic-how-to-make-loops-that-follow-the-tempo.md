@@ -23,12 +23,24 @@ If you know the tempo the loop was recorded at rather than its length, use `orig
 
 The amplitude envelope still applies. An attack of 0 and a sustain of 1 let the loop play exactly as recorded, and the release sets how quickly it stops when the key is let go.
 
+### Using a REX loop
+
+If the loop is a ReCycle file (`.rx2`, `.rex` or `.rcy`), you can skip `beats` and the next step: the file already says how long the loop is and where its slices are.
+
+```xml
+<group sampleMode="slice_stretch">
+  <sample path="Samples/Funky Break.rx2" rootNote="60" loNote="48" hiNote="72"/>
+</group>
+```
+
+REX loops leave the gaps between slices silent unless you set `sliceLoopMode` (see Step 3), which is how they sound in ReCycle. This needs Decent Sampler 1.39.0 or later.
+
 ## Step 2: Decide where the slices go
 
 Without any slice information, the loop is cut every 16th note. That works well for many drum loops, but slices that start exactly on each hit sound better, especially at slow tempos. There are three ways to get them, and Decent Sampler uses the first one it finds:
 
 1. A `slices` attribute listing where each slice starts, in frames from the start of the file: `slices="0 6670 13340 20010"`.
-2. Cue points (markers) saved in the WAV file. Many audio editors and hardware samplers can write them, so a loop that is already marked up needs nothing else.
+2. Cue points (markers) saved in the WAV file, or the slices saved in a REX file. Many audio editors and hardware samplers can write cue points, so a loop that is already marked up needs nothing else.
 3. A grid, set with `sliceGrid` (`1/8`, `1/16` and so on).
 
 The easiest way to make a `slices` attribute is the Preset Editor (**File > Developer Tools > Preset Editor...**). Select the sample and set its **Sample Mode** to **Slice Stretch**: the waveform then shows the slice markers. From there you can:
@@ -43,7 +55,7 @@ The easiest way to make a `slices` attribute is the Preset Editor (**File > Deve
 When the song is slower than the loop, or you play above the root note, each slice finishes before the next one is due, and there is a gap. `sliceLoopMode` decides what happens:
 
 - `off` leaves the gap silent. This can sound good on tight, dry drums.
-- `forward` (the default) loops the second half of the slice until the next one starts.
+- `forward` (the default, except for REX loops) loops the second half of the slice until the next one starts.
 - `back_and_forth` plays that part forwards and backwards in turn, which can be smoother on sustained sounds.
 
 `sliceEnvelope` fades each slice. At 100 (the default) there is no fade. Lower values make every slice die away sooner, which gives a tighter, gated sound and hides the gaps at slow tempos.
