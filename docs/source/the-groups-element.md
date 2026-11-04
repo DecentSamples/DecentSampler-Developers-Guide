@@ -194,7 +194,7 @@ Samples and oscillators live in groups. There can be many group elements under t
 | **`glideRetrigger`** | For monophonic groups with glide: `false` makes a legato glide to a new key carry on the sounding note, with no new attack. See [Monophonic instruments: legato glides without retriggering](#monophonic-instruments-legato-glides-without-retriggering). Inherits from `<groups>` level if not specified. Default: `true`. Requires Decent Sampler 1.41.0. | (optional) |
 | **`ampEnvEnabled`** | Turns the outer amplitude envelope on and off for everything in this group. Setting it to `false` makes the group's samples play as one-shots, running to the end of the file regardless of when the key is released. Can also be set per sample. Possible values: true, false. Default: true | (optional) |
 
-#### Restricting groups to MIDI channels
+### Restricting groups to MIDI channels
 
 Normally every group plays whatever MIDI channel a note arrives on. `loChannel` and `hiChannel` restrict a group (or a single sample or oscillator) to a range of channels, so that one instrument can play different sounds on different channels. For example, a bass on channel 1 and a lead on channel 2:
 
