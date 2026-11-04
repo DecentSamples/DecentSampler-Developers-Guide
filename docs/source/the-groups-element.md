@@ -31,6 +31,7 @@ Every **dspreset** file should have one and only one `<groups>` element. This is
 | **`hiChannel`** | (optional) | The highest MIDI channel (1 to 16) whose notes trigger this zone. For a single channel, set `loChannel` and `hiChannel` to the same number. Can be set on `<groups>`, `<group>`, `<sample>` or `<oscillator>`. Ignored in MPE mode. Default: 16. Requires Decent Sampler 1.41.0. |
 | **`glideTime`** | (optional) | The glide/portamento time in seconds. A value of 0.0 would mean no portamento. This value can also be set at the `<group>` and `<sample>` levels, although most people will want to set it globally at the `<groups>` level. Default: 0.0 |
 | **`glideMode`** | (optional) | Controls the glide/portamento behavior. Possible values are: `always` (glide is always performed), `legato` (glide is performed only when transitioning from one note to another),  and `off`. This value can also be set at the `<group>` and `<sample>` levels, although most people will want to set it globally at the `<groups>` level. Default: `legato` |
+| **`returnToHeldNote`** | (optional) | For monophonic instruments: when the note that is sounding is released while other keys are still held, play the most recently pressed of those keys again, the way a mono synth does. See [Monophonic instruments: returning to a held note](#monophonic-instruments-returning-to-a-held-note). Can also be set on `<group>`, `<sample>` and `<oscillator>`. Default: `false` |
 
 ## A note about volume and pan
 
@@ -68,6 +69,65 @@ A few things worth knowing:
 - **Players can change it.** The instrument-level value is also the **Transpose** setting in **File > MIDI Input Settings...**, which players can change for themselves, and it is saved with the DAW project and in snapshots, like Tuning. Changing it there doesn't move a knob bound to `GLOBAL_TRANSPOSE`, and turning the knob updates the setting the next time that window opens.
 - **It can be controlled from the interface.** Bind a knob or menu to `GLOBAL_TRANSPOSE` (level `instrument`) or `GROUP_TRANSPOSE` (level `group`); see Appendix B. Values are rounded to whole semitones. These bindings respond to knobs, menus, buttons and MIDI CCs; LFOs and envelopes can't drive a transpose.
 
+## Monophonic instruments: returning to a held note
+
+A monophonic instrument is one where a new note silences the previous one. In Decent Sampler that is
+a `<tag>` with `polyphony="1"` (see [The &lt;tags&gt; element](the-tags-element.md)), an oscillator
+with `polyphony="1"`, or groups that silence each other with `silencedByTags`. By default, when you
+let go of the note that is sounding, the instrument goes quiet, even if you are still holding down
+an earlier key.
+
+Set `returnToHeldNote="true"` to make it behave like a mono synth instead: when the sounding note is
+released and other keys are still held, the most recently pressed of those keys plays again. Hold
+C, play and release E, and you are back on C. This is what makes trills on a held note, wind
+instruments and classic analog-style leads feel natural.
+
+```xml
+<groups glideMode="legato" glideTime="0.15" returnToHeldNote="true">
+  <group tags="lead" silencingMode="normal">
+    <sample path="Samples/Lead_C3.wav" rootNote="C3" loNote="0" hiNote="127" loopEnabled="true"/>
+  </group>
+</groups>
+<tags>
+  <tag name="lead" polyphony="1"/>
+</tags>
+```
+
+How the return behaves:
+
+- **It is a transition from the released note.** The returning note plays the way it would if you
+  had pressed it while the released note was still down: `trigger="legato"` sounds are chosen rather
+  than `trigger="first"` ones, `previousNote` and `legatoInterval` compare against the released note,
+  and if `glideMode` lets the note glide, it glides back from the released note's pitch over
+  `glideTime`.
+- **With glide, nothing restarts.** The sound that was playing simply slides back to the held
+  note: there is no new attack, and its amp envelope, voice-level envelopes and LFOs carry on
+  where they were. With glide off (or `glideTime="0"`), the held note starts again as a fresh
+  note, with its own attack.
+- **When it starts again, it plays at its original velocity**, the velocity the key was first
+  pressed with. A sound that glides back keeps the level it already had.
+- **Only the same sound glides back.** If the held key plays a different sample from the one
+  that was sounding (a different zone, or a `trigger="legato"` transition sample), that sample
+  starts as usual.
+- **Only keys that are physically held count.** A key that is held only by the sustain pedal is
+  not returned to. If the released note was itself being held by the pedal, the return happens when
+  the pedal comes up and that note actually stops.
+- **It stays within the released note's groups**: the groups it was sounding in, and any group
+  tied to them by a tag (the same mono tag, or `silencedByTags`). Other groups, such as a
+  polyphonic pad layered underneath, are not retriggered. Within those groups the held key plays
+  what it normally would, so in groups split by `loChannel`/`hiChannel` it returns into the group
+  for its own MIDI channel. A held key that has nothing to play there (outside the group's key or
+  channel range, or already sounding, as in a group with `polyphony="2"`) is passed over for the
+  next most recent one.
+- **Round robins don't advance.** The returning note uses the same round-robin position as the note
+  that was released.
+- **Release samples.** The released note's `trigger="release"` sounds play exactly as they always
+  do. The returning note's release sounds play once, when its own key comes up.
+- **MPE** works the same way: each note keeps its own channel, pitch bend and pressure.
+
+`returnToHeldNote` can be set on `<groups>`, `<group>`, `<sample>` and `<oscillator>`; the innermost
+setting wins. It has no effect on a polyphonic group, since nothing there was silenced.
+
 ## The &lt;group&gt; element
 Samples and oscillators live in groups. There can be many group elements under the `<groups>` element. It can be useful to sort your samples into groups in order to apply similar settings to them or to control them with a knob. Each group can contain `<sample>` elements, an `<oscillator>` element, or both together. The order of groups in a file matters insofar as bindings will often reference groups by using an index. The first group in a file is group 0, the second is group 1, etc.
 
@@ -86,6 +146,7 @@ Samples and oscillators live in groups. There can be many group elements under t
 | **`hiChannel`** | The highest MIDI channel (1 to 16) whose notes trigger this zone. For a single channel, set `loChannel` and `hiChannel` to the same number. Can be set on `<groups>`, `<group>`, `<sample>` or `<oscillator>`. Ignored in MPE mode. Default: 16. Requires Decent Sampler 1.41.0. | (optional) |
 | **`glideTime`** | The glide/portamento time in seconds for samples and oscillators in this group. A value of 0.0 means no portamento. Can be overridden at the \`<sample>\` level. Inherits from \`<groups>\` level if not specified. Default: 0.0 | (optional) |
 | **`glideMode`** | Controls the glide/portamento behavior for samples and oscillators in this group. Possible values: \`always\` (glide is always performed), \`legato\` (glide only when transitioning from one note to another), \`off\` (no glide). Inherits from \`<groups>\` level if not specified. Default: \`legato\` | (optional) |
+| **`returnToHeldNote`** | For monophonic groups: when the sounding note is released while other keys are still held, the most recently pressed of them plays again. See [Monophonic instruments: returning to a held note](#monophonic-instruments-returning-to-a-held-note). Inherits from `<groups>` level if not specified. Default: `false` | (optional) |
 | **`ampEnvEnabled`** | Turns the outer amplitude envelope on and off for everything in this group. Setting it to `false` makes the group's samples play as one-shots, running to the end of the file regardless of when the key is released. Can also be set per sample. Possible values: true, false. Default: true | (optional) |
 
 #### Restricting groups to MIDI channels
@@ -139,6 +200,7 @@ Underneath the `<group>` elements are `<sample>` elements. Each sample correspon
 | **`tuningIgnoresKeyTrack`** | (optional) | Whether tuning still applies when `pitchKeyTrack` is below 1. Normally tuning is added to the played note before key tracking, so it shrinks along with `pitchKeyTrack` and has no effect at all when `pitchKeyTrack` is 0. Set this to `true` to apply `globalTuning`, `groupTuning` and `tuning` in full whatever `pitchKeyTrack` is set to. Useful for unpitched or fixed-pitch groups that still need tuning. Can be set on `<groups>`, `<group>` or `<sample>`. Default: false. Requires Decent Sampler 1.36.1. |
 | **`glideTime`** | (optional) | The glide/portamento time in seconds for this sample. A value of 0.0 means no portamento. Inherits from \`<group>\` or \`<groups>\` level if not specified. Default: 0.0 |
 | **`glideMode`** | (optional) | Controls the glide/portamento behavior for this sample. Possible values: \`always\`, \`legato\`, or \`off\`. Inherits from \`<group>\` or \`<groups>\` level if not specified. Default: \`legato\` |
+| **`returnToHeldNote`** | (optional) | See [Monophonic instruments: returning to a held note](#monophonic-instruments-returning-to-a-held-note). Inherits from `<group>` or `<groups>` level if not specified. Default: `false` |
 | **`trigger`**               | (optional) | Valid values: `attack` means a sample is played when the *note on* message is received. `release` means the sample is played when the *note off* message is received (aka a release trigger). `first` means that the sample will only be played if no other notes are playing. `legato` means that the sample will only be played if _some_ other notes are already playing. `continuous` means that the sample will always play. This can also be set at the `<group>` level. Default: `attack`. |  
 | **`releaseTriggerDecay`**   | (optional) | Controls the volume decay rate for release-triggered samples based on how long the note was held. When a release trigger sample plays, its volume decreases based on the time elapsed since the note was initially pressed. That time runs until the release sample starts: when the key comes up or, if the sustain pedal is down, when the pedal lifts. It is measured in audio time, so offline bounces (which render faster than real time) sound the same as real-time playback; before Decent Sampler 1.41.0 they had almost no decay. The value can be specified in two formats: **Decibel format (recommended):** Append "dB" to specify decay in decibels per second. For example, `"3dB"` means the volume decreases by 3dB for each second the note was held. If you specify a positive dB value, it will be automatically converted to negative (decay direction). **Linear format:** A decimal value between 0.0 and 1.0 specifying the linear gain decay factor per second. For example, `0.3` means the volume decreases by a factor of 0.3 each second. This is useful for piano pedal-up samples and other release triggers where shorter notes should have louder release samples. This can also be set at the `<group>` or `<groups>` levels. Default: 0.0 (no decay). |
 | **`loHoldTime`** **`hiHoldTime`** | (optional) | For release-triggered samples (`trigger="release"`) only: a range, in seconds, of how long the key must have been held for this sample to play. This works like `loVel`/`hiVel` for velocity, and lets you play one release sample after short notes and another after long ones. The range includes `loHoldTime` and excludes `hiHoldTime`, so adjacent ranges such as `hiHoldTime="0.5"` on one group and `loHoldTime="0.5"` on another never both play: a note held for exactly 0.5 seconds plays only the second. The hold time runs from the key going down to the key coming up. If the sustain pedal is down, the release sample still waits for the pedal to lift, as it always has, but which sample plays is decided by how long the key itself was held. Each note is timed separately, so the other notes held around it (legato playing) make no difference, and a note played again on the same key starts a new hold time. On samples with any other trigger these attributes are ignored. They can also be set at the `<group>` or `<groups>` levels. Default: no limit (`loHoldTime` 0, no `hiHoldTime`). Requires Decent Sampler 1.41.0. |
@@ -300,6 +362,7 @@ The `<oscillator>` element itself has only one attribute:
 |-----------|-------------------|-------------|---------|
 | **`waveform`** | (optional) | The waveform shape. Valid values: `sine`, `saw`, `square`, `triangle`, `noise` (or `white_noise`), `pluck1`, `wavetable`, `harmonic`, `formant`, `fm6op`. | `sine` |
 | **`polyphony`** | (optional) | How many voices this oscillator may sound at once. Omit for no limit. Set it to `1` to make the oscillator monophonic, which is what makes `glideMode` behave like portamento on a classic synth. See [Polyphony and glide](#polyphony-and-glide) below. | (no limit) |
+| **`returnToHeldNote`** | (optional) | With `polyphony="1"`: releasing the sounding note goes back to the most recently pressed key still held, gliding back if `glideMode` allows it. See [Monophonic instruments: returning to a held note](#monophonic-instruments-returning-to-a-held-note). | `false` |
 | **`damping`** | (optional) | **Only for `pluck1` waveform.** Controls the decay time of the plucked string. Range: 0.0 to 1.0. Lower values (closer to 0.0) create heavily damped, shorter sounds. Higher values (closer to 1.0) create minimal damping with longer, more resonant decay. This simulates the natural damping characteristics of string materials and playing techniques. | `0.5` |
 | **`pluckType`** | (optional) | **Only for `pluck1` waveform.** Blends between different excitation signals to control the timbral character. Range: 0.0 to 1.0. At 0.0, the oscillator uses a smooth triangle wave excitation producing a softer, mellower tone. At 1.0, it uses a noise burst excitation producing a brighter, more aggressive attack with richer harmonics. Intermediate values blend between the two extremes. | `0.5` |
 | **`wavetableFile`** | (optional) | **Only for `wavetable` waveform.** Path to the multi-frame wavetable `.wav` file, relative to the `.dspreset` file. The file should contain all wavetable frames concatenated in a single audio file. If the file contains a `clm ` RIFF chunk (Serum-compatible format), the frame size is detected automatically. | (none) |
