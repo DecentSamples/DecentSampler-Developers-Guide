@@ -1,7 +1,7 @@
 The &lt;ui&gt; element
 ======================
 
-The `<ui>` element is how you specify a user interface for your instrument. Each **dspreset** should have at most one `<ui>` element. There are several important attributes:
+The `<ui>` element is how you specify a user interface for your instrument. You can write it by hand, as this chapter describes, or build it visually in the [UI Designer](the-ui-designer.md). Each **dspreset** should have at most one `<ui>` element. There are several important attributes:
 
 - **`coverArt`** (optional): A relative or absolutely path to a cover art image to use. After the first time this library is opened, this will get displayed on the "My Libraries" tab.
 - **`bgImage`** (optional): A relative or absolutely path to a background image to use. 

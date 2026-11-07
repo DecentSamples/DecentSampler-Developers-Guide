@@ -47,7 +47,7 @@ The line at the bottom adds it up, for example "9 notes × 3 velocities = 27 tak
 
 **More options** has the rest. Any setting you change from its default is listed beside the button, so you can see it even with the options closed.
 
-- **Zones** decides which way each recording stretches to cover the notes between the sampled ones: **Centred on each note**, **Upward from each note** or **Downward from each note**.
+- **Zones** decides which way each recording stretches to cover the notes between the sampled ones: **Centered on each note**, **Upward from each note** or **Downward from each note**.
 - **Velocities** sets the exact velocities of the layers, for example `30, 80, 127`.
 - **Max release (s)** is the longest the Auto Sampler waits after the note-off for the sound to die away.
 - **Silence below (dB)** is the level counted as silence, for trimming and for deciding when a release has finished. Playing a test note sets it for you.
