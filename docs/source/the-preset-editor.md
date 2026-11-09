@@ -71,7 +71,7 @@ The **Zone** tab edits the selected samples and oscillators:
 
 - **Mapping**: root note, note range and velocity range.
 - **MIDI channel**: the lowest and highest MIDI channel the zone answers to (`loChannel` and `hiChannel`; see [Restricting groups to MIDI channels](the-groups-element.md#restricting-groups-to-midi-channels)).
-- **Sample**: the audio file, and the **Mode**: Normal, or Slice Stretch for loops that follow the tempo (see [Slicing loops](#slicing-loops-that-follow-the-tempo) below).
+- **Sample**: the audio file, and the **Mode**: Normal; Slice Stretch or Slice Keys for sliced loops (see [Slicing loops](#slicing-loops-that-follow-the-tempo) below); or Spectral Stretch or Solo Stretch, where the key changes only the pitch and the sample keeps its length (see [Spectral Stretch and Solo Stretch](the-groups-element.md#the-sample-element)). These two add a **Tempo** section: **Own length**, or **Follows tempo** with the sample's beats and original tempo.
 - **Pitch**: pitch tracking (`pitchKeyTrack`) and tuning.
 - **Playback**: the start and end points, volume and pan.
 - **Loop**: looping on or off, loop start and end, and the crossfade.

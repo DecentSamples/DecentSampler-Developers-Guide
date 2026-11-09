@@ -253,7 +253,7 @@ Underneath the `<group>` elements are `<sample>` elements. Each sample correspon
 | **`tags`**                  | (optional) | A command-separated list of tags. Example: tags="rt,mic1". These are useful when controlling volumes using tags. See Appendix D. |  
 | **`onLoCCN`** **`onHiCCN`** | (optional) | If you want a sample to be triggered when a MIDI CC controller message comes in, for example for piano pedal down and pedal up samples, you use these attributes to specify the range of values that should trigger the sample. If you use `onLoCCN`, you must also use a corresponding `onHiCCN` for the same MIDI CC number. Example: `onLoCC64="90"` and `onHiCC64="127"` would mean that values of CC64 (Sustain Pedal) between 90 and 127 will trigger the given sample. This can also be set at the `<group>` level. Default:-1 (off) |
 | **`playbackMode`**          | (optional) | By default, the choice of playback engine is left up to the discretion of the user–they can set this in the Preferences screen. However, a sample creator can override this setting by setting the playbackMode for a specific sample, a group, or the entire instrument. Possible values are `memory`, `disk_streaming`, and `auto` (default). |
-| **`sampleMode`**            | (optional) | How the sample is played. `normal` (the default) plays it as usual. `slice_stretch` plays it as a loop that keeps in time with the host's tempo; see **Slice Stretch** below. `slice_keys` plays one slice of it on each key; see **Slice Keys** below. This can also be set at the `<group>` or `<groups>` level. Requires Decent Sampler 1.37.0 (`slice_keys`: 1.39.0). |
+| **`sampleMode`**            | (optional) | How the sample is played. `normal` (the default) plays it as usual. `slice_stretch` plays it as a loop that keeps in time with the host's tempo; see **Slice Stretch** below. `slice_keys` plays one slice of it on each key; see **Slice Keys** below. `spectral_stretch` and `solo_stretch` make the key change only the pitch, so the sample plays for the same length on every key (or follows the host's tempo); see **Spectral Stretch and Solo Stretch** below. This can also be set at the `<group>` or `<groups>` level. Requires Decent Sampler 1.37.0 (`slice_keys`: 1.39.0; `spectral_stretch` and `solo_stretch`: 1.42.0). |
 | **`delay`**                 | (optional) | A delay time before the sample starts playing. The value is a decimal number (integer or float) that specifies the delay amount. The unit of measurement is controlled by the `delayUnit` attribute. A control or modulator can change it through the `SAMPLE_DELAY` binding parameter; see [Appendix B](appendix-b-the-binding-element). Default: 0 |
 | **`delayUnit`**             | (optional) | Specifies the unit of measurement for the `delay` attribute. Valid values are: `seconds` (time-based delay), `beats` (tempo-based delay), and `samples` (sample-accurate delay). Default: `seconds` |
 | **`retriggerEnabled`**      | (optional) | Enables pattern retriggering for creating repeating sample sequences. When enabled, after the initial delay sequence completes, all samples in the group will retrigger according to the retriggerInterval. This allows creating looping drum patterns and rhythmic sequences from delayed samples. This can also be set at the `<group>` or `<groups>` levels. Default: `false` |
@@ -330,6 +330,41 @@ Set `hiNote` to cover as many keys as there are slices. In the Preset Editor, ch
   </group>
 </groups>
 ```
+
+**Spectral Stretch and Solo Stretch (the same length on every key)**
+
+Normally a sample played above its `rootNote` plays faster and shorter, and below it slower and longer. With `sampleMode="spectral_stretch"` or `sampleMode="solo_stretch"`, the key changes only the pitch: every key plays the sample for its own length, the way a real instrument's notes last as long as they're held, not shorter as they go up. Everything else that changes the pitch (`pitchKeyTrack`, `tuning` and its modulation, pitch bend, glide, MPE) also changes only the pitch. Requires Decent Sampler 1.42.0.
+
+The two modes differ in how they do it:
+
+- **Spectral Stretch** works on anything: chords, pads, drum loops, whole mixes. Each note starts with the sample as recorded and changes over to the stretched sound about 60 ms in, so attacks stay crisp.
+- **Solo Stretch** is for a single pitched voice: a solo instrument or a singer, one note at a time per sample. It keeps the sound's waveform, attack and vibrato more faithfully than Spectral Stretch, and costs less to play, but each sample has to be analysed first. That happens in the background when the preset loads, usually in well under a second per sample; until it's done, notes play as Spectral Stretch. The result is saved on the user's computer, so the next load is immediate. A sample with no clear pitch, such as a drum loop, always plays as Spectral Stretch, and the Preset Editor's Validate Preset says so. A stereo sample plays in mono.
+
+```xml
+<groups attack="0" decay="0" sustain="1" release="0.3">
+  <group sampleMode="solo_stretch">
+    <sample path="Samples/Violin G3.wav" rootNote="55" loNote="48" hiNote="72"/>
+  </group>
+</groups>
+```
+
+**Following the host's tempo.** If a sample has `beats` or `originalTempo` (the same attributes as Slice Stretch, see the table above), its length follows the host's tempo instead: an 8-beat loop lasts 8 beats at any tempo, and keeps up when the tempo changes during a note. Unlike Slice Stretch, nothing is guessed: without `beats` or `originalTempo`, a sample keeps its own length. A REX loop's own length counts. As in Slice Stretch, a note starts at the beginning of the sample when it's played, not lined up with the host's bar.
+
+```xml
+<group sampleMode="spectral_stretch" beats="8">
+  <sample path="Samples/Pad Loop.wav" rootNote="60" loNote="48" hiNote="72"/>
+</group>
+```
+
+**Loops and release.** `loopStart`, `loopEnd`, `loopEnabled`, `loopCrossfade` and `loopDuringRelease` work as usual, in the sample's own time: a sustain loop holds the note for as long as the key is down, at the stretched speed. With `loopDuringRelease="false"`, releasing the key leaves the loop and plays the rest of the sample, still stretched.
+
+Things to know:
+
+- Both modes always play from memory, whatever `playbackMode` says.
+- Both cost more processor time than normal playback. Spectral Stretch is the more expensive of the two: on a Raspberry Pi 5, 16 notes at once take about a third of one core. Up to 32 Spectral Stretch notes play at once; a 33rd takes over from the oldest.
+- Solo Stretch's analysis takes memory as well as the sample itself: about 100 to 160 KB per second of audio, so a library with 25 minutes of Solo Stretch samples needs roughly another 150 to 250 MB.
+- Notes can't be started partway through the sample by modulating its start, and the samples can't be played in reverse. Samples longer than 100 seconds are cut off at 100 seconds, as in the other modes that play from memory.
+- In the Preset Editor, choose **Spectral Stretch** or **Solo Stretch** as the sample's **Mode**. The **Tempo** section that appears then switches between **Own length** and **Follows tempo**, with the beats and original tempo.
 
 **Amplitude Envelope**
 

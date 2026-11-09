@@ -41,6 +41,15 @@ For each reference the validator:
 - Reports an **error** if the file cannot be found at all.
 - Reports an **error** if the file exists on disk but with **different capitalization** than the path written in the preset. This is important because paths that work on case-insensitive file systems (macOS, Windows) will silently break on case-sensitive ones (most Linux distributions and some package-based deployments).
 
+### 4. Solo Stretch samples
+
+For samples set to Solo Stretch, Validate Preset also reports, as warnings:
+
+- a sample in which no pitch was found. It plays as Spectral Stretch instead. Solo Stretch is for one pitched voice; use Spectral Stretch for chords, drums and mixes.
+- a stereo sample. Solo Stretch plays its two channels mixed into one.
+
+These come from the loaded preset, so load it (and give its samples a moment to be analysed) before validating.
+
 ## Reading the Report
 
 The report dialog shows:

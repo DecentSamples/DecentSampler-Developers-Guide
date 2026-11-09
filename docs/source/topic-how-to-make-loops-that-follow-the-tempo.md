@@ -102,4 +102,18 @@ All of this can be changed from the interface. `SLICE_ENVELOPE` works with knobs
 - The loop always starts from its first slice when a key is pressed. It isn't lined up with the host's bar position, so start notes on the beat.
 - Slice-stretch samples always play from memory, even if the user has chosen disk streaming.
 - `start` and `end` set the part of the file used as the loop, so a file with silence before or after it can be trimmed without editing the audio.
-- In the standalone app, Decent Sampler uses its own tempo setting instead of a host's.
+- In the standalone app there is no host, so the tempo is always 120 BPM.
+
+## Loops that don't slice well: Spectral Stretch
+
+Slicing suits drums and other loops made of separate hits. Pads, sustained chords, vocals and whole mixes have no gaps to slice at, and they smear or stutter when sliced. For those, use `sampleMode="spectral_stretch"` with `beats` or `originalTempo`: the whole loop is stretched to fit the tempo, without slices, and keys change only its pitch.
+
+```xml
+<groups attack="0" decay="0" sustain="1" release="0.3">
+  <group sampleMode="spectral_stretch" beats="8">
+    <sample path="Samples/Pad Loop.wav" rootNote="60" loNote="48" hiNote="72"/>
+  </group>
+</groups>
+```
+
+A loop of one sung or played line can use `sampleMode="solo_stretch"` the same way, which keeps its tone and vibrato more faithfully. See [Spectral Stretch and Solo Stretch](the-groups-element) in the &lt;groups&gt; element reference. These need Decent Sampler 1.42.0 or later.
