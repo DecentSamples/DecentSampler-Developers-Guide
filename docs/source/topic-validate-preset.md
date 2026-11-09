@@ -41,6 +41,10 @@ For each reference the validator:
 - Reports an **error** if the file cannot be found at all.
 - Reports an **error** if the file exists on disk but with **different capitalization** than the path written in the preset. This is important because paths that work on case-insensitive file systems (macOS, Windows) will silently break on case-sensitive ones (most Linux distributions and some package-based deployments).
 
+### 4. Interface layout (Preset Editor only)
+
+When you click **VALIDATE** in the [Preset Editor](the-preset-editor.md), the report also warns about controls the player can't show properly: controls under the on-screen keyboard at the smallest window size, controls that run past the edge of the interface, and controls that start below the part of the interface the player shows. See [Leaving room for the keyboard](the-ui-designer.md#leaving-room-for-the-keyboard). These checks look at the interface as it is in the editor, including unsaved changes, and aren't part of **Developer Tools → Validate Preset**.
+
 ## Reading the Report
 
 The report dialog shows:

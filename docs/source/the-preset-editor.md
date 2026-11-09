@@ -15,7 +15,7 @@ The Preset Editor isn't available on iOS, or for copy-protected libraries.
 
 ## The window
 
-- **The toolbar** across the top has the back arrow, the **FILE...** and **TOOLS...** menus, and Undo and Redo. The name of the preset is in the middle, with a `*` when there are unsaved changes. **VALIDATE** and **SAVE** are on the right.
+- **The toolbar** across the top has the back arrow, the **FILE...** and **TOOLS...** menus, Undo and Redo, and the **Samples / Interface** switch. **Interface** opens the [UI Designer](the-ui-designer.md), for laying out the instrument's controls; **Samples** comes back to the sample mapping described in this chapter. The name of the preset is in the middle, with a `*` when there are unsaved changes. **VALIDATE** and **SAVE** are on the right.
 - **The groups list** on the left shows every `<group>` in the preset. The **+** button adds a group, and the **…** button has the group actions: Add Group, Rename, Duplicate, Merge Groups, Delete and Select All. You can select several groups at once. A disabled group is shown crossed out.
 - **The samples pane** in the middle shows the zones (samples and oscillators) in the selected groups. Its header has the **Edit**, **Add**, **Map**, **Loop** and **Process** menus, and a switch between the **Map** and **List** views. If the window is narrow, these menus are combined into a single Edit menu.
 - **The waveform** of the selected sample is shown under the map, behind a divider you can drag.
