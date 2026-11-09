@@ -43,12 +43,9 @@ For each reference the validator:
 
 ### 4. Solo Stretch samples
 
-For samples set to Solo Stretch, Validate Preset also reports, as warnings:
+For samples set to Solo Stretch, Validate Preset also reports, as a warning, a sample in which no pitch was found. It plays as Spectral Stretch instead. Solo Stretch is for one pitched voice; use Spectral Stretch for chords, drums and mixes.
 
-- a sample in which no pitch was found. It plays as Spectral Stretch instead. Solo Stretch is for one pitched voice; use Spectral Stretch for chords, drums and mixes.
-- a stereo sample. Solo Stretch plays its two channels mixed into one.
-
-These come from the loaded preset, so load it (and give its samples a moment to be analysed) before validating.
+This comes from the loaded preset, so load it (and give its samples a moment to be analysed) before validating.
 
 ## Reading the Report
 
