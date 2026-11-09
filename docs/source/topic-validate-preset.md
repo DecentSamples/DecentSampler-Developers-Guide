@@ -45,6 +45,12 @@ For each reference the validator:
 
 When you click **VALIDATE** in the [Preset Editor](the-preset-editor.md), the report also warns about controls the player can't show properly: controls under the on-screen keyboard at the smallest window size, controls that run past the edge of the interface, and controls that start below the part of the interface the player shows. See [Leaving room for the keyboard](the-ui-designer.md#leaving-room-for-the-keyboard). These checks look at the interface as it is in the editor, including unsaved changes, and aren't part of **Developer Tools → Validate Preset**.
 
+### 5. Solo Stretch samples
+
+For samples set to Solo Stretch, Validate Preset also reports, as a warning, a sample in which no pitch was found. It plays as Spectral Stretch instead. Solo Stretch is for one pitched voice; use Spectral Stretch for chords, drums and mixes.
+
+This comes from the loaded preset, so load it (and give its samples a moment to be analysed) before validating.
+
 ## Reading the Report
 
 The report dialog shows:
