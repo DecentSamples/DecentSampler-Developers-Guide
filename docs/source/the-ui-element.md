@@ -9,6 +9,8 @@ The `<ui>` element is how you specify a user interface for your instrument. You 
 - **`width`** (required): The width of your user interface. Recommended value: 812.
 - **`height`** (required): The height of your user interface. Recommended value: 375.
 
+Besides its `<tab>`, `<ui>` can hold a `<keyboard>` element (see below) and a `<controlStyles>` element, which holds your own designs for knobs, sliders and buttons; see [Control Styles](the-controlStyles-element.md).
+
 Example:
 
 ```xml
@@ -49,6 +51,7 @@ Attributes:
 | **`height`**          | (required)                     | The height of the menu                                                                                                                                                                                  | None    |
 | **`value`**           | (optional)                     | The is the 0-based index of the button state that is currently selected. A value of 0 means that the first state is active.                                                                             | 0       |
 | **`style`**           | (optional)                     | The type of button we want. There are two valid values: `text`, `image`.                                                                                                                                | `text`  |
+| **`controlStyle`**    | (optional)                     | The `id` of a button style to draw this button with, instead of its usual text or image look. See [Control Styles](the-controlStyles-element.md). Requires version 1.43.0 or later.                     | None    |
 | **`mainImage`**       | (required for `image` buttons) | For `image` buttons only. The path of the main image to display for this button. This can also be set at the state level so that it only applies to a specific state.                                   | None    |
 | **`hoverImage`**      | (optional)                     | For `image` buttons only. The path of the main image to display when the user hovers their mouse over this button. This can also be set at the state level so that it only applies to a specific state. | None    |
 | **`clickImage`**      | (optional)                     | For `image` buttons only. The path of the main image to display when the user clicks down on this button. This can also be set at the state level so that it only applies to a specific state.          | None    |
@@ -321,6 +324,7 @@ Attributes:
 
 It is also possible to use custom control graphics using the following attributes:
 
+- **`controlStyle`** (optional): The `id` of a knob or slider style to draw this control with, instead of its built-in look or `customSkinImage`. A knob style applies while `style` is a round one, and a slider style while it's a linear one. See [Control Styles](the-controlStyles-element.md). Requires version 1.43.0 or later.
 - **`customSkinImage`** (optional): This is path to an image to use for the control. This is expected to be a JPEG or PNG in KnobMan format. A huge gallery of compatible knobs can be found [here](https://www.g200kg.com/en/webknobman/gallery.php).
 - **`customSkinHoverImage`** (optional): An alternate KnobMan-format image, matching `customSkinImage` in frame count and orientation, to display while the user's mouse is hovering over the control. If omitted, the control keeps using `customSkinImage` on hover.
 - **`customSkinNumFrames`** (optional): The number of animation frames contained in the KnobMan image pointed to by `customSkinImage`.
