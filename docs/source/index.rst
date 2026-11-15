@@ -29,6 +29,7 @@ Contents
    the-dslibraryinfo-file
    the-preset-editor
    the-ui-designer
+   the-controlStyles-element
    the-auto-sampler
    appendix-a-the-color-format
    appendix-b-the-binding-element

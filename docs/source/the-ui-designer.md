@@ -21,7 +21,7 @@ Changes take effect in the preset as you make them, and the player shows them wh
 - **Layers, front to back** lists everything in the interface. The number beside each one is its position in the `<tab>`, which is how bindings and MIDI mappings refer to it. Click a layer to select it, or right-click it for the same commands as on the canvas.
 - **The canvas**, in the middle, shows the interface as the player draws it at its smallest window size: the background, the player's header above it, and an orange band where the on-screen keyboard covers the bottom of the interface (see [Leaving room for the keyboard](#leaving-room-for-the-keyboard) below).
 - **The toolbar** above the canvas has **Design** and **Play**, **GRID**, the **ALIGN** menu, and the zoom: **Fit**, or 50% to 200%.
-- **The inspector**, on the right, has three tabs: **Control**, **Bindings** and **XML**.
+- **The inspector**, on the right, has four tabs: **Control**, **Bindings**, **Style** and **XML**. **Style** designs the look of knobs, sliders and buttons; see [Control Styles](the-controlStyles-element.md).
 - **The status line**, along the bottom, names what's selected and its position, which MIDI CCs turn it, and which DAW parameter it is. If anything is under the keyboard, it says how many.
 
 In **Play** mode the controls work as they do in the player: knobs turn, buttons switch state, and the bindings act on the sound, so you can try the instrument without leaving the designer. Switch back to **Design** to edit.
