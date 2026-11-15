@@ -3,7 +3,7 @@ Control Styles
 
 Control styles let you design your own knobs, sliders and buttons without making images. A style is a short list of layers, such as circles, arcs, pointers, tick marks and text, with effects like shadows and bevels, written in the preset's `<ui>` element. The player draws controls from it as they're shown, so they stay sharp at every window size, and the same style can be used by as many controls as you like.
 
-You can design styles visually on the **Style** page of the [UI Designer](the-ui-designer.md), or write the XML by hand, as described below. Both make the same XML, so you can switch between them whenever you like.
+The easiest way to make a style is on the **Style** page of the [UI Designer](the-ui-designer.md). Every XML element and attribute for control styles is described below, but that's mainly for reference: we expect you to design styles in the UI Designer and rarely, if ever, write this XML by hand. The designer writes the same XML, so you can still look at it or adjust it whenever you need to.
 
 Control styles were added in Decent Sampler 1.43.0. Older versions skip them and show their usual knobs, sliders and buttons; see [Supporting older versions](#supporting-older-versions) for how to give them an image strip instead.
 
