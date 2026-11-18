@@ -299,11 +299,10 @@ Attributes:
 - **`y`** (required): The `y` position of your control where (0,0) is the top-left corner
 - **`width`** (required): The width in pixels of the knob + label.
 - **`height`** (required): The height in pixels of the knob + label.
-- **`parameterName`** (optional): The name this control is given in your DAW's list of automatable parameters. It is also used as the on-screen label if you haven't set `label`, and as the name shown when assigning MIDI CCs. It is good practice to always include one, since without it the DAW will simply show "Parameter 1", "Parameter 2" and so on.
+- **`parameterName`** (optional): The name this control is given in your DAW's list of automatable parameters. It is also used as the on-screen label if you haven't set `label`, and as the name shown when assigning MIDI CCs. It is good practice to always include one. Without it, Decent Sampler works out a name from the control's other attributes; see [How a control is named in your DAW](#how-a-control-is-named-in-your-daw).
 - **`style`** (optional): The specific kind of control that is created. The following values are supported: `linear_bar`, `linear_bar_vertical`, `linear_horizontal`, `linear_vertical`, `rotary`, `rotary_horizontal_drag`, `rotary_horizontal_vertical_drag`, `rotary_vertical_drag`, `custom_skin_vertical_drag`, `custom_skin_horizontal_drag`, `custom_skin_horizontal_vertical_drag`. Default: `rotary_vertical_drag`.
 - **`showLabel`** (optional): A true/false value dictating whether or not a built-in label should be displayed. Default: true for `<labeled-knob>` and false for `<control>` elements
 - **`label`** (optional): If `showLabel` is true, the actual text that should be displayed above the control.
-- **`parameterName`** (optional): The name this control is given in your DAW's list of automatable parameters. It is also used as the on-screen label if you haven't set `label`, and as the name shown when assigning MIDI CCs. It is good practice to always include one, since without it the DAW will simply show "Parameter 1", "Parameter 2" and so on.
 - **`minValue`** (optional): The minimum value of your control. Default: 0
 - **`maxValue`** (optional): The maximum value of your control. Default: 1
 - **`value`** (optional): The initial value of your control. Default: 0
@@ -354,6 +353,18 @@ Example:
 ```
 
 To learn how to make knobs actually control parameters of your instrument, see "Appendix B: Bindings" section below.
+
+### How a control is named in your DAW
+
+Your DAW's list of automatable parameters, the MIDI Learn menu and the Raspberry Pi player all show each control by name. Decent Sampler uses the first of these that the control has:
+
+1. `parameterName`.
+2. `label`, if it isn't empty.
+3. The start of `tooltip`, up to the first " - ". A tooltip such as `"Attack - How quickly the sound fades in"` names the control "Attack". A tooltip with no " - " in it is used only if it is short (20 characters or fewer).
+4. What the control's bindings change. A knob bound to the filter's frequency is called "Filter Frequency", one bound to the amp envelope's attack is called "Attack", and one bound to an effect's mix is called by the effect and the parameter, for example "Chorus Mix". If its bindings change two different things, both are given, for example "Filter Frequency & Volume". Bindings that set a fixed value (`translation="fixed_value"`) count only if nothing else does.
+5. "Parameter 1", "Parameter 2" and so on, by its position.
+
+This matters most when the control's text is drawn into your background image and the control itself has no label. Giving each control a `parameterName` is still the best way to choose exactly what your users see. Requires version 1.44.0 or later; earlier versions use `label`, then `parameterName`.
 
 ### Multi-State Controls
 
